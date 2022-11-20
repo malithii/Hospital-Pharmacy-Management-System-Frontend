@@ -6,6 +6,7 @@ import DrugUsage from "./pages/ward/DrugUsage";
 import Recieved from "./pages/ward/Recieved";
 import Order from "./pages/ward/Order";
 import ViewWard from "./pages/ward/ViewWard";
+import Login from "./pages/Login";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/order" element={<Order />} />
           <Route path="/view" element={<ViewWard />} />
         </Route>
+        <Route path="/login" element={<Login />} />
       </Routes>
     </BrowserRouter>
   );
