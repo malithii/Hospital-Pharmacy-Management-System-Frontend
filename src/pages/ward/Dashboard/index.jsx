@@ -1,11 +1,13 @@
 import { Button, Card, CardContent, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
-import { FcApproval } from "react-icons/fc";
 import CustomCard from "../../../components/CustomCard";
 import CardDetails from "../../../data/CardDetails";
+import React, { useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
 const Dashboard = () => {
+  const [value, onChange] = useState(new Date());
   return (
     <Box>
       <Grid container spacing={2}>
@@ -16,6 +18,12 @@ const Dashboard = () => {
             </Grid>
           );
         })}
+      </Grid>
+
+      <Grid container spacing={2} mt={2}>
+        <Grid item xs={3}>
+          <Calendar onChange={onChange} value={value} />
+        </Grid>
       </Grid>
     </Box>
   );
