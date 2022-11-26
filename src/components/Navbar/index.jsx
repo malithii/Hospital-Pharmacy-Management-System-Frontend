@@ -23,7 +23,7 @@ import { Link, Outlet } from "react-router-dom";
 import { Container } from "@mui/material";
 import { width } from "@mui/system";
 
-const drawerWidth = 240;
+const drawerWidth = 260;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -137,7 +137,10 @@ export default function MiniDrawer(props) {
         <Divider />
         <List>
           {NavbarData.map((item) => (
-            <Link to={item.path}>
+            <Link
+              to={item.path}
+              style={{ textDecoration: "none ", color: "black" }}
+            >
               <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
                 <ListItemButton
                   sx={{
@@ -165,7 +168,7 @@ export default function MiniDrawer(props) {
           ))}
         </List>
         <Divider />
-        <List>
+        {/* <List>
           {["All mail", "Trash", "Spam", "g"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>
               <ListItemButton
@@ -188,7 +191,7 @@ export default function MiniDrawer(props) {
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
+        </List> */}
       </Drawer>
       <Box
         component="main"
