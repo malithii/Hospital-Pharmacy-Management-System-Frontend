@@ -12,20 +12,20 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const rows = [
-  createData("Paracetamol", 159, 6.0, 24, 4.0),
-  createData("Ibuprofen", 237, 9.0, 37, 4.3),
+  createData("Paracetamol11", 159, 6.0, 24, 4.0),
+  createData("Ibuprofen1", 237, 9.0, 37, 4.3),
+  createData(" Antihistamine1", 262, 16.0, 24, 6.0),
+  createData("Cyclizine1", 305, 3.7, 67, 4.3),
+  createData("Metoclopramide1", 356, 16.0, 49, 3.9),
+  createData("Paracetamol1", 159, 6.0, 24, 4.0),
+  createData("Ibuprofen1", 237, 9.0, 37, 4.3),
   createData(" Antihistamine", 262, 16.0, 24, 6.0),
   createData("Cyclizine", 305, 3.7, 67, 4.3),
   createData("Metoclopramide", 356, 16.0, 49, 3.9),
   createData("Paracetamol", 159, 6.0, 24, 4.0),
   createData("Ibuprofen", 237, 9.0, 37, 4.3),
-  createData(" Antihistamine", 262, 16.0, 24, 6.0),
-  createData("Cyclizine", 305, 3.7, 67, 4.3),
-  createData("Metoclopramide", 356, 16.0, 49, 3.9),
-  createData("Paracetamol", 159, 6.0, 24, 4.0),
-  createData("Ibuprofen", 237, 9.0, 37, 4.3),
-  createData(" Antihistamine", 262, 16.0, 24, 6.0),
-  createData("Cyclizine", 305, 3.7, 67, 4.3),
+  createData(" Antihistamine1111", 262, 16.0, 24, 6.0),
+  createData("Cyclizine1111", 305, 3.7, 67, 4.3),
 ];
 
 export default function BasicTable() {

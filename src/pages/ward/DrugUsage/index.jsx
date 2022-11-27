@@ -5,10 +5,15 @@ import {
   CardActions,
   CardContent,
   Grid,
+  Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+import CustomDatePicker from "../../../components/CustomDatePicker";
+import BasicTable from "../../../components/Tables";
+import TitleBar from "../../../components/TitleBar";
+import medicine2 from "../../../images/medicine-2.png";
 
 const DrugUsage = () => {
   const columns = [
@@ -33,103 +38,128 @@ const DrugUsage = () => {
     { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
     { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
     { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
+    { id: 6, lastName: "Melisandre", firstName: null, age: 150 },
+    { id: 7, lastName: "Clifford", firstName: "Ferrara", age: 44 },
+    { id: 8, lastName: "Frances", firstName: "Rossini", age: 36 },
+    { id: 9, lastName: "Roxie", firstName: "Harvey", age: 65 },
   ];
 
   return (
     <Box>
-      <Typography variant="h5" pb={3} pt={2}>
-        DRUG USAGE DETAILS
-      </Typography>
-      <Grid container spacing={2}>
+      <TitleBar
+        image={medicine2}
+        title="Drug Usage Details"
+        description="Manage drug usage details"
+      />
+
+      <Grid container spacing={2} mt={2}>
         <Grid item lg={4}>
           <Card sx={{ p: 3 }}>
-            <Typography pl={1} pt={1}>
+            {/* <Typography pl={1} pt={1}>
               Date
             </Typography>
             <TextField
               sx={{ paddingLeft: "7px", mt: "0.5rem", width: "100%" }}
               placeholder="Date"
               size="small"
-            ></TextField>
+            ></TextField> */}
+            <CustomDatePicker />
           </Card>
+
+          <Grid item lg={12} mt={2}>
+            <Card sx={{ p: 3 }}>
+              <CardContent>
+                <Grid container spacing={2}>
+                  <Grid item lg={12}>
+                    <Typography pl={1} pt={1}>
+                      Drug ID
+                    </Typography>
+                    <TextField
+                      sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
+                      placeholder="Drug ID"
+                      size="small"
+                    />
+                  </Grid>
+                  <Grid item lg={12}>
+                    <Typography pl={1} pt={1}>
+                      Drug Name
+                    </Typography>
+                    <TextField
+                      sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
+                      placeholder="Drug Name"
+                      size="small"
+                    ></TextField>
+                  </Grid>
+                  <Grid item lg={12}>
+                    <Typography pl={1} pt={1}>
+                      BHT
+                    </Typography>
+                    <TextField
+                      sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
+                      placeholder="BHT"
+                      size="small"
+                    ></TextField>
+                  </Grid>
+                  <Grid item lg={12}>
+                    <Typography pl={1} pt={1}>
+                      Amount
+                    </Typography>
+                    <TextField
+                      sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
+                      placeholder="Amount"
+                      size="small"
+                    ></TextField>
+                  </Grid>
+                </Grid>
+              </CardContent>
+              <CardActions style={{ justifyContent: "flex-end" }}>
+                <Button
+                  size="large"
+                  variant="outlined"
+                  style={{ marginRight: "27px", width: "200px" }}
+                >
+                  Clear
+                </Button>
+                <Button
+                  size="large"
+                  variant="contained"
+                  style={{ marginRight: "27px", width: "200px" }}
+                >
+                  Add
+                </Button>
+              </CardActions>
+            </Card>
+          </Grid>
         </Grid>
-        <Grid item lg={8}></Grid>
-        <Grid item lg={4}>
-          <Card sx={{ p: 3 }}>
-            <CardContent>
-              <Grid container spacing={2}>
-                <Grid item lg={12}>
-                  <Typography pl={1} pt={1}>
-                    Drug ID
-                  </Typography>
-                  <TextField
-                    sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
-                    placeholder="Drug ID"
-                    size="small"
-                  />
-                </Grid>
-                <Grid item lg={12}>
-                  <Typography pl={1} pt={1}>
-                    Drug Name
-                  </Typography>
-                  <TextField
-                    sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
-                    placeholder="Drug Name"
-                    size="small"
-                  ></TextField>
-                </Grid>
-                <Grid item lg={12}>
-                  <Typography pl={1} pt={1}>
-                    BHT
-                  </Typography>
-                  <TextField
-                    sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
-                    placeholder="BHT"
-                    size="small"
-                  ></TextField>
-                </Grid>
-                <Grid item lg={12}>
-                  <Typography pl={1} pt={1}>
-                    Amount
-                  </Typography>
-                  <TextField
-                    sx={{ paddingLeft: "7px", mt: "0.5rem", width: "98%" }}
-                    placeholder="Amount"
-                    size="small"
-                  ></TextField>
-                </Grid>
-              </Grid>
-            </CardContent>
-            <CardActions style={{ justifyContent: "flex-end" }}>
-              <Button
-                size="large"
-                variant="outlined"
-                style={{ marginRight: "27px", width: "200px" }}
-              >
-                Clear
-              </Button>
-              <Button
-                size="large"
-                variant="contained"
-                style={{ marginRight: "27px", width: "200px" }}
-              >
-                Add
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
+
         <Grid item lg={8}>
-          <Card>
-            {/* <div style={{ height: "300px", width: "100%" }}> */}
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={7}
-              rowsPerPageOptions={[5]}
-              checkboxSelection
-              autoHeight
-            />
-            {/* </div> */}
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="h6" mb={2}>
+              Drug Usage Details added today
+            </Typography>
+            <Card>
+              {/* <div style={{ height: "300px", width: "100%" }}> */}
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={9}
+                rowsPerPageOptions={[5]}
+                checkboxSelection
+                autoHeight
+              />
+              {/* </div> */}
+            </Card>
+          </Paper>
+        </Grid>
+
+        <Grid item lg={12}>
+          <Card sx={{ p: 3 }}>
+            <Grid item lg={4}>
+              <CustomDatePicker />
+            </Grid>
+            <Grid item lg={12} pt={2}>
+              <BasicTable />
+            </Grid>
           </Card>
         </Grid>
       </Grid>
@@ -140,7 +170,7 @@ const DrugUsage = () => {
     //     Drug Name
     //   </Typography>
     //   <TextField
-    //     sx={{ paddingLeft: "7px", mt: "0.5rem", width: "50%" }}
+    //     sx={{ paddingLeft: "7px", mt: "0.5rem", wnpidth: "50%" }}
     //     placeholder="Drug Name"
     //     size="small"
     //   ></TextField>

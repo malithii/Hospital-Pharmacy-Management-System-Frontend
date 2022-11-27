@@ -24,7 +24,7 @@ const CardDetails = [
   {
     image: medicine2,
     value: "26/11",
-    title: "Drug Usage Details",
+    title: "Drug Usage",
     buttonTitle: "Add Drug Usage",
   },
 ];

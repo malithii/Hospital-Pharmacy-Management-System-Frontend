@@ -15,12 +15,15 @@ import "react-calendar/dist/Calendar.css";
 import BarChart from "../../../components/Charts/BarChart";
 import PieChart from "../../../components/Charts/PieChart";
 import Tables from "../../../components/Tables";
+import TitleBar from "../../../components/TitleBar";
+import dashboardIcon from "../../../images/dashboardIcon.png";
 
 const Dashboard = () => {
   const [value, onChange] = useState(new Date());
   return (
     <Box>
-      <Grid container spacing={2}>
+      <TitleBar image={dashboardIcon} title="Dashboard" description="Home" />
+      <Grid container spacing={2} mt={2}>
         {CardDetails.map((card, index) => {
           return (
             <Grid item lg={3} xs={12}>
