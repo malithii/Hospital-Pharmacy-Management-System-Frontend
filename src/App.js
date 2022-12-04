@@ -7,6 +7,7 @@ import Recieved from "./pages/ward/Recieved";
 import Order from "./pages/ward/Order";
 import ViewWard from "./pages/ward/ViewWard";
 import Login from "./pages/Login";
+import Drugs from "./pages/pharmacy/Drugs";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/recieved" element={<Recieved />} />
           <Route path="/order" element={<Order />} />
           <Route path="/view" element={<ViewWard />} />
+          <Route path="/drugs" element={<Drugs />} />
         </Route>
       </Routes>
     </BrowserRouter>
