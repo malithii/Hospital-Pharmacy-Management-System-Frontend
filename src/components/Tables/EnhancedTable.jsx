@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -112,7 +111,18 @@ export default function EnhancedTable({
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2, pt: 1 }}>
+      {/* <Paper sx={{ width: "100%", mb: 2, pt: 1 }}> */}
+      <Box
+        sx={{
+          width: "100%",
+          mb: 2,
+          pt: 1,
+          border: 1,
+          borderRadius: "16px",
+          borderColor: "#263159",
+          backgroundColor: "white",
+        }}
+      >
         <EnhancedTableToolbar
           tableTitle={tableTitle}
           optionalButton={optionalButton}
@@ -169,7 +179,8 @@ export default function EnhancedTable({
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Paper>
+        {/* </Paper> */}
+      </Box>
     </Box>
   );
 }

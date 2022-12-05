@@ -1,4 +1,4 @@
-import { Button, TableCell, TableRow } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import React from "react";
 import ActionButton from "./ActionButton";
 
@@ -13,7 +13,13 @@ function EnhancedTableRow({
     <TableRow hover role="checkbox" tabIndex={-1} key={index}>
       {data.map((item, id) => {
         return (
-          <TableCell component="th" key={id} scope="row" align={align}>
+          <TableCell
+            component="th"
+            key={id}
+            scope="row"
+            align={align}
+            style={{ fontWeight: "normal", fontSize: "19px", color: "#495579" }}
+          >
             {item}
           </TableCell>
         );

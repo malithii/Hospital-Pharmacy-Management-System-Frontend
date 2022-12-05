@@ -24,6 +24,7 @@ function EnhancedTableHead(props) {
             align={headCell.align ? headCell.align : "left"}
             width={headCell.width ? headCell.width : "auto"}
             sortDirection={orderBy === headCell.id ? order : false}
+            style={{ fontWeight: "bold", fontSize: "19px", color: "#495579" }}
           >
             {headCell.sorting === false ? (
               headCell.label

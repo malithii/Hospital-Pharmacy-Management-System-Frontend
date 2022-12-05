@@ -1,14 +1,20 @@
-import { Card, CardContent, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import dashboardIcon from "../../images/dashboardIcon.png";
 import HomeIcon from "@mui/icons-material/Home";
 
 const TitleBar = ({ image, title, description }) => {
   return (
-    <Card sx={{ padding: "10px" }}>
+    <Box
+      sx={{
+        padding: "25px",
+        bgcolor: "white",
+        borderRadius: 3,
+        marginBottom: 2,
+      }}
+    >
       <Grid container>
         <Grid item lg={0.5}>
-          <img src={image} height="50px" />
+          <img src={image} height="50px" alt="logo" />
         </Grid>
         <Grid item lg={4}>
           <Grid item lg={12}>
@@ -31,7 +37,7 @@ const TitleBar = ({ image, title, description }) => {
           </Box>
         </Grid>
       </Grid>
-    </Card>
+    </Box>
   );
 };
 

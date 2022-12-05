@@ -16,12 +16,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { NavbarData } from "../../data/NavbarData";
 import { Link, Outlet } from "react-router-dom";
-import { Container } from "@mui/material";
-import { width } from "@mui/system";
 
 const drawerWidth = 260;
 
@@ -195,7 +191,12 @@ export default function MiniDrawer(props) {
       </Drawer>
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, backgroundColor: " #e9f0f9 ", height: "100%" }}
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          backgroundColor: " #e9f0f9 ",
+          minHeight: "100vh",
+        }}
       >
         <DrawerHeader />
         {/* <Container fixed sx={{ backgroundColor: "black" }}> */}
