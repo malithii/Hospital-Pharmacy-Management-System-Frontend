@@ -1,5 +1,7 @@
-const Recieved = () => {
-  return "Recieved";
+import { Box } from "@mui/system";
+
+const WardInventory = () => {
+  return <Box></Box>;
 };
 
-export default Recieved;
+export default WardInventory;

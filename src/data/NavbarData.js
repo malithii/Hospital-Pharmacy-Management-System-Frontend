@@ -19,9 +19,9 @@ export const NavbarData = [
   },
   {
     id: 3,
-    title: "Recieved",
+    title: "Inventory",
     icon: <InventoryIcon />,
-    path: "/recieved",
+    path: "/wardinventory",
   },
   {
     id: 4,
