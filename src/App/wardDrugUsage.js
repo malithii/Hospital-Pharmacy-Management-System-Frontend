@@ -7,3 +7,7 @@ export const newDrugUsage = (body, onSuccess) => {
 export const getDrugUsageByDate = (body, onSuccess) => {
   post("/drug-usage/view-bydate", body, onSuccess);
 };
+
+export const allDrugUsages = (body, onSuccess) => {
+  post("/drug-usage/view-all", body, onSuccess);
+};

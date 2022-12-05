@@ -9,7 +9,7 @@ import ViewWard from "./pages/ward/ViewWard";
 import Login from "./pages/Login";
 import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
-import viewAllDrugUsage from "./pages/ward/viewAllDrugUsage";
+import UsageHistory from "./pages/ward/UsageHistory";
 
 function App() {
   return (
@@ -24,7 +24,7 @@ function App() {
           <Route path="/order" element={<Order />} />
           <Route path="/view" element={<ViewWard />} />
           <Route path="/drugs" element={<Drugs />} />
-          <Route path="drugUsageHistory" element={<viewAllDrugUsage />} />
+          <Route path="/drugusagehistory" element={<UsageHistory />} />
         </Route>
       </Routes>
     </BrowserRouter>

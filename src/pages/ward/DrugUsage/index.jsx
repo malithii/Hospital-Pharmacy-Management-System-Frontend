@@ -9,9 +9,17 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import CustomCalendar from "../../../components/Calendar";
 
 const DrugUsage = () => {
   const [value, setValue] = useState(dayjs());
+
+  const navigate = useNavigate();
+  const navigateToHistory = () => {
+    let path = `/drugusagehistory`;
+    navigate(path);
+  };
 
   const headCells = [
     {
@@ -137,7 +145,7 @@ const DrugUsage = () => {
 
       <Grid container spacing={2}>
         <Grid item lg={8} xs={12}>
-          <Box sx={{ bgcolor: "white", p: 4 }}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Add New Drug Usage Details
             </Typography>
@@ -332,21 +340,24 @@ const DrugUsage = () => {
           </Box>
         </Grid>
         <Grid item lg={4} xs={12}>
-          <Box sx={{ bgcolor: "white", p: 4 }}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 6, pb: 6 }}>
             <Grid item sx={{ display: "flex", justifyContent: "end" }}>
               <Button
                 variant="contained"
                 sx={{ minWidth: "200px" }}
                 size="large"
+                onClick={navigateToHistory}
+                title="Click to view drug usage history"
               >
                 View History
               </Button>
+              <CustomCalendar />
             </Grid>
           </Box>
         </Grid>
         <Grid item lg={12}>
-          <Box sx={{ bgcolor: "white", p: 4 }}>
-            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={3}>
               Drug Usage Details Added Today
             </Typography>
             <EnhancedTable
