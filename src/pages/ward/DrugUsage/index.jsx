@@ -95,9 +95,10 @@ const DrugUsage = () => {
     };
   }
   const requestBody = {
-    date: "2022-04-23",
+    date: "2022-12-04T18:30:00.000Z",
     wardNo: "13",
   };
+  console.log("date" + requestBody.date);
   useEffect(() => {
     getDrugUsageByDate(requestBody, (response) => {
       console.log(response.drugUsage);

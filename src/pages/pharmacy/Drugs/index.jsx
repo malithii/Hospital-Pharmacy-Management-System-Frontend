@@ -68,6 +68,7 @@ const Drugs = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
+  const [shouldRefresh, setShouldRefresh] = useState(true);
 
   const editClickHandler = (userId) => {
     console.log(userId);
@@ -114,7 +115,7 @@ const Drugs = () => {
       );
       setNumOfRows(response.drug.length);
     });
-  }, []);
+  }, [shouldRefresh]);
 
   useEffect(() => {
     console.log(rows);
@@ -140,6 +141,7 @@ const Drugs = () => {
     newDrug(data, (response) => {
       console.log(response);
       clearAll();
+      setShouldRefresh((prev) => !prev);
     });
   };
 

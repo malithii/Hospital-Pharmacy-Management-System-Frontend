@@ -58,10 +58,12 @@ const UsageHistory = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
+  const [shouldRefresh, setShouldRefresh] = useState(true);
 
   const editClickHandler = (userId) => {
     console.log(userId);
     //btn action
+    setShouldRefresh((prev) => !prev);
   };
 
   useEffect(() => {
@@ -93,7 +95,8 @@ const UsageHistory = () => {
       );
       setNumOfRows(response.drugUsage.length);
     });
-  }, []);
+  }, [shouldRefresh]);
+
   useEffect(() => {
     console.log(rows);
   }, [rows]);

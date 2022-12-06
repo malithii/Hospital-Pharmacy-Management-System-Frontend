@@ -1,25 +1,14 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  Grid,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import CustomCard from "../../../components/CustomCard";
 import CardDetails from "../../../data/CardDetails";
 import React, { useState } from "react";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import BarChart from "../../../components/Charts/BarChart";
-import PieChart from "../../../components/Charts/PieChart";
-import Tables from "../../../components/Tables";
 import TitleBar from "../../../components/TitleBar";
 import dashboardIcon from "../../../images/dashboardIcon.png";
+import Chart from "react-apexcharts";
 
 const Dashboard = () => {
-  const [value, onChange] = useState(new Date());
   return (
     <Box>
       <TitleBar image={dashboardIcon} title="Dashboard" description="Home" />
@@ -33,28 +22,77 @@ const Dashboard = () => {
         })}
       </Grid>
 
-      <Grid container spacing={3} mt={2}>
+      <Grid container spacing={3} pt={3}>
         <Grid item lg={4}>
-          <Paper>
-            <BarChart />
-          </Paper>
-        </Grid>
-        <Grid item lg={4}>
-          <Paper>
-            <BarChart />
-          </Paper>
-        </Grid>
-
-        <Grid item xs>
-          <Paper>
-            <PieChart />
-          </Paper>
-        </Grid>
-        <Grid item lg={12}>
-          <Typography variant="h5">Drug Inventory Summary</Typography>
-        </Grid>
-        <Grid item lg={12}>
-          <Tables />
+          <Grid container spacing={3}>
+            <Grid item lg={12}>
+              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
+                <Chart
+                  type="bar"
+                  width="100%"
+                  height="180px"
+                  options={{
+                    chart: {
+                      id: "basic-bar",
+                    },
+                    plotOptions: {
+                      bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                      },
+                    },
+                    xaxis: {
+                      categories: [
+                        "Non-Refrigerated",
+                        "Refrigerated",
+                        "Freezing",
+                      ],
+                    },
+                  }}
+                  series={[
+                    {
+                      name: "series-1",
+                      data: [30, 40, 45],
+                    },
+                  ]}
+                />
+              </Box>
+            </Grid>
+            <Grid item lg={12}>
+              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
+                <Chart
+                  type="bar"
+                  width="100%"
+                  height="200px"
+                  options={{
+                    chart: {
+                      id: "basic-bar",
+                    },
+                    plotOptions: {
+                      bar: {
+                        borderRadius: 4,
+                        horizontal: true,
+                      },
+                    },
+                    xaxis: {
+                      categories: [
+                        "General Medicines",
+                        "Pharmacy Medicines",
+                        "Prescription Only",
+                        "Controlled drugs",
+                      ],
+                    },
+                  }}
+                  series={[
+                    {
+                      name: "series-1",
+                      data: [30, 40, 20, 45],
+                    },
+                  ]}
+                />
+              </Box>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

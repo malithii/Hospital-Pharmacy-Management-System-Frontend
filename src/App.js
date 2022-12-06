@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
 import UsageHistory from "./pages/ward/UsageHistory";
+import WardInventory from "./pages/ward/WardInventory";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/view" element={<ViewWard />} />
           <Route path="/drugs" element={<Drugs />} />
           <Route path="/drugusagehistory" element={<UsageHistory />} />
+          <Route path="/wardinventory" element={<WardInventory />} />
         </Route>
       </Routes>
     </BrowserRouter>
