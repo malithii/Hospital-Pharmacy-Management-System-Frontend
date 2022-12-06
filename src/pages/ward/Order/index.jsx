@@ -3,13 +3,107 @@ import { Box, Stack } from "@mui/system";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TitleBar from "../../../components/TitleBar";
 import order from "../../../images/order.png";
 import Chart from "react-apexcharts";
+import { useForm } from "react-hook-form";
+import { getOrders, newOrder } from "../../../App/orderService";
+import EnhancedTable from "../../../components/Tables/EnhancedTable";
 
 const Order = () => {
   const [value, setValue] = useState(dayjs());
+
+  const headCells = [
+    {
+      id: "date",
+      numeric: false,
+      disablePadding: true,
+      label: "Date",
+      align: "center",
+    },
+    {
+      id: "drugName",
+      numeric: false,
+      disablePadding: true,
+      label: "Drug Name",
+      align: "center",
+    },
+    {
+      id: "quantity",
+      numeric: false,
+      disablePadding: true,
+      label: "Quantity",
+      align: "center",
+    },
+    {
+      id: "Actions",
+      numeric: true,
+      disablePadding: false,
+      label: "Actions",
+      align: "center",
+      sorting: false,
+    },
+  ];
+
+  const [rows, setRows] = useState([]);
+  const [retrivedRows, setRetrivedRows] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [numOfRows, setNumOfRows] = useState(0);
+  const [shouldRefresh, setShouldRefresh] = useState(true);
+
+  useEffect(() => {
+    setRows(
+      retrivedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    );
+  }, [page, rowsPerPage, retrivedRows]);
+
+  function createData(date, drugName, quantity) {
+    return {
+      date,
+      drugName,
+      quantity,
+    };
+  }
+
+  useEffect(() => {
+    getOrders((response) => {
+      console.log(response.order);
+      setRetrivedRows(
+        response.order.map((e) => createData(e.date, e.drugName, e.quantity))
+      );
+      setNumOfRows(response.order.length);
+    });
+  }, [shouldRefresh]);
+
+  const editClickHandler = (userId) => {
+    console.log(userId);
+    //btn action
+  };
+  useEffect(() => {
+    console.log(rows);
+  }, [rows]);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+  } = useForm();
+
+  const clearAll = () => {
+    resetField("drugName");
+    resetField("quantity");
+  };
+
+  const onSubmit = (data) => {
+    newOrder(data, (response) => {
+      console.log(response);
+      clearAll();
+      setShouldRefresh((prev) => !prev);
+    });
+  };
 
   return (
     <Box>
@@ -44,8 +138,22 @@ const Order = () => {
                         onChange={(newValue) => {
                           setValue(newValue);
                         }}
+                        inputFormat="YYYY-MM-DD"
                         renderInput={(params) => (
-                          <TextField size="small" {...params} />
+                          <TextField
+                            size="small"
+                            {...params}
+                            {...register("date", {
+                              required: {
+                                value: true,
+                                message: "Date is required",
+                              },
+                            })}
+                            {...(errors.date && {
+                              error: true,
+                              helperText: errors.date.message,
+                            })}
+                          />
                         )}
                         size="small"
                       />
@@ -62,7 +170,21 @@ const Order = () => {
                   >
                     Drug Name
                   </Typography>
-                  <TextField id="drugName" size="small" fullWidth />
+                  <TextField
+                    id="drugName"
+                    size="small"
+                    fullWidth
+                    {...register("drugName", {
+                      required: {
+                        value: true,
+                        message: "Drug Name is required",
+                      },
+                    })}
+                    {...(errors.drugName && {
+                      error: true,
+                      helperText: errors.drugName.message,
+                    })}
+                  />
                 </Grid>
                 <Grid item lg={12} xs={12}>
                   <Typography
@@ -73,7 +195,21 @@ const Order = () => {
                   >
                     Quantity
                   </Typography>
-                  <TextField size="small" fullWidth id="quantity" />
+                  <TextField
+                    size="small"
+                    fullWidth
+                    id="quantity"
+                    {...register("quantity", {
+                      required: {
+                        value: true,
+                        message: "Drug quantity is required",
+                      },
+                    })}
+                    {...(errors.quantity && {
+                      error: true,
+                      helperText: errors.quantity.message,
+                    })}
+                  />
                 </Grid>
                 <Grid
                   item
@@ -86,6 +222,7 @@ const Order = () => {
                     variant="contained"
                     sx={{ minWidth: "200px" }}
                     size="large"
+                    onClick={handleSubmit(onSubmit)}
                   >
                     ADD
                   </Button>
@@ -145,6 +282,24 @@ const Order = () => {
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Order
             </Typography>
+            <EnhancedTable
+              headCells={headCells}
+              rows={rows}
+              page={page}
+              setPage={setPage}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              numOfRows={numOfRows}
+              tableTitle={"Orders"}
+              actionButtons={[
+                { btnName: "Edit", actionFunc: editClickHandler },
+              ]}
+            />
+            <Box sx={{ display: "flex", justifyContent: "end" }}>
+              <Button variant="contained" size="large">
+                Order
+              </Button>
+            </Box>
           </Box>
         </Grid>
       </Grid>

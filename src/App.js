@@ -10,6 +10,7 @@ import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
 import UsageHistory from "./pages/ward/UsageHistory";
 import WardInventory from "./pages/ward/WardInventory";
+import ViewWards from "./pages/pharmacy/VIewWards";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/drugs" element={<Drugs />} />
           <Route path="/drugusagehistory" element={<UsageHistory />} />
           <Route path="/wardinventory" element={<WardInventory />} />
+          <Route path="/viewwards" element={<ViewWards />} />
         </Route>
       </Routes>
     </BrowserRouter>

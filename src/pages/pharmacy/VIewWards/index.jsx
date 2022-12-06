@@ -14,11 +14,17 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import TitleBar from "../../../components/TitleBar";
-import iconInventory from "../../../images/icon-inventory-96.png";
+import wardIcon from "../../../images/hospital-icon.png";
 import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 
-const WardInventory = () => {
+const ViewWards = () => {
+  const array = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+    41, 42, 43, 44, 45, 46, 47, 48, 49, 50,
+  ];
+
   const columns = [
     { id: "drugId", label: "Drug ID", minWidth: 170 },
     { id: "drugName", label: "Drug Name", minWidth: 100 },
@@ -87,7 +93,6 @@ const WardInventory = () => {
       quantity,
     };
   }
-
   const rows = [
     createData(
       "WWT342",
@@ -160,7 +165,6 @@ const WardInventory = () => {
       "96"
     ),
   ];
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -173,20 +177,24 @@ const WardInventory = () => {
     setPage(0);
   };
 
-  /////////////////////////////////////////////////////////////////////////////////
-  const top100Films = [
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-  ];
+  console.log(array);
   return (
     <Box>
       <TitleBar
-        image={iconInventory}
-        title="Ward Inventory"
-        description="View Ward Inventory"
+        image={wardIcon}
+        title="View"
+        description="View Ward Inventories"
       />
+
+      <Grid container>
+        <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+          <Grid container gap={2}>
+            {array.map((x) => (
+              <Button variant="contained">{x}</Button>
+            ))}
+          </Grid>
+        </Box>
+      </Grid>
       <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
         <Grid container>
           <Grid item lg={3}>
@@ -196,12 +204,11 @@ const WardInventory = () => {
               color="#495579"
               pb={1}
             >
-              Ward Inventory
+              Search
             </Typography>
             <Autocomplete
               id="free-solo-demo"
               freeSolo
-              options={top100Films.map((option) => option.title)}
               renderInput={(params) => (
                 <TextField {...params} label="Drug Name" size="small" />
               )}
@@ -283,4 +290,4 @@ const WardInventory = () => {
   );
 };
 
-export default WardInventory;
+export default ViewWards;

@@ -2,7 +2,11 @@ import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import TitleBar from "../../../components/TitleBar";
 import medicine2 from "../../../images/medicine-2.png";
 import { useForm } from "react-hook-form";
-import { getDrugUsageByDate, newDrugUsage } from "../../../App/wardDrugUsage";
+import {
+  allDrugUsages,
+  getDrugUsageByDate,
+  newDrugUsage,
+} from "../../../App/wardDrugUsage";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
@@ -78,6 +82,7 @@ const DrugUsage = () => {
     console.log(userId);
     //btn action
   };
+  const [shouldRefresh, setShouldRefresh] = useState(true);
 
   useEffect(() => {
     setRows(
@@ -95,12 +100,12 @@ const DrugUsage = () => {
     };
   }
   const requestBody = {
-    date: "2022-12-04T18:30:00.000Z",
+    // date: "2022-12-04T18:30:00.000Z",
     wardNo: "13",
   };
   console.log("date" + requestBody.date);
   useEffect(() => {
-    getDrugUsageByDate(requestBody, (response) => {
+    allDrugUsages(requestBody, (response) => {
       console.log(response.drugUsage);
       setRetrivedRows(
         response.drugUsage.map((e) =>
@@ -109,7 +114,7 @@ const DrugUsage = () => {
       );
       setNumOfRows(response.drugUsage.length);
     });
-  }, []);
+  }, [shouldRefresh]);
 
   useEffect(() => {
     console.log(rows);
@@ -134,6 +139,7 @@ const DrugUsage = () => {
     newDrugUsage(data, (response) => {
       console.log("response");
       clearAll();
+      setShouldRefresh((prev) => !prev);
     });
   };
   return (
@@ -167,6 +173,7 @@ const DrugUsage = () => {
                       onChange={(newValue) => {
                         setValue(newValue);
                       }}
+                      inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
                         <TextField
                           size="small"

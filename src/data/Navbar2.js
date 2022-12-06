@@ -4,30 +4,31 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ViewListIcon from "@mui/icons-material/ViewList";
 
-export const NavbarData = [
+export const Navbar2Data = [
   {
     id: 1,
     title: "Dashboard",
     icon: <DashboardIcon />,
     path: "/dashboard",
   },
+
   {
     id: 2,
-    title: "Drug Usage",
-    icon: <MedicalServicesIcon />,
-    path: "/drugUsage",
-  },
-  {
-    id: 3,
     title: "Order",
     icon: <ShoppingBagIcon />,
     path: "/order",
   },
   {
-    id: 4,
+    id: 3,
     title: "Inventory",
     icon: <InventoryIcon />,
     path: "/wardinventory",
+  },
+  {
+    id: 4,
+    title: "Drug Usage",
+    icon: <MedicalServicesIcon />,
+    path: "/drugs",
   },
 
   {
