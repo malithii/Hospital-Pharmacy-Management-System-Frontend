@@ -14,21 +14,21 @@ export const Navbar2Data = [
 
   {
     id: 2,
-    title: "Order",
+    title: "Drugs",
     icon: <ShoppingBagIcon />,
-    path: "/order",
+    path: "/drugs",
   },
   {
     id: 3,
-    title: "Inventory",
+    title: "View Wards",
     icon: <InventoryIcon />,
-    path: "/wardinventory",
+    path: "/viewwards",
   },
   {
     id: 4,
-    title: "Drug Usage",
+    title: "Inventory",
     icon: <MedicalServicesIcon />,
-    path: "/drugs",
+    path: "/pharmacyinventory",
   },
 
   {
