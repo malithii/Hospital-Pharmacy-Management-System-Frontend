@@ -11,25 +11,34 @@ import LandingPage from "./pages/LandingPage";
 import UsageHistory from "./pages/ward/UsageHistory";
 import WardInventory from "./pages/ward/WardInventory";
 import ViewWards from "./pages/pharmacy/VIewWards";
+import Suppliers from "./pages/pharmacy/Suppliers";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistor, store } from "./App/store";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/medlink" element={<LandingPage />} />
-        <Route path="/" element={<Navbar />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/drugUsage" element={<DrugUsage />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/view" element={<ViewWard />} />
-          <Route path="/drugs" element={<Drugs />} />
-          <Route path="/drugusagehistory" element={<UsageHistory />} />
-          <Route path="/wardinventory" element={<WardInventory />} />
-          <Route path="/viewwards" element={<ViewWards />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/medlink" element={<LandingPage />} />
+            <Route path="/" element={<Navbar />}>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/drugUsage" element={<DrugUsage />} />
+              <Route path="/order" element={<Order />} />
+              <Route path="/view" element={<ViewWard />} />
+              <Route path="/drugs" element={<Drugs />} />
+              <Route path="/drugusagehistory" element={<UsageHistory />} />
+              <Route path="/wardinventory" element={<WardInventory />} />
+              <Route path="/viewwards" element={<ViewWards />} />
+              <Route path="/suppliers" element={<Suppliers />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </PersistGate>
+    </Provider>
   );
 }
 

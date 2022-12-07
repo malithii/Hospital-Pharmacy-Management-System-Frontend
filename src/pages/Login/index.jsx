@@ -15,6 +15,10 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Card, CardContent } from "@mui/material";
 import backgroundLogin from "../../images/backgroundLogin.jpg";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { userLogin } from "../../App/userService";
+import { useDispatch } from "react-redux";
+import { login } from "../../reducers/loginSlice";
 
 function Copyright(props) {
   return (
@@ -37,19 +41,40 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const navigateToDashboard = () => {
     navigate("/dashboard");
+  };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+  } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+    userLogin(data, (response) => {
+      console.log(response);
+      if (response.status === "success") {
+        const { username, wardNo, email, type } = response.wardUser;
+        dispatch(
+          login({
+            username,
+            wardNo,
+            email,
+            type,
+          })
+        );
+        navigate("/dashboard");
+      }
+    });
+    //  newDrug(data, (response) => {
+    //    console.log(response);
+    //  });
   };
 
   return (
@@ -86,31 +111,41 @@ export default function Login() {
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
-                <Box
-                  component="form"
-                  onSubmit={handleSubmit}
-                  noValidate
-                  sx={{ mt: 1 }}
-                >
+                <Box component="form" noValidate sx={{ mt: 1 }}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
+                    id="username"
+                    label="Username"
+                    name="username"
+                    {...register("username", {
+                      required: {
+                        value: true,
+                        message: "Username is required",
+                      },
+                    })}
+                    {...(errors.username && {
+                      error: true,
+                      helperText: errors.username.message,
+                    })}
                   />
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     name="password"
                     label="Password"
                     type="password"
                     id="password"
-                    autoComplete="current-password"
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Password is required",
+                      },
+                    })}
+                    {...(errors.password && {
+                      error: true,
+                      helperText: errors.password.message,
+                    })}
                   />
                   <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
@@ -121,7 +156,7 @@ export default function Login() {
                     fullWidth
                     variant="contained"
                     sx={{ mt: 3, mb: 2 }}
-                    onClick={navigateToDashboard}
+                    onClick={handleSubmit(onSubmit)}
                   >
                     Sign In
                   </Button>

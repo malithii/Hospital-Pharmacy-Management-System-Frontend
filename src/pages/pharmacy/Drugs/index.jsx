@@ -8,8 +8,13 @@ import { getAllDrugs, newDrug } from "../../../App/drugsService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
+import DrugsModal from "../../../components/DrugsModal";
 
 const Drugs = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const headCells = [
     {
       id: "drugId",
@@ -70,10 +75,28 @@ const Drugs = () => {
   const [numOfRows, setNumOfRows] = useState(0);
   const [shouldRefresh, setShouldRefresh] = useState(true);
 
-  const editClickHandler = (userId) => {
-    console.log(userId);
+  const editClickHandler = (
+    drugId,
+    drugName,
+    category,
+    description,
+    level,
+    storeTemp
+  ) => {
+    console.log(drugId, drugName, category, description, level, storeTemp);
+    handleOpen();
     //btn action
   };
+
+  const [drugValue, setDrugValues] = useState({
+    drugId: "",
+    drugName: "",
+    category: "",
+    description: "",
+    level: "",
+    storeTemp: "",
+  });
+
   useEffect(() => {
     setRows(
       retrivedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -479,6 +502,7 @@ const Drugs = () => {
           </Box>
         </Grid>
       </Grid>
+      <DrugsModal open={open} setOpen={setOpen} drugValue={drugValue} />
     </Box>
   );
 };
