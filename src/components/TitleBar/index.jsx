@@ -6,7 +6,7 @@ const TitleBar = ({ image, title, description }) => {
   return (
     <Box
       sx={{
-        padding: "25px",
+        padding: "10px",
         bgcolor: "white",
         borderRadius: 3,
         marginBottom: 2,
@@ -14,9 +14,9 @@ const TitleBar = ({ image, title, description }) => {
     >
       <Grid container>
         <Grid item lg={0.5}>
-          <img src={image} height="50px" alt="logo" />
+          <img src={image} width="100%" alt="logo" />
         </Grid>
-        <Grid item lg={4}>
+        <Grid item lg={4} pl={2}>
           <Grid item lg={12}>
             <Typography variant="h6">{title}</Typography>
           </Grid>

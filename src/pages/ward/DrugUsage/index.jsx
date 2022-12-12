@@ -330,16 +330,16 @@ const DrugUsage = () => {
               >
                 <Button
                   variant="outlined"
-                  sx={{ minWidth: "200px" }}
-                  size="large"
+                  sx={{ minWidth: "150px" }}
+                  size="medium"
                   onClick={clearAll}
                 >
                   Clear
                 </Button>
                 <Button
                   variant="contained"
-                  sx={{ minWidth: "200px" }}
-                  size="large"
+                  sx={{ minWidth: "150px" }}
+                  size="medium"
                   onClick={handleSubmit(onSubmit)}
                 >
                   Add
@@ -349,7 +349,7 @@ const DrugUsage = () => {
           </Box>
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 6, pb: 6 }}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 3, pb: 3 }}>
             <Grid item sx={{ display: "flex", justifyContent: "end" }}>
               <Button
                 variant="contained"
