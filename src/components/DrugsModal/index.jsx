@@ -1,7 +1,8 @@
 import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { updateDrugs } from "../../App/drugsService";
 
 const DrugsModal = ({
   open,
@@ -12,12 +13,15 @@ const DrugsModal = ({
   description,
   level,
   storeTemp,
+  updatingData,
+  setShouldRefresh,
 }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
     resetField,
+    setValue,
   } = useForm();
 
   const clearAll = () => {
@@ -31,6 +35,27 @@ const DrugsModal = ({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  useEffect(() => {
+    if (updatingData.drugId) {
+      setValue("drugId", updatingData.drugId);
+      setValue("drugName", updatingData.drugName);
+      setValue("category", updatingData.category);
+      setValue("description", updatingData.description);
+      setValue("level", updatingData.level);
+      setValue("storeTemp", updatingData.storeTemp);
+    }
+  }, [updatingData]);
+
+  const onSubmit = (data) => {
+    data["_id"] = updatingData._id;
+    console.log(data);
+    updateDrugs(data, (response) => {
+      console.log(response);
+      clearAll();
+      setShouldRefresh((prev) => !prev);
+      handleClose();
+    });
+  };
 
   return (
     <Modal
@@ -91,7 +116,6 @@ const DrugsModal = ({
               </Typography>
               <TextField
                 id="drugName"
-                value={drugName}
                 sx={{ mt: "0.5rem", width: "98%" }}
                 placeholder="Drug Name"
                 size="small"
@@ -117,7 +141,6 @@ const DrugsModal = ({
                 Category
               </Typography>
               <TextField
-                value={category}
                 id="category"
                 sx={{ mt: "0.5rem", width: "98%" }}
                 placeholder="Category"
@@ -236,9 +259,9 @@ const DrugsModal = ({
                 variant="contained"
                 sx={{ minWidth: "50%" }}
                 size="large"
-                // onClick={handleSubmit(onSubmit)}
+                onClick={handleSubmit(onSubmit)}
               >
-                Add
+                {updatingData.drugId ? "Update" : "Add"}
               </Button>
             </Grid>
           </Grid>

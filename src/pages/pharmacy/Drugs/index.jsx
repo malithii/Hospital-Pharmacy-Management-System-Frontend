@@ -75,19 +75,6 @@ const Drugs = () => {
   const [numOfRows, setNumOfRows] = useState(0);
   const [shouldRefresh, setShouldRefresh] = useState(true);
 
-  const editClickHandler = (
-    drugId,
-    drugName,
-    category,
-    description,
-    level,
-    storeTemp
-  ) => {
-    console.log(drugId, drugName, category, description, level, storeTemp);
-    handleOpen();
-    //btn action
-  };
-
   const [drugValue, setDrugValues] = useState({
     drugId: "",
     drugName: "",
@@ -104,6 +91,7 @@ const Drugs = () => {
   }, [page, rowsPerPage, retrivedRows]);
 
   function createData(
+    _id,
     drugId,
     drugName,
     category,
@@ -112,6 +100,7 @@ const Drugs = () => {
     storeTemp
   ) {
     return {
+      _id,
       drugId,
       drugName,
       category,
@@ -127,6 +116,7 @@ const Drugs = () => {
       setRetrivedRows(
         response.drug.map((e) =>
           createData(
+            e._id,
             e.drugId,
             e.drugName,
             e.category,
@@ -149,7 +139,15 @@ const Drugs = () => {
     handleSubmit,
     formState: { errors },
     resetField,
+    setValue,
   } = useForm();
+  const [updatingData, setUpdatingData] = useState({});
+  const editClickHandler = (data) => {
+    setUpdatingData(data);
+    console.log(data);
+    handleOpen();
+    //btn action
+  };
 
   const clearAll = () => {
     resetField("drugId");
@@ -502,7 +500,13 @@ const Drugs = () => {
           </Box>
         </Grid>
       </Grid>
-      <DrugsModal open={open} setOpen={setOpen} drugValue={drugValue} />
+      <DrugsModal
+        open={open}
+        setOpen={setOpen}
+        drugValue={drugValue}
+        setShouldRefresh={setShouldRefresh}
+        updatingData={updatingData}
+      />
     </Box>
   );
 };
