@@ -116,7 +116,7 @@ const Order = () => {
         <Grid item lg={5}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
                 <Typography
                   variant="h6"
                   fontWeight={"bold"}
@@ -127,8 +127,8 @@ const Order = () => {
                 </Typography>
                 <Grid item lg={12} xs={12}>
                   <Typography
-                    variant="h6"
-                    fontWeight={"bold"}
+                    variant="h7"
+                    fontWeight={"normal"}
                     color="#495579"
                     pb={1}
                   >
@@ -166,8 +166,8 @@ const Order = () => {
 
                 <Grid item lg={12} xs={12}>
                   <Typography
-                    variant="h6"
-                    fontWeight={"bold"}
+                    variant="h7"
+                    fontWeight={"normal"}
                     color="#495579"
                     pb={1}
                   >
@@ -191,8 +191,8 @@ const Order = () => {
                 </Grid>
                 <Grid item lg={12} xs={12}>
                   <Typography
-                    variant="h6"
-                    fontWeight={"bold"}
+                    variant="h7"
+                    fontWeight={"normal"}
                     color="#495579"
                     pb={1}
                   >
@@ -223,8 +223,8 @@ const Order = () => {
                 >
                   <Button
                     variant="contained"
-                    sx={{ minWidth: "200px" }}
-                    size="large"
+                    sx={{ minWidth: "150px" }}
+                    size="medium"
                     onClick={handleSubmit(onSubmit)}
                   >
                     ADD
@@ -233,7 +233,7 @@ const Order = () => {
               </Box>
             </Grid>
             <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
                 <Typography
                   variant="h6"
                   fontWeight={"bold"}
@@ -281,7 +281,7 @@ const Order = () => {
           </Grid>
         </Grid>
         <Grid item lg={7}>
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Order
             </Typography>
