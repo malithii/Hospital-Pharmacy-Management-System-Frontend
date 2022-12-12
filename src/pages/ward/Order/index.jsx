@@ -59,8 +59,9 @@ const Order = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(date, drugName, quantity) {
+  function createData(_id, date, drugName, quantity) {
     return {
+      _id,
       date,
       drugName,
       quantity,
@@ -71,7 +72,9 @@ const Order = () => {
     getOrders((response) => {
       console.log(response.order);
       setRetrivedRows(
-        response.order.map((e) => createData(e.date, e.drugName, e.quantity))
+        response.order.map((e) =>
+          createData(e._id, e.date, e.drugName, e.quantity)
+        )
       );
       setNumOfRows(response.order.length);
     });

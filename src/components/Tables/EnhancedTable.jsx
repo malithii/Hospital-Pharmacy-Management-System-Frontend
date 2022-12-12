@@ -149,7 +149,7 @@ export default function EnhancedTable({
                     <EnhancedTableRow
                       index={index}
                       key={index}
-                      data={Object.values(row)}
+                      data={Object.values(row).slice(1)}
                       row={row}
                       actionButtons={actionButtons}
                       align={align}

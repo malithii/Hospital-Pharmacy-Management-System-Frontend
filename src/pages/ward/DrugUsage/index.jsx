@@ -90,8 +90,9 @@ const DrugUsage = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(date, drugName, batchNo, bht, quantity) {
+  function createData(_id, date, drugName, batchNo, bht, quantity) {
     return {
+      _id,
       date,
       drugName,
       batchNo,
@@ -109,7 +110,7 @@ const DrugUsage = () => {
       console.log(response.drugUsage);
       setRetrivedRows(
         response.drugUsage.map((e) =>
-          createData(e.date, e.drugName, e.batchNo, e.bht, e.quantity)
+          createData(e._id, e.date, e.drugName, e.batchNo, e.bht, e.quantity)
         )
       );
       setNumOfRows(response.drugUsage.length);
@@ -151,7 +152,7 @@ const DrugUsage = () => {
       />
 
       <Grid container spacing={2}>
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={7} xs={12}>
           <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Add New Drug Usage Details
@@ -159,8 +160,8 @@ const DrugUsage = () => {
             <Grid container spacing={2}>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -197,8 +198,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -222,8 +223,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -247,8 +248,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -272,8 +273,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -297,8 +298,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -329,16 +330,16 @@ const DrugUsage = () => {
               >
                 <Button
                   variant="outlined"
-                  sx={{ minWidth: "200px" }}
-                  size="large"
+                  sx={{ minWidth: "150px" }}
+                  size="medium"
                   onClick={clearAll}
                 >
                   Clear
                 </Button>
                 <Button
                   variant="contained"
-                  sx={{ minWidth: "200px" }}
-                  size="large"
+                  sx={{ minWidth: "150px" }}
+                  size="medium"
                   onClick={handleSubmit(onSubmit)}
                 >
                   Add
@@ -347,8 +348,8 @@ const DrugUsage = () => {
             </Grid>
           </Box>
         </Grid>
-        <Grid item lg={4} xs={12}>
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 6, pb: 6 }}>
+        <Grid item lg={5} xs={12}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 3, pb: 3 }}>
             <Grid item sx={{ display: "flex", justifyContent: "end" }}>
               <Button
                 variant="contained"

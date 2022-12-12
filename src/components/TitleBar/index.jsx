@@ -6,7 +6,7 @@ const TitleBar = ({ image, title, description }) => {
   return (
     <Box
       sx={{
-        padding: "25px",
+        padding: "10px",
         bgcolor: "white",
         borderRadius: 3,
         marginBottom: 2,
@@ -14,9 +14,9 @@ const TitleBar = ({ image, title, description }) => {
     >
       <Grid container>
         <Grid item lg={0.5}>
-          <img src={image} height="50px" alt="logo" />
+          <img src={image} width="100%" alt="logo" />
         </Grid>
-        <Grid item lg={4}>
+        <Grid item lg={4} pl={2}>
           <Grid item lg={12}>
             <Typography variant="h6">{title}</Typography>
           </Grid>
@@ -31,9 +31,9 @@ const TitleBar = ({ image, title, description }) => {
           justifyContent="end"
           alignItems={"center"}
         >
-          <Box width={"30%"} justifyContent="center" display={"flex"}>
-            <HomeIcon sx={{ fontSize: "1.8rem" }} />
-            <Typography variant="h6">Home/{title}</Typography>
+          <Box width={"35%"} justifyContent="center" display={"flex"}>
+            <HomeIcon sx={{ fontSize: "1.4rem" }} />
+            <Typography variant="h7">Home/{title}</Typography>
           </Box>
         </Grid>
       </Grid>
