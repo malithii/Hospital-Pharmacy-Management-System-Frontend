@@ -152,7 +152,7 @@ const DrugUsage = () => {
       />
 
       <Grid container spacing={2}>
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={7} xs={12}>
           <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Add New Drug Usage Details
@@ -160,8 +160,8 @@ const DrugUsage = () => {
             <Grid container spacing={2}>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -198,8 +198,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -223,8 +223,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -248,8 +248,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -273,8 +273,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -298,8 +298,8 @@ const DrugUsage = () => {
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
+                  variant="h7"
+                  fontWeight={"normal"}
                   color="#495579"
                   pb={1}
                 >
@@ -348,7 +348,7 @@ const DrugUsage = () => {
             </Grid>
           </Box>
         </Grid>
-        <Grid item lg={4} xs={12}>
+        <Grid item lg={5} xs={12}>
           <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 6, pb: 6 }}>
             <Grid item sx={{ display: "flex", justifyContent: "end" }}>
               <Button

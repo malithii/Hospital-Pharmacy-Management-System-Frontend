@@ -31,9 +31,9 @@ const TitleBar = ({ image, title, description }) => {
           justifyContent="end"
           alignItems={"center"}
         >
-          <Box width={"30%"} justifyContent="center" display={"flex"}>
-            <HomeIcon sx={{ fontSize: "1.8rem" }} />
-            <Typography variant="h6">Home/{title}</Typography>
+          <Box width={"35%"} justifyContent="center" display={"flex"}>
+            <HomeIcon sx={{ fontSize: "1.4rem" }} />
+            <Typography variant="h7">Home/{title}</Typography>
           </Box>
         </Grid>
       </Grid>
