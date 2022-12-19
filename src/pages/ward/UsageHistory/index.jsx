@@ -72,8 +72,9 @@ const UsageHistory = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(date, drugName, batchNo, bht, quantity) {
+  function createData(_id, date, drugName, batchNo, bht, quantity) {
     return {
+      _id,
       date,
       drugName,
       batchNo,
@@ -90,7 +91,7 @@ const UsageHistory = () => {
       console.log(response.drugUsage);
       setRetrivedRows(
         response.drugUsage.map((e) =>
-          createData(e.date, e.drugName, e.batchNo, e.bht, e.quantity)
+          createData(e._id, e.date, e.drugName, e.batchNo, e.bht, e.quantity)
         )
       );
       setNumOfRows(response.drugUsage.length);

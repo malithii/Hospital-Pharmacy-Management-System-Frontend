@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "./App/store";
 import PharmacyInventory from "./pages/pharmacy/PharmacyInventory";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/medlink" element={<LandingPage />} />
             <Route path="/" element={<Navbar />}>
               <Route path="/dashboard" element={<Dashboard />} />

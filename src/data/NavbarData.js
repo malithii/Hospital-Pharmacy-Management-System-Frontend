@@ -10,24 +10,28 @@ export const NavbarData = [
     title: "Dashboard",
     icon: <DashboardIcon />,
     path: "/dashboard",
+    userType: ["ADMIN", "USER"],
   },
   {
     id: 2,
     title: "Drug Usage",
     icon: <MedicalServicesIcon />,
     path: "/drugUsage",
+    userType: ["ADMIN", "USER"],
   },
   {
     id: 3,
     title: "Order",
     icon: <ShoppingBagIcon />,
     path: "/order",
+    userType: ["ADMIN"],
   },
   {
     id: 4,
     title: "Inventory",
     icon: <InventoryIcon />,
     path: "/wardinventory",
+    userType: ["ADMIN"],
   },
 
   {
@@ -35,5 +39,6 @@ export const NavbarData = [
     title: "View",
     icon: <ViewListIcon />,
     path: "/view",
+    userType: ["ADMIN"],
   },
 ];
