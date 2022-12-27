@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/ward/Dashboard";
 import DrugUsage from "./pages/ward/DrugUsage";
 import Order from "./pages/ward/Order";
-import ViewWard from "./pages/ward/ViewWard";
+import WardRecieved from "./pages/ward/WardRecieved";
 import Login from "./pages/Login";
 import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
@@ -31,7 +31,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/drugUsage" element={<DrugUsage />} />
               <Route path="/order" element={<Order />} />
-              <Route path="/view" element={<ViewWard />} />
+              <Route path="/wardreceived" element={<WardRecieved />} />
               <Route path="/drugs" element={<Drugs />} />
               <Route path="/drugusagehistory" element={<UsageHistory />} />
               <Route path="/wardinventory" element={<WardInventory />} />

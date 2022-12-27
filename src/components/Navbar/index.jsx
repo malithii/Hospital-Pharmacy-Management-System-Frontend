@@ -18,7 +18,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { NavbarData } from "../../data/NavbarData";
 import { Link, Outlet } from "react-router-dom";
-import { Navbar2Data } from "../../data/Navbar2";
 import { Badge, Menu, MenuItem } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
@@ -203,7 +202,10 @@ export default function MiniDrawer(props) {
         <Divider />
         <List>
           {NavbarData.map((item) => {
-            if (item.userType.includes(type)) {
+            {
+              /* if (item.userType.includes(type)) */
+            }
+            if (item.userType.includes("PHARMACIST")) {
               return (
                 <Link
                   to={item.path}
@@ -242,38 +244,7 @@ export default function MiniDrawer(props) {
           })}
         </List>
         <Divider />
-        <List>
-          {Navbar2Data.map((item) => (
-            <Link
-              to={item.path}
-              style={{ textDecoration: "none ", color: "black" }}
-            >
-              <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.title}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
-        </List>
+
         {/* <List>
           {["All mail", "Trash", "Spam", "g"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>

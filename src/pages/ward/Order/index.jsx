@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -35,14 +35,6 @@ const Order = () => {
       disablePadding: true,
       label: "Quantity",
       align: "center",
-    },
-    {
-      id: "Actions",
-      numeric: true,
-      disablePadding: false,
-      label: "Actions",
-      align: "center",
-      sorting: false,
     },
   ];
 
@@ -108,6 +100,10 @@ const Order = () => {
     });
   };
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Box>
       <TitleBar image={order} title="Order" description="Manages Orders" />
@@ -171,7 +167,7 @@ const Order = () => {
                     color="#495579"
                     pb={1}
                   >
-                    Drug Name
+                    Drug
                   </Typography>
                   <TextField
                     id="drugName"
@@ -299,13 +295,45 @@ const Order = () => {
               ]}
             />
             <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button variant="contained" size="large">
+              <Button variant="contained" size="large" onClick={handleOpen}>
                 Order
               </Button>
             </Box>
           </Box>
         </Grid>
       </Grid>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 5 }}>
+            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
+              Order Details
+            </Typography>
+            <EnhancedTable
+              headCells={headCells}
+              rows={rows}
+              page={page}
+              setPage={setPage}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              numOfRows={numOfRows}
+              tableTitle={"Orders"}
+            />
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

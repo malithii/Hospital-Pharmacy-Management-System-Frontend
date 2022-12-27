@@ -178,7 +178,7 @@ const Drugs = () => {
           <Grid container spacing={2}>
             <Grid item lg={6} xs={12}>
               <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-                <Typography variant="h5" pb={6}>
+                <Typography variant="h6" pb={3}>
                   Store Temperature
                 </Typography>
                 <Grid container>

@@ -196,6 +196,7 @@ const DrugUsage = () => {
                   </Stack>
                 </LocalizationProvider>
               </Grid>
+
               <Grid item lg={6} xs={12}>
                 <Typography
                   variant="h7"
@@ -203,32 +204,7 @@ const DrugUsage = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Ward No
-                </Typography>
-                <TextField
-                  size="small"
-                  fullWidth
-                  id="wardNo"
-                  {...register("wardNo", {
-                    required: {
-                      value: true,
-                      message: "wardNo is required",
-                    },
-                  })}
-                  {...(errors.wardNo && {
-                    error: true,
-                    helperText: errors.wardNo.message,
-                  })}
-                />
-              </Grid>
-              <Grid item lg={6} xs={12}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Drug Name
+                  Drug:
                 </Typography>
                 <TextField
                   id="drugName"
@@ -303,7 +279,7 @@ const DrugUsage = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Quantity
+                  Quantity to BHT
                 </Typography>
                 <TextField
                   size="small"
@@ -318,6 +294,31 @@ const DrugUsage = () => {
                   {...(errors.quantity && {
                     error: true,
                     helperText: errors.quantity.message,
+                  })}
+                />
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <Typography
+                  variant="h7"
+                  fontWeight={"normal"}
+                  color="#495579"
+                  pb={1}
+                >
+                  Quantity from BHT
+                </Typography>
+                <TextField
+                  size="small"
+                  fullWidth
+                  id="quantity2"
+                  {...register("quantity2", {
+                    required: {
+                      value: true,
+                      message: "Quantity is required",
+                    },
+                  })}
+                  {...(errors.quantity2 && {
+                    error: true,
+                    helperText: errors.quantity2.message,
                   })}
                 />
               </Grid>
