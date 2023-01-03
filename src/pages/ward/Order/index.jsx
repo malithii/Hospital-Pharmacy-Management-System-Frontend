@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -35,14 +35,6 @@ const Order = () => {
       disablePadding: true,
       label: "Quantity",
       align: "center",
-    },
-    {
-      id: "Actions",
-      numeric: true,
-      disablePadding: false,
-      label: "Actions",
-      align: "center",
-      sorting: false,
     },
   ];
 
@@ -108,6 +100,10 @@ const Order = () => {
     });
   };
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <Box>
       <TitleBar image={order} title="Order" description="Manages Orders" />
@@ -116,7 +112,7 @@ const Order = () => {
         <Grid item lg={5}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
                 <Typography
                   variant="h6"
                   fontWeight={"bold"}
@@ -127,8 +123,8 @@ const Order = () => {
                 </Typography>
                 <Grid item lg={12} xs={12}>
                   <Typography
-                    variant="h6"
-                    fontWeight={"bold"}
+                    variant="h7"
+                    fontWeight={"normal"}
                     color="#495579"
                     pb={1}
                   >
@@ -166,12 +162,12 @@ const Order = () => {
 
                 <Grid item lg={12} xs={12}>
                   <Typography
-                    variant="h6"
-                    fontWeight={"bold"}
+                    variant="h7"
+                    fontWeight={"normal"}
                     color="#495579"
                     pb={1}
                   >
-                    Drug Name
+                    Drug
                   </Typography>
                   <TextField
                     id="drugName"
@@ -191,8 +187,8 @@ const Order = () => {
                 </Grid>
                 <Grid item lg={12} xs={12}>
                   <Typography
-                    variant="h6"
-                    fontWeight={"bold"}
+                    variant="h7"
+                    fontWeight={"normal"}
                     color="#495579"
                     pb={1}
                   >
@@ -223,8 +219,8 @@ const Order = () => {
                 >
                   <Button
                     variant="contained"
-                    sx={{ minWidth: "200px" }}
-                    size="large"
+                    sx={{ minWidth: "150px" }}
+                    size="medium"
                     onClick={handleSubmit(onSubmit)}
                   >
                     ADD
@@ -233,7 +229,7 @@ const Order = () => {
               </Box>
             </Grid>
             <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
                 <Typography
                   variant="h6"
                   fontWeight={"bold"}
@@ -281,7 +277,7 @@ const Order = () => {
           </Grid>
         </Grid>
         <Grid item lg={7}>
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Order
             </Typography>
@@ -299,13 +295,45 @@ const Order = () => {
               ]}
             />
             <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button variant="contained" size="large">
+              <Button variant="contained" size="large" onClick={handleOpen}>
                 Order
               </Button>
             </Box>
           </Box>
         </Grid>
       </Grid>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 5 }}>
+            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
+              Order Details
+            </Typography>
+            <EnhancedTable
+              headCells={headCells}
+              rows={rows}
+              page={page}
+              setPage={setPage}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              numOfRows={numOfRows}
+              tableTitle={"Orders"}
+            />
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

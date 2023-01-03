@@ -48,6 +48,20 @@ const Dashboard = () => {
                         "Freezing",
                       ],
                     },
+                    title: {
+                      text: "Store Temperature",
+                      align: "left",
+                      margin: 10,
+                      offsetX: 0,
+                      offsetY: 0,
+                      floating: false,
+                      style: {
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                        fontFamily: undefined,
+                        color: "#263238",
+                      },
+                    },
                   }}
                   series={[
                     {
@@ -82,6 +96,20 @@ const Dashboard = () => {
                         "Controlled drugs",
                       ],
                     },
+                    title: {
+                      text: "Drug Categories",
+                      align: "left",
+                      margin: 10,
+                      offsetX: 0,
+                      offsetY: 0,
+                      floating: false,
+                      style: {
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                        fontFamily: undefined,
+                        color: "#263238",
+                      },
+                    },
                   }}
                   series={[
                     {
@@ -98,263 +126,68 @@ const Dashboard = () => {
           <Box
             sx={{ bgcolor: "white", p: 2, borderRadius: 3, height: "31rem" }}
           >
-            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
-              Expiring List
-            </Typography>
-            <Grid container>
-              <Grid item lg={4}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Drug Name
-                </Typography>
-              </Grid>
-              <Grid item lg={4}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Expire Date
-                </Typography>
-              </Grid>
-              <Grid item lg={4}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Quantity
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Paracetamol
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  2023-02-25
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  52
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Augmentin
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  2023-04-25
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  71
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Nervijen
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  2024-06-07
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  60
-                </Typography>
-              </Grid>
-            </Grid>
+            <Chart
+              type="bar"
+              width="100%"
+              height="100%"
+              options={{
+                chart: {
+                  id: "basic-bar",
+                },
+                plotOptions: {
+                  bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                  },
+                },
+                xaxis: {
+                  categories: [
+                    "General Medicines",
+                    "Pharmacy Medicines",
+                    "Prescription Only",
+                    "Controlled drugs",
+                    "General Medicines",
+                    "Pharmacy Medicines",
+                    "Prescription Only",
+                    "Controlled drugs",
+                    "General Medicines",
+                    "Pharmacy Medicines",
+                    "Prescription Only",
+                    "Controlled drugs",
+                  ],
+                },
+                title: {
+                  text: "General Medicine Inventory",
+                  align: "left",
+                  margin: 10,
+                  offsetX: 0,
+                  offsetY: 0,
+                  floating: false,
+                  style: {
+                    fontSize: "14px",
+                    fontWeight: "bold",
+                    fontFamily: undefined,
+                    color: "#263238",
+                  },
+                },
+              }}
+              series={[
+                {
+                  name: "series-1",
+                  data: [30, 40, 20, 45, 30, 40, 20, 45, 30, 40, 20, 45],
+                },
+              ]}
+            />
           </Box>
         </Grid>
-
         <Grid item lg={4}>
           <Box
             sx={{ bgcolor: "white", p: 2, borderRadius: 3, height: "31rem" }}
           >
-            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
+            <Typography variant="h7" fontWeight={"bold"} color="#495579" pb={1}>
               Expiring List
             </Typography>
-            <Grid container>
-              <Grid item lg={4}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Drug Name
-                </Typography>
-              </Grid>
-              <Grid item lg={4}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Expire Date
-                </Typography>
-              </Grid>
-              <Grid item lg={4}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Quantity
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Paracetamol
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  2023-02-25
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  52
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Augmentin
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  2023-04-25
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  71
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Nervijen
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  2024-06-07
-                </Typography>
-              </Grid>
-              <Grid item lg={4} pt={1}>
-                <Typography
-                  variant="h7"
-                  fontWeight={"normal"}
-                  color="#495579"
-                  pb={1}
-                >
-                  60
-                </Typography>
-              </Grid>
-            </Grid>
+            <Typography>Table</Typography>
           </Box>
         </Grid>
       </Grid>

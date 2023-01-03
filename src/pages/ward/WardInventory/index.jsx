@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Button,
   Grid,
+  Modal,
   Table,
   TableBody,
   TableCell,
@@ -19,6 +20,10 @@ import SearchIcon from "@mui/icons-material/Search";
 import { useState } from "react";
 
 const WardInventory = () => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const columns = [
     { id: "drugId", label: "Drug ID", minWidth: 170 },
     { id: "drugName", label: "Drug Name", minWidth: 100 },
@@ -194,7 +199,7 @@ const WardInventory = () => {
               variant="h8"
               fontWeight={"normal"}
               color="#495579"
-              pb={1}
+              pb={3}
             >
               Ward Inventory
             </Typography>
@@ -215,6 +220,19 @@ const WardInventory = () => {
                 size="large"
               >
                 <SearchIcon />
+              </Button>
+            </Box>
+          </Grid>
+          <Box sx={{ flexGrow: 1 }} />
+          <Grid item lg={2}>
+            <Box p={3}>
+              <Button
+                variant="contained"
+                sx={{ minWidth: "200px" }}
+                size="large"
+                onClick={handleOpen}
+              >
+                Add New
               </Button>
             </Box>
           </Grid>
@@ -279,6 +297,97 @@ const WardInventory = () => {
           </Grid>
         </Grid>
       </Box>
+
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%,-50%)",
+          }}
+        >
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 5 }}>
+            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
+              Add New
+            </Typography>
+            <Grid container>
+              <Grid item lg={12} xs={12}>
+                <Typography
+                  variant="h7"
+                  fontWeight={"normal"}
+                  color="#495579"
+                  pb={1}
+                >
+                  Drug
+                </Typography>
+                <TextField size="small" fullWidth />
+              </Grid>
+              <Grid item lg={12} xs={12}>
+                <Typography
+                  variant="h7"
+                  fontWeight={"normal"}
+                  color="#495579"
+                  pb={1}
+                >
+                  Batch No
+                </Typography>
+                <TextField size="small" fullWidth />
+              </Grid>
+              <Grid item lg={12} xs={12}>
+                <Typography
+                  variant="h7"
+                  fontWeight={"normal"}
+                  color="#495579"
+                  pb={1}
+                >
+                  Quantity In Stock
+                </Typography>
+                <TextField size="small" fullWidth />
+              </Grid>
+              <Grid item lg={12} xs={12}>
+                <Typography
+                  variant="h7"
+                  fontWeight={"normal"}
+                  color="#495579"
+                  pb={1}
+                >
+                  Reorder Level
+                </Typography>
+                <TextField size="small" fullWidth />
+              </Grid>
+              <Grid
+                item
+                lg={12}
+                gap={2}
+                pt={3}
+                xs={12}
+                sx={{ display: "flex", justifyContent: "end" }}
+              >
+                <Button
+                  variant="contained"
+                  sx={{ minWidth: "150px" }}
+                  size="medium"
+                >
+                  Clear
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{ minWidth: "150px" }}
+                  size="medium"
+                >
+                  ADD
+                </Button>
+              </Grid>
+            </Grid>
+          </Box>
+        </Box>
+      </Modal>
     </Box>
   );
 };

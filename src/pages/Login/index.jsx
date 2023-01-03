@@ -60,7 +60,7 @@ export default function Login() {
     userLogin(data, (response) => {
       console.log(response);
       if (response.status === "success") {
-        const { username, wardNo, email, type } = response.wardUser;
+        const { username, wardNo, email, type } = response.user;
         dispatch(
           login({
             username,
