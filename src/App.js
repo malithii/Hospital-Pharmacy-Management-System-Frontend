@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/ward/Dashboard";
 import DrugUsage from "./pages/ward/DrugUsage";
 import Order from "./pages/ward/Order";
-import WardRecieved from "./pages/ward/WardRecieved";
+import WardReports from "./pages/ward/WardReports";
 import Login from "./pages/Login";
 import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
@@ -17,6 +17,8 @@ import { PersistGate } from "redux-persist/integration/react";
 import { persistor, store } from "./App/store";
 import PharmacyInventory from "./pages/pharmacy/PharmacyInventory";
 import SignUp from "./pages/SignUp";
+import ViewFullReport from "./pages/ward/ViewFullReport";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -27,16 +29,19 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/medlink" element={<LandingPage />} />
+            <Route path="/userprofile" element={<Profile />} />
             <Route path="/" element={<Navbar />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/drugUsage" element={<DrugUsage />} />
               <Route path="/order" element={<Order />} />
-              <Route path="/wardreceived" element={<WardRecieved />} />
+              <Route path="/wardreports" element={<WardReports />} />
+              <Route path="wardfullreport" element={<ViewFullReport />} />
               <Route path="/drugs" element={<Drugs />} />
               <Route path="/drugusagehistory" element={<UsageHistory />} />
               <Route path="/wardinventory" element={<WardInventory />} />
               <Route path="/viewwards" element={<ViewWards />} />
               <Route path="/suppliers" element={<Suppliers />} />
+
               <Route
                 path="/pharmacyinventory"
                 element={<PharmacyInventory />}

@@ -36,9 +36,9 @@ export const NavbarData = [
 
   {
     id: 5,
-    title: "Recieved",
+    title: "Reports",
     icon: <ViewListIcon />,
-    path: "/wardreceived",
+    path: "/wardreports",
     userType: ["WARDUSER"],
   },
   {
