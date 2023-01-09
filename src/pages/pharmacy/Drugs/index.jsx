@@ -1,19 +1,43 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Avatar,
+  Button,
+  Grid,
+  IconButton,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import TitleBar from "../../../components/TitleBar";
 import medicine1 from "../../../images/medicine-2.png";
 import ListComponent from "../../../components/ListComponent";
 import { useForm } from "react-hook-form";
-import { getAllDrugs, newDrug } from "../../../App/drugsService";
+import {
+  getAllDrugs,
+  getCategories,
+  getStoreTemps,
+  newCategory,
+  newDrug,
+} from "../../../App/drugsService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
 import DrugsModal from "../../../components/DrugsModal";
+import EditIcon from "@mui/icons-material/Edit";
+import CategoryModal from "../../../components/CategoryModal";
 
 const Drugs = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [openCategory, setOpenCategory] = useState(false);
+  const handleOpenCategory = () => setOpenCategory(true);
+  const handleCloseCategory = () => setOpenCategory(false);
 
   const headCells = [
     {
@@ -31,24 +55,17 @@ const Drugs = () => {
       align: "center",
     },
     {
+      id: "strength",
+      numeric: false,
+      disablePadding: true,
+      label: "Strength",
+      align: "center",
+    },
+    {
       id: "category",
       numeric: false,
       disablePadding: true,
       label: "Category",
-      align: "center",
-    },
-    {
-      id: "description",
-      numeric: false,
-      disablePadding: true,
-      label: "Description",
-      align: "center",
-    },
-    {
-      id: "level",
-      numeric: false,
-      disablePadding: true,
-      label: "Level",
       align: "center",
     },
     {
@@ -58,6 +75,14 @@ const Drugs = () => {
       label: "Store Temperature",
       align: "center",
     },
+    {
+      id: "description",
+      numeric: false,
+      disablePadding: true,
+      label: "Description",
+      align: "center",
+    },
+
     {
       id: "Actions",
       numeric: true,
@@ -74,14 +99,14 @@ const Drugs = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
   const [shouldRefresh, setShouldRefresh] = useState(true);
+  const [refreshCategories, setRefreshCategories] = useState(true);
 
   const [drugValue, setDrugValues] = useState({
-    drugId: "",
     drugName: "",
+    strength: "",
     category: "",
-    description: "",
-    level: "",
     storeTemp: "",
+    description: "",
   });
 
   useEffect(() => {
@@ -94,35 +119,35 @@ const Drugs = () => {
     _id,
     drugId,
     drugName,
+    strength,
     category,
-    description,
-    level,
-    storeTemp
+    storeTemp,
+    description
   ) {
     return {
       _id,
       drugId,
       drugName,
+      strength,
       category,
-      description,
-      level,
       storeTemp,
+      description,
     };
   }
 
   useEffect(() => {
     getAllDrugs((response) => {
-      console.log(response.drug);
+      // console.log(response.drug);
       setRetrivedRows(
         response.drug.map((e) =>
           createData(
             e._id,
             e.drugId,
             e.drugName,
-            e.category,
-            e.description,
-            e.level,
-            e.storeTemp
+            e.strength,
+            e.category.name,
+            e.storeTemp.id,
+            e.description
           )
         )
       );
@@ -131,8 +156,25 @@ const Drugs = () => {
   }, [shouldRefresh]);
 
   useEffect(() => {
-    console.log(rows);
+    // console.log(rows);
   }, [rows]);
+
+  const [categories, setCategories] = useState([]);
+  const [storeTemps, setStoreTemps] = useState([]);
+
+  useEffect(() => {
+    getCategories((response) => {
+      console.log(response.categories);
+      setCategories(response.categories);
+    });
+  }, [refreshCategories]);
+
+  useEffect(() => {
+    getStoreTemps((response) => {
+      console.log(response.storeTemps);
+      setStoreTemps(response.storeTemps);
+    });
+  }, []);
 
   const {
     register,
@@ -144,7 +186,7 @@ const Drugs = () => {
   const [updatingData, setUpdatingData] = useState({});
   const editClickHandler = (data) => {
     setUpdatingData(data);
-    console.log(data);
+    // console.log(data);
     handleOpen();
     //btn action
   };
@@ -152,10 +194,10 @@ const Drugs = () => {
   const clearAll = () => {
     resetField("drugId");
     resetField("drugName");
+    resetField("strength");
     resetField("category");
-    resetField("description");
-    resetField("level");
     resetField("storeTemp");
+    resetField("description");
   };
 
   const onSubmit = (data) => {
@@ -173,67 +215,49 @@ const Drugs = () => {
         title="Drugs"
         description="Manage drug details"
       />
-      <Grid container mt={2} spacing={2} mb={2}>
-        <Grid item lg={8}>
+      <Grid container spacing={2} mb={2}>
+        <Grid item lg={4}>
           <Grid container spacing={2}>
-            <Grid item lg={6} xs={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-                <Typography variant="h6" pb={3}>
-                  Store Temperature
-                </Typography>
-                <Grid container>
-                  <ListComponent
-                    x="12"
-                    color="#F49D1A"
-                    label="1 :- Non-Refrigerated medicines: 10°- 25°C "
-                  />
-                  <ListComponent
-                    x="12"
-                    color="#DC3535"
-                    label="2 :- Refrigerated medicines: 2°-8°C  "
-                  />
-                  <ListComponent
-                    x="12"
-                    color="#B01E68"
-                    label="1 :- Freezing temperatures: -10°C to -25°C "
-                  />
-                </Grid>
-                <Typography variant="h5" pb={3} mt={3}>
-                  Levels
-                </Typography>
-                <Grid container>
-                  <ListComponent
-                    x="6"
-                    color="#379237"
-                    label="1 :- General Medicines"
-                  />
-                  <ListComponent
-                    x="6"
-                    color="#FCE700"
-                    label="2 :- Pharmacy Medicines"
-                  />
-                  <ListComponent
-                    x="6"
-                    color="#400D51"
-                    label="3 :- Prescription Only "
-                  />
-                  <ListComponent
-                    x="6"
-                    color="#EB1D36"
-                    label="4 :- Controlled drugs"
-                  />
-                </Grid>
-              </Box>
-            </Grid>
-            <Grid item lg={6} xs={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-                <Typography variant="h5" pb={3}>
-                  Levels
-                </Typography>
+            <Grid item lg={12} xs={12}>
+              <Box
+                sx={{
+                  bgcolor: "white",
+                  pl: 2,
+                  pr: 4,
+                  pb: 4,
+                  pt: 2,
+                  borderRadius: 3,
+                }}
+              >
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h6">Categories</Typography>
+                  <Box sx={{ flexGrow: 1 }} />
+                  <IconButton
+                    title="Add and view categories"
+                    onClick={handleOpenCategory}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Box>
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h6">Store Temp</Typography>
+                  <Box sx={{ flexGrow: 1 }} />
+                  <IconButton
+                    title="Add and view categories"
+                    onClick={handleOpenCategory}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Box>
+                <Box sx={{ display: "flex" }}>
+                  <Typography variant="h7" pt={2}>
+                    Drugs in Categories:
+                  </Typography>
+                </Box>
                 <Chart
                   type="pie"
-                  width={500}
-                  height={390}
+                  width={450}
+                  height={340}
                   options={{
                     chart: {
                       id: "basic-bar",
@@ -249,82 +273,23 @@ const Drugs = () => {
                 />
               </Box>
             </Grid>
-            <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-                <Chart
-                  type="bar"
-                  width="100%"
-                  height="150px"
-                  options={{
-                    chart: {
-                      id: "basic-bar",
-                    },
-                    plotOptions: {
-                      bar: {
-                        borderRadius: 4,
-                        horizontal: true,
-                      },
-                    },
-                    xaxis: {
-                      categories: [
-                        "Non-Refrigerated",
-                        "Refrigerated",
-                        "Freezing",
-                      ],
-                    },
-                  }}
-                  series={[
-                    {
-                      name: "series-1",
-                      data: [30, 40, 45],
-                    },
-                  ]}
-                />
-              </Box>
-            </Grid>
           </Grid>
         </Grid>
 
-        <Grid item lg={4} xs={12}>
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 5 }}>
-            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
+        <Grid item lg={8} xs={12}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 3 }}>
+            <Typography variant="h6" fontWeight={"bold"} color="#495579">
               Add New Drug
             </Typography>
             <Grid container>
-              <Grid item lg={12}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pt={1}
-                >
-                  Drug ID
-                </Typography>
-                <TextField
-                  id="drugid"
-                  sx={{ mt: "0.5rem", width: "98%" }}
-                  placeholder="Drug ID"
-                  size="small"
-                  {...register("drugId", {
-                    required: {
-                      value: true,
-                      message: "Drug ID is required",
-                    },
-                  })}
-                  {...(errors.drugId && {
-                    error: true,
-                    helperText: errors.drugId.message,
-                  })}
-                ></TextField>
-              </Grid>
-              <Grid item lg={12}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pt={1}
-                >
-                  Drug Name
+              <Grid item lg={6}>
+                <Typography fontWeight={"normal"} color="#495579" pt={1}>
+                  Drug Name{" "}
+                  {errors.drugName ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.drugName.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   id="drugName"
@@ -339,48 +304,166 @@ const Drugs = () => {
                   })}
                   {...(errors.drugName && {
                     error: true,
-                    helperText: errors.drugName.message,
+                  })}
+                ></TextField>
+                {/* <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={setCategories}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Movie" />
+                  )}
+                /> */}
+              </Grid>
+              <Grid item lg={6}>
+                <Typography fontWeight={"normal"} color="#495579" pt={1}>
+                  Strength{" "}
+                  {errors.strength ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.strength.message}
+                    </span>
+                  ) : null}
+                </Typography>
+                <TextField
+                  id="strength"
+                  sx={{ mt: "0.5rem", width: "98%" }}
+                  placeholder="Strength"
+                  size="small"
+                  {...register("strength", {
+                    required: {
+                      value: true,
+                      message: "Strength is required",
+                    },
+                  })}
+                  {...(errors.strength && {
+                    error: true,
                   })}
                 ></TextField>
               </Grid>
-              <Grid item lg={12}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pt={1}
-                >
-                  Category
+              <Grid item lg={6}>
+                <Typography fontWeight={"normal"} color="#495579" pt={1}>
+                  Category{" "}
+                  {errors.category ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.category.message}
+                    </span>
+                  ) : null}
                 </Typography>
-                <TextField
-                  id="category"
-                  sx={{ mt: "0.5rem", width: "98%" }}
-                  placeholder="Category"
-                  size="small"
+
+                <Autocomplete
+                  disablePortal
                   {...register("category", {
                     required: {
                       value: true,
-                      message: "Category is required",
+                      message: "category is required",
                     },
                   })}
-                  {...(errors.category && {
-                    error: true,
-                    helperText: errors.category.message,
+                  onChange={(e, value) => {
+                    setValue("category", value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.name}
+                  options={categories}
+                  sx={{
+                    mt: "0.5rem",
+                    width: "98%",
+                    ...(errors.category && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                        // {...register("storeTemp", {
+                        //   required: {
+                        //     value: true,
+                        //     message: "Store temperature is required",
+                        //   },
+                        // })}
+                        // {...(errors.storeTemp && {
+                        //   error: true,
+                        //   helperText: errors.storeTemp.message,
+                        // })}
+                      />
+                    );
+                  }}
+                />
+              </Grid>
+              <Grid item lg={6}>
+                <Typography fontWeight={"normal"} color="#495579" pt={1}>
+                  Store Temperature{" "}
+                  {errors.storeTemp ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.storeTemp.message}
+                    </span>
+                  ) : null}
+                </Typography>
+                <Autocomplete
+                  disablePortal
+                  {...register("storeTemp", {
+                    required: {
+                      value: true,
+                      message: "Store temperature is required",
+                    },
                   })}
-                ></TextField>
+                  onChange={(e, value) => {
+                    setValue("storeTemp", value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.id}
+                  options={storeTemps}
+                  sx={{
+                    mt: "0.5rem",
+                    width: "98%",
+                    ...(errors.storeTemp && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                        // {...register("storeTemp", {
+                        //   required: {
+                        //     value: true,
+                        //     message: "Store temperature is required",
+                        //   },
+                        // })}
+                        // {...(errors.storeTemp && {
+                        //   error: true,
+                        //   helperText: errors.storeTemp.message,
+                        // })}
+                      />
+                    );
+                  }}
+                />
               </Grid>
               <Grid item lg={12}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pt={1}
-                >
-                  Description
+                <Typography fontWeight={"normal"} color="#495579" pt={1}>
+                  Description{" "}
+                  {errors.description ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.description.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   id="description"
-                  sx={{ mt: "0.5rem", width: "98%" }}
+                  sx={{ mt: "0.5rem", width: "99%" }}
                   placeholder="Description"
                   multiline
                   rows={2}
@@ -392,66 +475,14 @@ const Drugs = () => {
                   })}
                   {...(errors.description && {
                     error: true,
-                    helperText: errors.description.message,
                   })}
                 ></TextField>
               </Grid>
-              <Grid item lg={6}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pt={1}
-                >
-                  Level
-                </Typography>
-                <TextField
-                  id="level"
-                  sx={{ mt: "0.5rem", width: "98%" }}
-                  placeholder="Level"
-                  size="small"
-                  {...register("level", {
-                    required: {
-                      value: true,
-                      message: "Level is required",
-                    },
-                  })}
-                  {...(errors.level && {
-                    error: true,
-                    helperText: errors.level.message,
-                  })}
-                ></TextField>
-              </Grid>
-              <Grid item lg={6}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pt={1}
-                >
-                  Store Temperature
-                </Typography>
-                <TextField
-                  id="storeTemp"
-                  sx={{ mt: "0.5rem", width: "98%" }}
-                  placeholder="Store Temperature"
-                  size="small"
-                  {...register("storeTemp", {
-                    required: {
-                      value: true,
-                      message: "Store temperature is required",
-                    },
-                  })}
-                  {...(errors.storeTemp && {
-                    error: true,
-                    helperText: errors.storeTemp.message,
-                  })}
-                ></TextField>
-              </Grid>
+
               <Grid
                 item
                 lg={12}
-                pt={4}
+                pt={2}
                 gap={2}
                 pl={2}
                 sx={{ display: "flex", justifyContent: "end" }}
@@ -500,6 +531,13 @@ const Drugs = () => {
           </Box>
         </Grid>
       </Grid>
+
+      <CategoryModal
+        openCategory={openCategory}
+        setOpenCategory={setOpenCategory}
+        setRefreshCategories={setRefreshCategories}
+      />
+
       <DrugsModal
         open={open}
         setOpen={setOpen}

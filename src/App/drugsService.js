@@ -15,3 +15,15 @@ export const updateDrugs = (body, onSuccess) => {
 export const deleteDrugs = (body, onSuccess) => {
   post("/drugs/remove-drug", body, onSuccess);
 };
+
+export const getCategories = (onSuccess) => {
+  post("/category/get-categories", {}, onSuccess);
+};
+
+export const newCategory = (body, onSuccess) => {
+  post("/category/new-category", body, onSuccess);
+};
+
+export const getStoreTemps = (onSuccess) => {
+  post("/store-temp/get-storeTemps", {}, onSuccess);
+};

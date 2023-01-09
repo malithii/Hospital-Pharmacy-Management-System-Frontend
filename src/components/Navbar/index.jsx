@@ -205,7 +205,7 @@ export default function MiniDrawer(props) {
             {
               /* if (item.userType.includes(type)) */
             }
-            if (item.userType.includes("WARDUSER")) {
+            if (item.userType.includes("PHARMACIST")) {
               return (
                 <Link
                   to={item.path}
