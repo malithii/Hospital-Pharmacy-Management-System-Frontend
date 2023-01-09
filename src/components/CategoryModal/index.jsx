@@ -13,7 +13,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import { newCategory } from "../../App/drugsService";
 import { useForm } from "react-hook-form";
 
-const CategoryModal = ({ openCategory, setOpenCategory }) => {
+const CategoryModal = ({
+  openCategory,
+  setOpenCategory,
+  setRefreshCategories,
+}) => {
   const handleOpenCategory = () => setOpenCategory(true);
   const handleCloseCategory = () => setOpenCategory(false);
 
@@ -34,6 +38,7 @@ const CategoryModal = ({ openCategory, setOpenCategory }) => {
     newCategory(data, (response) => {
       console.log(response);
       clearCategory();
+      setRefreshCategories((prev) => !prev);
     });
   };
 

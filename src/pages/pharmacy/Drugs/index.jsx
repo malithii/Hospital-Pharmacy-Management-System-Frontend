@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Avatar,
   Button,
   Grid,
@@ -15,7 +16,13 @@ import TitleBar from "../../../components/TitleBar";
 import medicine1 from "../../../images/medicine-2.png";
 import ListComponent from "../../../components/ListComponent";
 import { useForm } from "react-hook-form";
-import { getAllDrugs, newCategory, newDrug } from "../../../App/drugsService";
+import {
+  getAllDrugs,
+  getCategories,
+  getStoreTemps,
+  newCategory,
+  newDrug,
+} from "../../../App/drugsService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import React, { useEffect, useState } from "react";
 import Chart from "react-apexcharts";
@@ -92,6 +99,7 @@ const Drugs = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
   const [shouldRefresh, setShouldRefresh] = useState(true);
+  const [refreshCategories, setRefreshCategories] = useState(true);
 
   const [drugValue, setDrugValues] = useState({
     drugName: "",
@@ -129,7 +137,7 @@ const Drugs = () => {
 
   useEffect(() => {
     getAllDrugs((response) => {
-      console.log(response.drug);
+      // console.log(response.drug);
       setRetrivedRows(
         response.drug.map((e) =>
           createData(
@@ -137,8 +145,8 @@ const Drugs = () => {
             e.drugId,
             e.drugName,
             e.strength,
-            e.category,
-            e.storeTemp,
+            e.category.name,
+            e.storeTemp.id,
             e.description
           )
         )
@@ -148,8 +156,25 @@ const Drugs = () => {
   }, [shouldRefresh]);
 
   useEffect(() => {
-    console.log(rows);
+    // console.log(rows);
   }, [rows]);
+
+  const [categories, setCategories] = useState([]);
+  const [storeTemps, setStoreTemps] = useState([]);
+
+  useEffect(() => {
+    getCategories((response) => {
+      console.log(response.categories);
+      setCategories(response.categories);
+    });
+  }, [refreshCategories]);
+
+  useEffect(() => {
+    getStoreTemps((response) => {
+      console.log(response.storeTemps);
+      setStoreTemps(response.storeTemps);
+    });
+  }, []);
 
   const {
     register,
@@ -161,7 +186,7 @@ const Drugs = () => {
   const [updatingData, setUpdatingData] = useState({});
   const editClickHandler = (data) => {
     setUpdatingData(data);
-    console.log(data);
+    // console.log(data);
     handleOpen();
     //btn action
   };
@@ -190,7 +215,7 @@ const Drugs = () => {
         title="Drugs"
         description="Manage drug details"
       />
-      <Grid container mt={2} spacing={2} mb={2}>
+      <Grid container spacing={2} mb={2}>
         <Grid item lg={4}>
           <Grid container spacing={2}>
             <Grid item lg={12} xs={12}>
@@ -259,7 +284,12 @@ const Drugs = () => {
             <Grid container>
               <Grid item lg={6}>
                 <Typography fontWeight={"normal"} color="#495579" pt={1}>
-                  Drug Name
+                  Drug Name{" "}
+                  {errors.drugName ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.drugName.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   id="drugName"
@@ -274,13 +304,26 @@ const Drugs = () => {
                   })}
                   {...(errors.drugName && {
                     error: true,
-                    helperText: errors.drugName.message,
                   })}
                 ></TextField>
+                {/* <Autocomplete
+                  disablePortal
+                  id="combo-box-demo"
+                  options={setCategories}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Movie" />
+                  )}
+                /> */}
               </Grid>
               <Grid item lg={6}>
                 <Typography fontWeight={"normal"} color="#495579" pt={1}>
-                  Strength
+                  Strength{" "}
+                  {errors.strength ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.strength.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   id="strength"
@@ -295,55 +338,128 @@ const Drugs = () => {
                   })}
                   {...(errors.strength && {
                     error: true,
-                    helperText: errors.strength.message,
                   })}
                 ></TextField>
               </Grid>
               <Grid item lg={6}>
                 <Typography fontWeight={"normal"} color="#495579" pt={1}>
-                  Category
+                  Category{" "}
+                  {errors.category ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.category.message}
+                    </span>
+                  ) : null}
                 </Typography>
-                <TextField
-                  id="category"
-                  sx={{ mt: "0.5rem", width: "98%" }}
-                  placeholder="Category"
-                  size="small"
+
+                <Autocomplete
+                  disablePortal
                   {...register("category", {
                     required: {
                       value: true,
-                      message: "Category is required",
+                      message: "category is required",
                     },
                   })}
-                  {...(errors.category && {
-                    error: true,
-                    helperText: errors.category.message,
-                  })}
-                ></TextField>
+                  onChange={(e, value) => {
+                    setValue("category", value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.name}
+                  options={categories}
+                  sx={{
+                    mt: "0.5rem",
+                    width: "98%",
+                    ...(errors.category && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                        // {...register("storeTemp", {
+                        //   required: {
+                        //     value: true,
+                        //     message: "Store temperature is required",
+                        //   },
+                        // })}
+                        // {...(errors.storeTemp && {
+                        //   error: true,
+                        //   helperText: errors.storeTemp.message,
+                        // })}
+                      />
+                    );
+                  }}
+                />
               </Grid>
               <Grid item lg={6}>
                 <Typography fontWeight={"normal"} color="#495579" pt={1}>
-                  Store Temperature
+                  Store Temperature{" "}
+                  {errors.storeTemp ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.storeTemp.message}
+                    </span>
+                  ) : null}
                 </Typography>
-                <TextField
-                  id="storeTemp"
-                  sx={{ mt: "0.5rem", width: "98%" }}
-                  placeholder="Store Temperature"
-                  size="small"
+                <Autocomplete
+                  disablePortal
                   {...register("storeTemp", {
                     required: {
                       value: true,
                       message: "Store temperature is required",
                     },
                   })}
-                  {...(errors.storeTemp && {
-                    error: true,
-                    helperText: errors.storeTemp.message,
-                  })}
-                ></TextField>
+                  onChange={(e, value) => {
+                    setValue("storeTemp", value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.id}
+                  options={storeTemps}
+                  sx={{
+                    mt: "0.5rem",
+                    width: "98%",
+                    ...(errors.storeTemp && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                        // {...register("storeTemp", {
+                        //   required: {
+                        //     value: true,
+                        //     message: "Store temperature is required",
+                        //   },
+                        // })}
+                        // {...(errors.storeTemp && {
+                        //   error: true,
+                        //   helperText: errors.storeTemp.message,
+                        // })}
+                      />
+                    );
+                  }}
+                />
               </Grid>
               <Grid item lg={12}>
                 <Typography fontWeight={"normal"} color="#495579" pt={1}>
-                  Description
+                  Description{" "}
+                  {errors.description ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.description.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   id="description"
@@ -359,7 +475,6 @@ const Drugs = () => {
                   })}
                   {...(errors.description && {
                     error: true,
-                    helperText: errors.description.message,
                   })}
                 ></TextField>
               </Grid>
@@ -420,6 +535,7 @@ const Drugs = () => {
       <CategoryModal
         openCategory={openCategory}
         setOpenCategory={setOpenCategory}
+        setRefreshCategories={setRefreshCategories}
       />
 
       <DrugsModal

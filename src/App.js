@@ -19,6 +19,10 @@ import PharmacyInventory from "./pages/pharmacy/PharmacyInventory";
 import SignUp from "./pages/SignUp";
 import ViewFullReport from "./pages/ward/ViewFullReport";
 import Profile from "./pages/Profile";
+import PharmacyDashboard from "./pages/pharmacy/PharmacyDashboard";
+import RecievedStocks from "./pages/pharmacy/RecievedStocks";
+import RecievedOrders from "./pages/pharmacy/RecievedOrders";
+import PharmacyReports from "./pages/pharmacy/PharmacyReports";
 
 function App() {
   return (
@@ -41,11 +45,17 @@ function App() {
               <Route path="/wardinventory" element={<WardInventory />} />
               <Route path="/viewwards" element={<ViewWards />} />
               <Route path="/suppliers" element={<Suppliers />} />
-
+              <Route
+                path="/pharmacy-dashboard"
+                element={<PharmacyDashboard />}
+              />
+              <Route path="recieved-stocks" element={<RecievedStocks />} />
               <Route
                 path="/pharmacyinventory"
                 element={<PharmacyInventory />}
               />
+              <Route path="/recieved-orders" element={<RecievedOrders />} />
+              <Route path="pharmacy-reports" element={<PharmacyReports />} />
             </Route>
           </Routes>
         </BrowserRouter>
