@@ -9,18 +9,18 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import EditIcon from "@mui/icons-material/Edit";
-import { newCategory } from "../../App/drugsService";
 import { useForm } from "react-hook-form";
+import EditIcon from "@mui/icons-material/Edit";
+import { newStoreTemp } from "../../App/drugsService";
 
-const CategoryModal = ({
-  openCategory,
-  setOpenCategory,
-  setRefreshCategories,
-  categories,
+const StoreTempModal = ({
+  openStoreTemp,
+  setOpenStoreTemp,
+  storeTemps,
+  setRefreshStoreTemps,
 }) => {
-  const handleOpenCategory = () => setOpenCategory(true);
-  const handleCloseCategory = () => setOpenCategory(false);
+  const handleOpenStoreTemp = () => setOpenStoreTemp(true);
+  const handleCloseStoreTemp = () => setOpenStoreTemp(false);
 
   const {
     register,
@@ -30,23 +30,23 @@ const CategoryModal = ({
     setValue,
   } = useForm();
 
-  const clearCategory = () => {
+  const clearStoreTemp = () => {
     resetField("name");
+    resetField("range");
   };
-
-  const onSubmitCategory = (data) => {
+  const onSubmitStoreTemp = (data) => {
     console.log(data);
-    newCategory(data, (response) => {
+    newStoreTemp(data, (response) => {
       console.log(response);
-      clearCategory();
-      setRefreshCategories((prev) => !prev);
+      clearStoreTemp();
+      setRefreshStoreTemps((prev) => !prev);
     });
   };
 
   return (
     <Modal
-      open={openCategory}
-      onClose={handleCloseCategory}
+      open={openStoreTemp}
+      onClose={handleCloseStoreTemp}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -63,29 +63,47 @@ const CategoryModal = ({
         }}
       >
         <Typography variant="h7" fontWeight="bold">
-          Drug Categories
+          Store Temperatures
         </Typography>
         <Grid container>
-          <Grid item lg={3} sx={{ display: "flex", alignItems: "center" }}>
+          <Grid item lg={2} sx={{ display: "flex", alignItems: "center" }}>
             <Typography variant="h7" fontWeight="normal">
-              New Category
+              Add New
             </Typography>
           </Grid>
-          <Grid item lg={7} sx={{ display: "flex", alignItems: "center" }}>
+          <Grid item lg={4} sx={{ display: "flex", alignItems: "center" }}>
             <TextField
               sx={{ mt: "0.5rem", width: "98%" }}
-              placeholder="Category Name"
+              placeholder="Temperature Name"
               size="small"
               id="name"
               {...register("name", {
                 required: {
                   value: true,
-                  message: "Category is required",
+                  message: "Temperature name is required",
                 },
               })}
               {...(errors.name && {
                 error: true,
                 helperText: errors.name.message,
+              })}
+            ></TextField>
+          </Grid>
+          <Grid item lg={4} sx={{ display: "flex", alignItems: "center" }}>
+            <TextField
+              sx={{ mt: "0.5rem", width: "98%" }}
+              placeholder="Temperature Range"
+              size="small"
+              id="range"
+              {...register("range", {
+                required: {
+                  value: true,
+                  message: "Range is required",
+                },
+              })}
+              {...(errors.range && {
+                error: true,
+                helperText: errors.range.message,
               })}
             ></TextField>
           </Grid>
@@ -97,7 +115,7 @@ const CategoryModal = ({
             <Button
               variant="contained"
               sx={{ width: "100px" }}
-              onClick={handleSubmit(onSubmitCategory)}
+              onClick={handleSubmit(onSubmitStoreTemp)}
             >
               Add
             </Button>
@@ -108,7 +126,7 @@ const CategoryModal = ({
         </Grid>
         <Box sx={{ height: "250px" }} overflow>
           <Grid item lg={4}>
-            {categories.map((category) => (
+            {storeTemps.map((storeTemp) => (
               <ListItem
                 secondaryAction={
                   <IconButton edge="end" aria-label="delete">
@@ -116,7 +134,7 @@ const CategoryModal = ({
                   </IconButton>
                 }
               >
-                <ListItemText primary={category.name} />
+                <ListItemText primary={storeTemp.id} />
               </ListItem>
             ))}
           </Grid>
@@ -126,4 +144,4 @@ const CategoryModal = ({
   );
 };
 
-export default CategoryModal;
+export default StoreTempModal;

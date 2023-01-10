@@ -29,6 +29,8 @@ import Chart from "react-apexcharts";
 import DrugsModal from "../../../components/DrugsModal";
 import EditIcon from "@mui/icons-material/Edit";
 import CategoryModal from "../../../components/CategoryModal";
+import StoreTempModal from "../../../components/StoreTempModal";
+import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimation";
 
 const Drugs = () => {
   const [open, setOpen] = useState(false);
@@ -38,6 +40,10 @@ const Drugs = () => {
   const [openCategory, setOpenCategory] = useState(false);
   const handleOpenCategory = () => setOpenCategory(true);
   const handleCloseCategory = () => setOpenCategory(false);
+
+  const [openStoreTemp, setOpenStoreTemp] = useState(false);
+  const handleOpenStoreTemp = () => setOpenStoreTemp(true);
+  const handleCloseStoreTemp = () => setOpenStoreTemp(false);
 
   const headCells = [
     {
@@ -100,6 +106,7 @@ const Drugs = () => {
   const [numOfRows, setNumOfRows] = useState(0);
   const [shouldRefresh, setShouldRefresh] = useState(true);
   const [refreshCategories, setRefreshCategories] = useState(true);
+  const [refreshStoreTemps, setRefreshStoreTemps] = useState(true);
 
   const [drugValue, setDrugValues] = useState({
     drugName: "",
@@ -116,7 +123,7 @@ const Drugs = () => {
   }, [page, rowsPerPage, retrivedRows]);
 
   function createData(
-    _id,
+    obj,
     drugId,
     drugName,
     strength,
@@ -125,7 +132,7 @@ const Drugs = () => {
     description
   ) {
     return {
-      _id,
+      obj,
       drugId,
       drugName,
       strength,
@@ -141,7 +148,7 @@ const Drugs = () => {
       setRetrivedRows(
         response.drug.map((e) =>
           createData(
-            e._id,
+            e,
             e.drugId,
             e.drugName,
             e.strength,
@@ -161,6 +168,7 @@ const Drugs = () => {
 
   const [categories, setCategories] = useState([]);
   const [storeTemps, setStoreTemps] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getCategories((response) => {
@@ -170,11 +178,13 @@ const Drugs = () => {
   }, [refreshCategories]);
 
   useEffect(() => {
+    setLoading(true);
     getStoreTemps((response) => {
+      setLoading(false);
       console.log(response.storeTemps);
       setStoreTemps(response.storeTemps);
     });
-  }, []);
+  }, [refreshStoreTemps]);
 
   const {
     register,
@@ -201,11 +211,18 @@ const Drugs = () => {
   };
 
   const onSubmit = (data) => {
-    newDrug(data, (response) => {
-      console.log(response);
-      clearAll();
-      setShouldRefresh((prev) => !prev);
-    });
+    setLoading(true);
+    newDrug(
+      data,
+      (response) => {
+        console.log(response);
+        clearAll();
+        setShouldRefresh((prev) => !prev);
+      },
+      () => {
+        setLoading(false);
+      }
+    );
   };
 
   return (
@@ -215,6 +232,7 @@ const Drugs = () => {
         title="Drugs"
         description="Manage drug details"
       />
+      {loading && <LoadingAnimation />}
       <Grid container spacing={2} mb={2}>
         <Grid item lg={4}>
           <Grid container spacing={2}>
@@ -240,11 +258,11 @@ const Drugs = () => {
                   </IconButton>
                 </Box>
                 <Box sx={{ display: "flex" }}>
-                  <Typography variant="h6">Store Temp</Typography>
+                  <Typography variant="h6">Store Temperatures</Typography>
                   <Box sx={{ flexGrow: 1 }} />
                   <IconButton
                     title="Add and view categories"
-                    onClick={handleOpenCategory}
+                    onClick={handleOpenStoreTemp}
                   >
                     <EditIcon />
                   </IconButton>
@@ -536,6 +554,13 @@ const Drugs = () => {
         openCategory={openCategory}
         setOpenCategory={setOpenCategory}
         setRefreshCategories={setRefreshCategories}
+        categories={categories}
+      />
+      <StoreTempModal
+        openStoreTemp={openStoreTemp}
+        setOpenStoreTemp={setOpenStoreTemp}
+        storeTemps={storeTemps}
+        setRefreshStoreTemps={setRefreshStoreTemps}
       />
 
       <DrugsModal
@@ -544,6 +569,7 @@ const Drugs = () => {
         drugValue={drugValue}
         setShouldRefresh={setShouldRefresh}
         updatingData={updatingData}
+        categories={categories}
       />
     </Box>
   );

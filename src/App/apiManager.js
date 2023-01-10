@@ -1,4 +1,10 @@
-export const post = (path, body, onSuccess = () => {}, onFailed = () => {}) => {
+export const post = (
+  path,
+  body,
+  onSuccess = () => {},
+  onFailed = () => {},
+  onComplete = () => {}
+) => {
   fetch("http://localhost:9000" + path, {
     method: "POST",
     headers: {
@@ -17,5 +23,8 @@ export const post = (path, body, onSuccess = () => {}, onFailed = () => {}) => {
     .catch((error) => {
       console.log(error);
       onFailed(error);
+    })
+    .finally(() => {
+      onComplete();
     });
 };
