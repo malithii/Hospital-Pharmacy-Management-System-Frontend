@@ -1,4 +1,11 @@
-import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Grid,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -10,9 +17,10 @@ const DrugsModal = ({
   drugId,
   drugName,
   category,
+  strength,
   description,
-  level,
   storeTemp,
+  categories,
   updatingData,
   setShouldRefresh,
 }) => {
@@ -22,14 +30,17 @@ const DrugsModal = ({
     formState: { errors },
     resetField,
     setValue,
+    getValues,
   } = useForm();
+  const [categoryD, setCategory] = useState("");
 
   const clearAll = () => {
     resetField("drugId");
     resetField("drugName");
     resetField("category");
+    resetField("strength");
     resetField("description");
-    resetField("level");
+
     resetField("storeTemp");
   };
 
@@ -37,11 +48,14 @@ const DrugsModal = ({
   const handleClose = () => setOpen(false);
   useEffect(() => {
     if (updatingData.drugId) {
+      console.log(updatingData);
+      setCategory(updatingData.obj.category);
       setValue("drugId", updatingData.drugId);
       setValue("drugName", updatingData.drugName);
-      setValue("category", updatingData.category);
+      setValue("strength", updatingData.strength);
+      setValue("category", "");
       setValue("description", updatingData.description);
-      setValue("level", updatingData.level);
+
       setValue("storeTemp", updatingData.storeTemp);
     }
   }, [updatingData]);
@@ -56,6 +70,7 @@ const DrugsModal = ({
       handleClose();
     });
   };
+  console.log(getValues("category"));
 
   return (
     <Modal
@@ -80,35 +95,8 @@ const DrugsModal = ({
           <Grid container>
             <Grid item lg={12}>
               <Typography
-                variant="h6"
-                fontWeight={"bold"}
-                color="#495579"
-                pt={1}
-              >
-                Drug ID
-              </Typography>
-              <TextField
-                value={drugId}
-                id="drugid"
-                sx={{ mt: "0.5rem", width: "98%" }}
-                placeholder="Drug ID"
-                size="small"
-                {...register("drugId", {
-                  required: {
-                    value: true,
-                    message: "Drug ID is required",
-                  },
-                })}
-                {...(errors.drugId && {
-                  error: true,
-                  helperText: errors.drugId.message,
-                })}
-              ></TextField>
-            </Grid>
-            <Grid item lg={12}>
-              <Typography
-                variant="h6"
-                fontWeight={"bold"}
+                variant="h7"
+                fontWeight={"normal"}
                 color="#495579"
                 pt={1}
               >
@@ -133,34 +121,121 @@ const DrugsModal = ({
             </Grid>
             <Grid item lg={12}>
               <Typography
-                variant="h6"
-                fontWeight={"bold"}
+                variant="h7"
+                fontWeight={"normal"}
                 color="#495579"
                 pt={1}
               >
-                Category
+                Strength
               </Typography>
               <TextField
-                id="category"
+                id="strength"
                 sx={{ mt: "0.5rem", width: "98%" }}
-                placeholder="Category"
+                placeholder="trength"
                 size="small"
-                {...register("category", {
+                {...register("strength", {
                   required: {
                     value: true,
-                    message: "Category is required",
+                    message: "Strength is required",
                   },
                 })}
-                {...(errors.category && {
+                {...(errors.strength && {
                   error: true,
-                  helperText: errors.category.message,
+                  helperText: errors.strength.message,
                 })}
               ></TextField>
             </Grid>
             <Grid item lg={12}>
               <Typography
-                variant="h6"
-                fontWeight={"bold"}
+                variant="h7"
+                fontWeight={"normal"}
+                color="#495579"
+                pt={1}
+              >
+                Category
+              </Typography>
+              <Autocomplete
+                disablePortal
+                {...register("category", {
+                  required: {
+                    value: true,
+                    message: "category is required",
+                  },
+                })}
+                onChange={(e, value) => {
+                  setValue("category", value);
+                  // if (updatingData.drugId) {
+                  //   updatingData.obj["category"] = value;
+                  // }
+                  setCategory(value);
+                }}
+                value={{ ...categoryD }}
+                id="category"
+                getOptionLabel={(option) => option.name}
+                options={categories}
+                sx={{
+                  mt: "0.5rem",
+                  width: "98%",
+                  ...(errors.category && {
+                    border: "1px solid red",
+                  }),
+                }}
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      sx={{ color: "red" }}
+                      {...params}
+                      size="small"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "search",
+                      }}
+                      // {...register("storeTemp", {
+                      //   required: {
+                      //     value: true,
+                      //     message: "Store temperature is required",
+                      //   },
+                      // })}
+                      // {...(errors.storeTemp && {
+                      //   error: true,
+                      //   helperText: errors.storeTemp.message,
+                      // })}
+                    />
+                  );
+                }}
+              />
+            </Grid>
+            <Grid item lg={12}>
+              <Typography
+                variant="h7"
+                fontWeight={"normal"}
+                color="#495579"
+                pt={1}
+              >
+                Store Temperature
+              </Typography>
+              <TextField
+                value={storeTemp}
+                id="storeTemp"
+                sx={{ mt: "0.5rem", width: "98%" }}
+                placeholder="Store Temperature"
+                size="small"
+                {...register("storeTemp", {
+                  required: {
+                    value: true,
+                    message: "Store temperature is required",
+                  },
+                })}
+                {...(errors.storeTemp && {
+                  error: true,
+                  helperText: errors.storeTemp.message,
+                })}
+              ></TextField>
+            </Grid>
+            <Grid item lg={12}>
+              <Typography
+                variant="h7"
+                fontWeight={"normal"}
                 color="#495579"
                 pt={1}
               >
@@ -185,64 +260,11 @@ const DrugsModal = ({
                 })}
               ></TextField>
             </Grid>
-            <Grid item lg={6}>
-              <Typography
-                variant="h6"
-                fontWeight={"bold"}
-                color="#495579"
-                pt={1}
-              >
-                Level
-              </Typography>
-              <TextField
-                value={level}
-                id="level"
-                sx={{ mt: "0.5rem", width: "98%" }}
-                placeholder="Level"
-                size="small"
-                {...register("level", {
-                  required: {
-                    value: true,
-                    message: "Level is required",
-                  },
-                })}
-                {...(errors.level && {
-                  error: true,
-                  helperText: errors.level.message,
-                })}
-              ></TextField>
-            </Grid>
-            <Grid item lg={6}>
-              <Typography
-                variant="h6"
-                fontWeight={"bold"}
-                color="#495579"
-                pt={1}
-              >
-                Store Temperature
-              </Typography>
-              <TextField
-                value={storeTemp}
-                id="storeTemp"
-                sx={{ mt: "0.5rem", width: "98%" }}
-                placeholder="Store Temperature"
-                size="small"
-                {...register("storeTemp", {
-                  required: {
-                    value: true,
-                    message: "Store temperature is required",
-                  },
-                })}
-                {...(errors.storeTemp && {
-                  error: true,
-                  helperText: errors.storeTemp.message,
-                })}
-              ></TextField>
-            </Grid>
+
             <Grid
               item
               lg={12}
-              pt={4}
+              pt={2}
               gap={2}
               pl={2}
               sx={{ display: "flex", justifyContent: "end" }}

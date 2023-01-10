@@ -1,7 +1,7 @@
 import { post } from "./apiManager";
 
-export const newDrug = (body, onSuccess) => {
-  post("/drugs/new-drug", body, onSuccess);
+export const newDrug = (body, onSuccess, onComplete) => {
+  post("/drugs/new-drug", body, onSuccess, () => {}, onComplete);
 };
 
 export const getAllDrugs = (onSuccess) => {
@@ -26,4 +26,8 @@ export const newCategory = (body, onSuccess) => {
 
 export const getStoreTemps = (onSuccess) => {
   post("/store-temp/get-storeTemps", {}, onSuccess);
+};
+
+export const newStoreTemp = (body, onSuccess) => {
+  post("/store-temp/new-storeTemp", body, onSuccess);
 };
