@@ -35,3 +35,7 @@ export const newStoreTemp = (body, onSuccess) => {
 export const drugCategoryChart = (onSuccess) => {
   post("/category/drugcategorychart", {}, onSuccess);
 };
+
+export const updateCategory = (body, onSuccess) => {
+  post("/category/categoryupdate", body, onSuccess);
+};
