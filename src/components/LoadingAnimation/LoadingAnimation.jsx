@@ -13,20 +13,34 @@ const LoadingAnimation = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        height: "100vh",
+        minHeight: "100vh",
+        height: "100%",
         width: "100vw",
         backdropFilter: "blur(2px)",
       }}
     >
-      <FillingBottle
-        color="#007ACC"
+      <div
         style={{
-          opacity: 1,
+          position: "absolute",
+          top: 0,
+          left: 0,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+          width: "100vw",
         }}
-        width={size}
-        height={size}
-        duration="2s"
-      />
+      >
+        <FillingBottle
+          color="#007ACC"
+          style={{
+            opacity: 1,
+          }}
+          width={size}
+          height={size}
+          duration="2s"
+        />
+      </div>
     </div>
   );
 };

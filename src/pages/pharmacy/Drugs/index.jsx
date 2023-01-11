@@ -17,6 +17,7 @@ import medicine1 from "../../../images/medicine-2.png";
 import ListComponent from "../../../components/ListComponent";
 import { useForm } from "react-hook-form";
 import {
+  drugCategoryChart,
   getAllDrugs,
   getCategories,
   getStoreTemps,
@@ -107,6 +108,8 @@ const Drugs = () => {
   const [shouldRefresh, setShouldRefresh] = useState(true);
   const [refreshCategories, setRefreshCategories] = useState(true);
   const [refreshStoreTemps, setRefreshStoreTemps] = useState(true);
+  const [drugCategoryChartData, setDrugCategoryChart] = useState([]);
+  const [refreshChart, setRefreshChart] = useState(true);
 
   const [drugValue, setDrugValues] = useState({
     drugName: "",
@@ -186,6 +189,13 @@ const Drugs = () => {
     });
   }, [refreshStoreTemps]);
 
+  useEffect(() => {
+    drugCategoryChart((response) => {
+      console.log(response.drug);
+      setDrugCategoryChart(response.drug);
+    });
+  }, [shouldRefresh]);
+
   const {
     register,
     handleSubmit,
@@ -226,7 +236,11 @@ const Drugs = () => {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        position: "relative",
+      }}
+    >
       <TitleBar
         image={medicine1}
         title="Drugs"
@@ -280,14 +294,9 @@ const Drugs = () => {
                     chart: {
                       id: "basic-bar",
                     },
-                    labels: [
-                      "General Medicines",
-                      "Pharmacy Medicine",
-                      "Prescription Only",
-                      "Controlled Drugs",
-                    ],
+                    labels: drugCategoryChartData.map((e) => e._id),
                   }}
-                  series={[55, 13, 43, 22]}
+                  series={drugCategoryChartData.map((e) => e.count)}
                 />
               </Box>
             </Grid>
@@ -503,6 +512,7 @@ const Drugs = () => {
                 pt={2}
                 gap={2}
                 pl={2}
+                my={1.1}
                 sx={{ display: "flex", justifyContent: "end" }}
               >
                 <Button
@@ -570,6 +580,7 @@ const Drugs = () => {
         setShouldRefresh={setShouldRefresh}
         updatingData={updatingData}
         categories={categories}
+        storeTemps={storeTemps}
       />
     </Box>
   );

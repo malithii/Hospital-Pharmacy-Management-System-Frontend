@@ -21,6 +21,7 @@ const DrugsModal = ({
   description,
   storeTemp,
   categories,
+  storeTemps,
   updatingData,
   setShouldRefresh,
 }) => {
@@ -33,15 +34,14 @@ const DrugsModal = ({
     getValues,
   } = useForm();
   const [categoryD, setCategory] = useState("");
+  const [storeTempD, setStoreTemp] = useState("");
 
   const clearAll = () => {
-    resetField("drugId");
     resetField("drugName");
-    resetField("category");
     resetField("strength");
-    resetField("description");
-
+    resetField("category");
     resetField("storeTemp");
+    resetField("description");
   };
 
   const handleOpen = () => setOpen(true);
@@ -50,10 +50,11 @@ const DrugsModal = ({
     if (updatingData.drugId) {
       console.log(updatingData);
       setCategory(updatingData.obj.category);
+      setStoreTemp(updatingData.obj.storeTemp);
       setValue("drugId", updatingData.drugId);
       setValue("drugName", updatingData.drugName);
       setValue("strength", updatingData.strength);
-      setValue("category", "");
+      setValue("category", updatingData.obj.category);
       setValue("description", updatingData.description);
 
       setValue("storeTemp", updatingData.storeTemp);
@@ -61,7 +62,9 @@ const DrugsModal = ({
   }, [updatingData]);
 
   const onSubmit = (data) => {
-    data["_id"] = updatingData._id;
+    data["_id"] = updatingData.obj._id;
+    data["category"] = data.category._id;
+    data["storeTemp"] = data.storeTemp._id;
     console.log(data);
     updateDrugs(data, (response) => {
       console.log(response);
@@ -70,7 +73,7 @@ const DrugsModal = ({
       handleClose();
     });
   };
-  console.log(getValues("category"));
+  // console.log(getValues("category"));
 
   return (
     <Modal
@@ -169,6 +172,9 @@ const DrugsModal = ({
                   // }
                   setCategory(value);
                 }}
+                isOptionEqualToValue={(option, value) =>
+                  option.name === value.name
+                }
                 value={{ ...categoryD }}
                 id="category"
                 getOptionLabel={(option) => option.name}
@@ -214,23 +220,57 @@ const DrugsModal = ({
               >
                 Store Temperature
               </Typography>
-              <TextField
-                value={storeTemp}
-                id="storeTemp"
-                sx={{ mt: "0.5rem", width: "98%" }}
-                placeholder="Store Temperature"
-                size="small"
+              <Autocomplete
+                disablePortal
                 {...register("storeTemp", {
                   required: {
                     value: true,
-                    message: "Store temperature is required",
+                    message: "StoreTemp is required",
                   },
                 })}
-                {...(errors.storeTemp && {
-                  error: true,
-                  helperText: errors.storeTemp.message,
-                })}
-              ></TextField>
+                onChange={(e, value) => {
+                  setValue("storeTemp", value);
+                  // if (updatingData.drugId) {
+                  //   updatingData.obj["category"] = value;
+                  // }
+                  setStoreTemp(value);
+                }}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                value={{ ...storeTempD }}
+                id="storeTemp"
+                getOptionLabel={(option) => option.id}
+                options={storeTemps}
+                sx={{
+                  mt: "0.5rem",
+                  width: "98%",
+                  ...(errors.storeTemp && {
+                    border: "1px solid red",
+                  }),
+                }}
+                renderInput={(params) => {
+                  return (
+                    <TextField
+                      sx={{ color: "red" }}
+                      {...params}
+                      size="small"
+                      InputProps={{
+                        ...params.InputProps,
+                        type: "search",
+                      }}
+                      // {...register("storeTemp", {
+                      //   required: {
+                      //     value: true,
+                      //     message: "Store temperature is required",
+                      //   },
+                      // })}
+                      // {...(errors.storeTemp && {
+                      //   error: true,
+                      //   helperText: errors.storeTemp.message,
+                      // })}
+                    />
+                  );
+                }}
+              />
             </Grid>
             <Grid item lg={12}>
               <Typography

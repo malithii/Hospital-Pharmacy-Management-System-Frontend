@@ -111,7 +111,13 @@ const CategoryModal = ({
             {categories.map((category) => (
               <ListItem
                 secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => {
+                      // setEditing(cate)
+                    }}
+                  >
                     <EditIcon />
                   </IconButton>
                 }
