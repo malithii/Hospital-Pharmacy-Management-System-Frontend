@@ -31,3 +31,11 @@ export const getStoreTemps = (onSuccess) => {
 export const newStoreTemp = (body, onSuccess) => {
   post("/store-temp/new-storeTemp", body, onSuccess);
 };
+
+export const drugCategoryChart = (onSuccess) => {
+  post("/category/drugcategorychart", {}, onSuccess);
+};
+
+export const updateCategory = (body, onSuccess) => {
+  post("/category/categoryupdate", body, onSuccess);
+};

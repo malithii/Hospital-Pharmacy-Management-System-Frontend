@@ -10,8 +10,9 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
-import { newCategory } from "../../App/drugsService";
+import { newCategory, updateCategory } from "../../App/drugsService";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 const CategoryModal = ({
   openCategory,
@@ -42,6 +43,16 @@ const CategoryModal = ({
       setRefreshCategories((prev) => !prev);
     });
   };
+
+  const categoryUpdate = (data) => {
+    console.log(data);
+    updateCategory(data, (response) => {
+      console.log(response);
+      setRefreshCategories((prev) => !prev);
+    });
+  };
+
+  const [editing, setEditing] = useState("");
 
   return (
     <Modal
@@ -108,17 +119,49 @@ const CategoryModal = ({
         </Grid>
         <Box sx={{ height: "250px" }} overflow>
           <Grid item lg={4}>
-            {categories.map((category) => (
-              <ListItem
-                secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
-                    <EditIcon />
-                  </IconButton>
-                }
-              >
-                <ListItemText primary={category.name} />
-              </ListItem>
-            ))}
+            {categories.map((category) =>
+              category._id === editing._id ? (
+                <Box
+                  display={"flex"}
+                  alignItems={"center"}
+                  mt={1}
+                  justifyContent="space-between"
+                >
+                  <TextField
+                    size="small"
+                    value={editing.name}
+                    onChange={(e) => {
+                      setEditing({ ...editing, name: e.target.value });
+                    }}
+                  />
+                  <Button
+                    onClick={() => {
+                      console.log(editing);
+                      categoryUpdate(editing);
+                      setEditing("");
+                    }}
+                  >
+                    Update
+                  </Button>
+                </Box>
+              ) : (
+                <ListItem
+                  secondaryAction={
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() => {
+                        setEditing(category);
+                      }}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  }
+                >
+                  <ListItemText primary={category.name} />
+                </ListItem>
+              )
+            )}
           </Grid>
         </Box>
       </Box>
