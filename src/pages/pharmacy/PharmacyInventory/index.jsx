@@ -20,8 +20,13 @@ import { useEffect, useState } from "react";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import { viewInventory } from "../../../App/inventoryService";
 import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimation";
+import DetailedInventory from "../../../components/DetailedInventory";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
+import EditIcon from "@mui/icons-material/Edit";
 
 const PharmacyInventory = () => {
+  const [detailedInventory, setDetailedInventory] = useState({});
+
   const headCells = [
     {
       id: "drugId",
@@ -61,6 +66,11 @@ const PharmacyInventory = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  const editClickHandler = (data) => {
+    setDetailedInventory(data);
+    // console.log(data);
+  };
 
   const requestBody = {
     user: "63b564bcfc1d5e7994bea009",
@@ -169,9 +179,15 @@ const PharmacyInventory = () => {
                 setRowsPerPage={setRowsPerPage}
                 numOfRows={numOfRows}
                 tableTitle={"Drugs"}
-                actionButtons={[{ btnName: "Edit" }]}
+                actionButtons={[
+                  { btnName: <WysiwygIcon />, actionFunc: editClickHandler },
+                  { btnName: <EditIcon /> },
+                ]}
               />
             </Box>
+          </Grid>
+          <Grid item lg={5} sx={{ pl: 2 }}>
+            <DetailedInventory detailedInventory={detailedInventory} />
           </Grid>
         </Grid>
       </Box>
