@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import thunk from "redux-thunk";
 import loginReducer from "../reducers/loginSlice";
+import alertReducer from "../reducers/alertSlice";
 
 const persistConfig = {
   key: "root",
@@ -11,6 +12,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   loginHPMS: loginReducer,
+  alertHPMS: alertReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

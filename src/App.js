@@ -23,11 +23,13 @@ import PharmacyDashboard from "./pages/pharmacy/PharmacyDashboard";
 import RecievedStocks from "./pages/pharmacy/RecievedStocks";
 import RecievedOrders from "./pages/pharmacy/RecievedOrders";
 import PharmacyReports from "./pages/pharmacy/PharmacyReports";
+import CustomSnackbar from "./components/CustomSnackbar";
 
 function App() {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
+        <CustomSnackbar />
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
