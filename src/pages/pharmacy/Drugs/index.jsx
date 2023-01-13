@@ -32,6 +32,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import CategoryModal from "../../../components/CategoryModal";
 import StoreTempModal from "../../../components/StoreTempModal";
 import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimation";
+import { showAlert } from "../../../App/alertService";
 
 const Drugs = () => {
   const [open, setOpen] = useState(false);
@@ -148,6 +149,8 @@ const Drugs = () => {
   useEffect(() => {
     getAllDrugs((response) => {
       // console.log(response.drug);
+      showAlert(response.status, "error");
+
       setRetrivedRows(
         response.drug.map((e) =>
           createData(
