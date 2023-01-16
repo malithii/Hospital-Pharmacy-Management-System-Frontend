@@ -149,7 +149,6 @@ const Drugs = () => {
   useEffect(() => {
     getAllDrugs((response) => {
       // console.log(response.drug);
-      showAlert(response.status, "error");
 
       setRetrivedRows(
         response.drug.map((e) =>
@@ -225,9 +224,11 @@ const Drugs = () => {
 
   const onSubmit = (data) => {
     setLoading(true);
+
     newDrug(
       data,
       (response) => {
+        showAlert(response.status, "success");
         console.log(response);
         clearAll();
         setShouldRefresh((prev) => !prev);
