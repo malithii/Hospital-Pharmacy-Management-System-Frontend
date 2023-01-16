@@ -211,7 +211,7 @@ const RecievedStocks = () => {
               height: "330px",
             }}
           >
-            <Typography>Stocks Added</Typography>
+            <Typography fontWeight={"bold"}>Stocks Added</Typography>
             <Box sx={{ height: "78%" }}></Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <Button variant="contained" size="medium" sx={{ width: "150px" }}>
