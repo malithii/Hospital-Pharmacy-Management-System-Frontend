@@ -1,4 +1,12 @@
-import { Button, Grid, Modal, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Grid,
+  IconButton,
+  Modal,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -10,100 +18,50 @@ import Chart from "react-apexcharts";
 import { useForm } from "react-hook-form";
 import { getOrders, newOrder } from "../../../App/orderService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
+import { getDrugById } from "../../../App/drugsService";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ClearAllIcon from "@mui/icons-material/ClearAll";
 
 const Order = () => {
-  const [value, setValue] = useState(dayjs());
-
-  const headCells = [
-    {
-      id: "date",
-      numeric: false,
-      disablePadding: true,
-      label: "Date",
-      align: "center",
-    },
-    {
-      id: "drugName",
-      numeric: false,
-      disablePadding: true,
-      label: "Drug Name",
-      align: "center",
-    },
-    {
-      id: "quantity",
-      numeric: false,
-      disablePadding: true,
-      label: "Quantity",
-      align: "center",
-    },
-  ];
-
-  const [rows, setRows] = useState([]);
-  const [retrivedRows, setRetrivedRows] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [numOfRows, setNumOfRows] = useState(0);
-  const [shouldRefresh, setShouldRefresh] = useState(true);
-
-  useEffect(() => {
-    setRows(
-      retrivedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    );
-  }, [page, rowsPerPage, retrivedRows]);
-
-  function createData(_id, date, drugName, quantity) {
-    return {
-      _id,
-      date,
-      drugName,
-      quantity,
-    };
-  }
-
-  useEffect(() => {
-    getOrders((response) => {
-      console.log(response.order);
-      setRetrivedRows(
-        response.order.map((e) =>
-          createData(e._id, e.date, e.drugName, e.quantity)
-        )
-      );
-      setNumOfRows(response.order.length);
-    });
-  }, [shouldRefresh]);
-
-  const editClickHandler = (userId) => {
-    console.log(userId);
-    //btn action
-  };
-  useEffect(() => {
-    console.log(rows);
-  }, [rows]);
+  const [indexes, setIndexes] = useState([]);
+  const [counter, setCounter] = useState(0);
+  const [drugs, setDrugs] = useState([]);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-    resetField,
   } = useForm();
 
-  const clearAll = () => {
-    resetField("drugName");
-    resetField("quantity");
-  };
-
   const onSubmit = (data) => {
-    newOrder(data, (response) => {
-      console.log(response);
-      clearAll();
-      setShouldRefresh((prev) => !prev);
-    });
+    console.log(data.orderItems);
   };
 
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const addItem = () => {
+    setIndexes((prevIndexes) => [...prevIndexes, counter]);
+    setCounter((prevCounter) => prevCounter + 1);
+  };
 
+  const removeItem = (index) => () => {
+    setIndexes((prevIndexes) => [
+      ...prevIndexes.filter((item) => item !== index),
+    ]);
+    setCounter((prevCounter) => prevCounter - 1);
+  };
+
+  const clearItems = () => {
+    setIndexes([]);
+  };
+
+  useEffect(() => {
+    getDrugById((response) => {
+      console.log(response.drug);
+      setDrugs(response.drug);
+    });
+  }, []);
   return (
     <Box>
       <TitleBar image={order} title="Order" description="Manages Orders" />
@@ -112,166 +70,147 @@ const Order = () => {
         <Grid item lg={5}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Order
-                </Typography>
-                <Grid item lg={12} xs={12}>
+              <Box
+                sx={{
+                  bgcolor: "white",
+                  p: 2,
+                  borderRadius: 3,
+                  height: "500px",
+                  overflow: "auto",
+                }}
+              >
+                <Grid container sx={{ width: "100%" }}>
                   <Typography
-                    variant="h7"
-                    fontWeight={"normal"}
+                    variant="h6"
+                    fontWeight={"bold"}
                     color="#495579"
                     pb={1}
                   >
-                    Date
+                    Order
                   </Typography>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <Stack spacing={3}>
-                      <DesktopDatePicker
-                        minDate={dayjs("2017-01-01")}
-                        onChange={(newValue) => {
-                          setValue(newValue);
-                        }}
-                        inputFormat="YYYY-MM-DD"
-                        renderInput={(params) => (
-                          <TextField
-                            size="small"
-                            {...params}
-                            {...register("date", {
-                              required: {
-                                value: true,
-                                message: "Date is required",
-                              },
-                            })}
-                            {...(errors.date && {
-                              error: true,
-                              helperText: errors.date.message,
-                            })}
-                          />
-                        )}
-                        size="small"
-                      />
-                    </Stack>
-                  </LocalizationProvider>
-                </Grid>
 
-                <Grid item lg={12} xs={12}>
-                  <Typography
-                    variant="h7"
-                    fontWeight={"normal"}
-                    color="#495579"
-                    pb={1}
-                  >
-                    Drug
-                  </Typography>
-                  <TextField
-                    id="drugName"
-                    size="small"
-                    fullWidth
-                    {...register("drugName", {
-                      required: {
-                        value: true,
-                        message: "Drug Name is required",
-                      },
-                    })}
-                    {...(errors.drugName && {
-                      error: true,
-                      helperText: errors.drugName.message,
-                    })}
-                  />
+                  <Grid item lg={12}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                      {indexes.map((index) => {
+                        const fieldName = `orderItems[${index}]`;
+                        return (
+                          <fieldset
+                            style={{ border: "none" }}
+                            name={fieldName}
+                            key={fieldName}
+                          >
+                            <Grid container spacing={2}>
+                              <Grid item lg={6.3} xs={12}>
+                                <Typography variant="h7" fontWeight={"normal"}>
+                                  Drug {index}:
+                                </Typography>
+                                {/* <input
+                            type="text"
+                            name={`${fieldName}.firstName`}
+                            {...register(`${fieldName}.firstName`)}
+                          /> */}
+                                <Autocomplete
+                                  disablePortal
+                                  {...register(`${fieldName}.drug`, {
+                                    required: {
+                                      value: true,
+                                      message: "Drug is required",
+                                    },
+                                  })}
+                                  onChange={(e, value) => {
+                                    setValue("drug", value);
+                                    console.log(value);
+                                  }}
+                                  id="combo-box-demo"
+                                  getOptionLabel={(option) => option.drugId}
+                                  options={drugs}
+                                  sx={{
+                                    mt: "0.5rem",
+                                    width: "100%",
+                                    ...(errors.drug && {
+                                      border: "1px solid red",
+                                    }),
+                                  }}
+                                  renderInput={(params) => {
+                                    return (
+                                      <TextField
+                                        name={`${fieldName}.drug`}
+                                        sx={{ color: "red" }}
+                                        {...params}
+                                        size="small"
+                                        InputProps={{
+                                          ...params.InputProps,
+                                          type: "search",
+                                        }}
+                                      />
+                                    );
+                                  }}
+                                />
+                              </Grid>
+                              <Grid item lg={4.3} xs={12}>
+                                <Typography variant="h7" fontWeight={"normal"}>
+                                  Quantity {index}:
+                                </Typography>
+                                <TextField
+                                  size="small"
+                                  sx={{ width: "100%", mt: "0.5rem" }}
+                                  type="text"
+                                  name={`${fieldName}.quantityOrdered`}
+                                  {...register(`${fieldName}.quantityOrdered`)}
+                                />
+                              </Grid>
+                              <Grid item lg={1.4}>
+                                <IconButton
+                                  aria-label="delete"
+                                  onClick={removeItem(index)}
+                                  sx={{ mt: "1.8rem" }}
+                                >
+                                  <DeleteIcon />
+                                </IconButton>
+                              </Grid>
+                            </Grid>
+                          </fieldset>
+                        );
+                      })}
+
+                      <Grid item lg={12}>
+                        <Grid container spacing={2} p={2}>
+                          <Grid item lg={4} xs={12}>
+                            <Button
+                              variant="contained"
+                              onClick={addItem}
+                              startIcon={<AddCircleIcon />}
+                              sx={{ width: "100%" }}
+                            >
+                              Add New
+                            </Button>
+                          </Grid>
+                          <Grid item lg={4} xs={12}>
+                            <Button
+                              variant="contained"
+                              onClick={clearItems}
+                              startIcon={<ClearAllIcon />}
+                              sx={{ width: "100%" }}
+                            >
+                              Clear All
+                            </Button>
+                          </Grid>
+                          <Grid item lg={4} xs={12}>
+                            <Button
+                              type="submit"
+                              variant="contained"
+                              color="primary"
+                              startIcon={<AddShoppingCartIcon />}
+                              sx={{ width: "100%" }}
+                            >
+                              Order
+                            </Button>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </form>
+                  </Grid>
                 </Grid>
-                <Grid item lg={12} xs={12}>
-                  <Typography
-                    variant="h7"
-                    fontWeight={"normal"}
-                    color="#495579"
-                    pb={1}
-                  >
-                    Quantity
-                  </Typography>
-                  <TextField
-                    size="small"
-                    fullWidth
-                    id="quantity"
-                    {...register("quantity", {
-                      required: {
-                        value: true,
-                        message: "Drug quantity is required",
-                      },
-                    })}
-                    {...(errors.quantity && {
-                      error: true,
-                      helperText: errors.quantity.message,
-                    })}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  lg={12}
-                  pt={3}
-                  xs={12}
-                  sx={{ display: "flex", justifyContent: "end" }}
-                >
-                  <Button
-                    variant="contained"
-                    sx={{ minWidth: "150px" }}
-                    size="medium"
-                    onClick={handleSubmit(onSubmit)}
-                  >
-                    ADD
-                  </Button>
-                </Grid>
-              </Box>
-            </Grid>
-            <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
-                <Typography
-                  variant="h6"
-                  fontWeight={"bold"}
-                  color="#495579"
-                  pb={1}
-                >
-                  Low Level Drugs
-                </Typography>
-                <Chart
-                  type="bar"
-                  width="100%"
-                  height="200rem"
-                  options={{
-                    chart: {
-                      id: "basic-bar",
-                    },
-                    plotOptions: {
-                      bar: {
-                        borderRadius: 4,
-                        horizontal: true,
-                      },
-                    },
-                    xaxis: {
-                      categories: [
-                        "Allopurinol",
-                        "Amoxicillin",
-                        "Bisoprolol",
-                        "Cefalexin",
-                        "Domperidone ",
-                        "Escitalopram",
-                        "Finasteride ",
-                        "Hydroxocobalamin ",
-                      ],
-                    },
-                  }}
-                  series={[
-                    {
-                      name: "series-1",
-                      data: [30, 40, 45, 50, 49, 60, 70, 91],
-                    },
-                  ]}
-                />
               </Box>
             </Grid>
           </Grid>
@@ -281,59 +220,9 @@ const Order = () => {
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Order
             </Typography>
-            <EnhancedTable
-              headCells={headCells}
-              rows={rows}
-              page={page}
-              setPage={setPage}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              numOfRows={numOfRows}
-              tableTitle={"Orders"}
-              actionButtons={[
-                { btnName: "Edit", actionFunc: editClickHandler },
-              ]}
-            />
-            <Box sx={{ display: "flex", justifyContent: "end" }}>
-              <Button variant="contained" size="large" onClick={handleOpen}>
-                Order
-              </Button>
-            </Box>
           </Box>
         </Grid>
       </Grid>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%,-50%)",
-          }}
-        >
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 5 }}>
-            <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
-              Order Details
-            </Typography>
-            <EnhancedTable
-              headCells={headCells}
-              rows={rows}
-              page={page}
-              setPage={setPage}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              numOfRows={numOfRows}
-              tableTitle={"Orders"}
-            />
-          </Box>
-        </Box>
-      </Modal>
     </Box>
   );
 };

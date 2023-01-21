@@ -16,6 +16,10 @@ export const deleteDrugs = (body, onSuccess) => {
   post("/drugs/remove-drug", body, onSuccess);
 };
 
+export const getDrugById = (onSuccess) => {
+  post("/drugs/drug-by-id", {}, onSuccess);
+};
+
 export const getCategories = (onSuccess) => {
   post("/category/get-categories", {}, onSuccess);
 };

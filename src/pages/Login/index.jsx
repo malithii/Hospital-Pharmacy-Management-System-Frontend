@@ -60,16 +60,21 @@ export default function Login() {
     userLogin(data, (response) => {
       console.log(response);
       if (response.status === "success") {
-        const { username, wardNo, email, type } = response.user;
+        const { _id, username, wardNo, email, type } = response.user;
         dispatch(
           login({
+            _id,
             username,
             wardNo,
             email,
             type,
           })
         );
-        navigate("/dashboard");
+        if (type === "PHARMACIST") {
+          navigate("/pharmacy-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       }
     });
     //  newDrug(data, (response) => {

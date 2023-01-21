@@ -1,4 +1,12 @@
-import { Box, Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  Grid,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import TitleBar from "../../../components/TitleBar";
 import medicine2 from "../../../images/medicine-2.png";
 import { useForm } from "react-hook-form";
@@ -6,6 +14,7 @@ import {
   allDrugUsages,
   getDrugUsageByDate,
   newDrugUsage,
+  viewDrugUsageByDate,
 } from "../../../App/wardDrugUsage";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -15,9 +24,12 @@ import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CustomCalendar from "../../../components/Calendar";
+import { useSelector } from "react-redux";
+import { getDrugById } from "../../../App/drugsService";
 
 const DrugUsage = () => {
-  const [value, setValue] = useState(dayjs());
+  const [date, setDate] = useState(dayjs());
+  const [drugs, setDrugs] = useState([]);
 
   const navigate = useNavigate();
   const navigateToHistory = () => {
@@ -34,7 +46,7 @@ const DrugUsage = () => {
       align: "center",
     },
     {
-      id: "drugName",
+      id: "drug",
       numeric: "false",
       disablePadding: true,
       label: "Drug Name",
@@ -56,10 +68,17 @@ const DrugUsage = () => {
       align: "center",
     },
     {
-      id: "quantity",
-      numeric: "false",
+      id: "quantityToBHT",
+
       disablePadding: true,
-      label: "Quantity",
+      label: "Quantity To BHT",
+      align: "center",
+    },
+    {
+      id: "quantityFromBHT",
+
+      disablePadding: true,
+      label: "Quantity from BHT",
       align: "center",
     },
     {
@@ -90,32 +109,63 @@ const DrugUsage = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(_id, date, drugName, batchNo, bht, quantity) {
+  function createData(
+    _id,
+    date,
+    drug,
+    batchNo,
+    bht,
+    quantitytoBHT,
+    quantityfromBHT
+  ) {
     return {
       _id,
       date,
-      drugName,
+      drug,
       batchNo,
       bht,
-      quantity,
+      quantitytoBHT,
+      quantityfromBHT,
     };
   }
+  var today = new Date(),
+    month = today.getMonth() + 1,
+    month1 = month < 10 ? "0" + month : month,
+    date1 = today.getFullYear() + "-" + month1 + "-" + today.getDate();
+
+  // console.log("DATE: " + date1);
+  const user = useSelector((state) => state.loginHPMS._id);
   const requestBody = {
-    // date: "2022-12-04T18:30:00.000Z",
-    wardNo: "13",
+    user: user,
+    date: date1,
   };
-  console.log("date" + requestBody.date);
+
   useEffect(() => {
-    allDrugUsages(requestBody, (response) => {
+    viewDrugUsageByDate(requestBody, (response) => {
       console.log(response.drugUsage);
       setRetrivedRows(
         response.drugUsage.map((e) =>
-          createData(e._id, e.date, e.drugName, e.batchNo, e.bht, e.quantity)
+          createData(
+            e._id,
+            e.date,
+            e.drug.drugId,
+            e.batchNo,
+            e.bht,
+            e.quantitytoBHT,
+            e.quantityfromBHT
+          )
         )
       );
       setNumOfRows(response.drugUsage.length);
     });
   }, [shouldRefresh]);
+
+  useEffect(() => {
+    getDrugById((response) => {
+      console.log(response.drug);
+      setDrugs(response.drug);
+    });
+  }, []);
 
   useEffect(() => {
     console.log(rows);
@@ -126,19 +176,21 @@ const DrugUsage = () => {
     handleSubmit,
     formState: { errors },
     resetField,
+    setValue,
   } = useForm();
 
   const clearAll = () => {
-    resetField("wardNo");
-    resetField("drugName");
     resetField("batchNo");
     resetField("bht");
-    resetField("quantity");
+    resetField("quantitytoBHT");
+    resetField("quantityfromBHT");
   };
 
   const onSubmit = (data) => {
-    newDrugUsage(data, (response) => {
-      console.log("response");
+    console.log(data);
+    const body = { ...data, user: user };
+    newDrugUsage(body, (response) => {
+      console.log(response);
       clearAll();
       setShouldRefresh((prev) => !prev);
     });
@@ -204,22 +256,48 @@ const DrugUsage = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Drug:
+                  Drug:{" "}
+                  {errors.drug ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.drug.message}
+                    </span>
+                  ) : null}
                 </Typography>
-                <TextField
-                  id="drugName"
-                  size="small"
-                  fullWidth
-                  {...register("drugName", {
+                <Autocomplete
+                  disablePortal
+                  {...register("drug", {
                     required: {
                       value: true,
-                      message: "drugName is required",
+                      message: "Drug is required",
                     },
                   })}
-                  {...(errors.drugName && {
-                    error: true,
-                    helperText: errors.drugName.message,
-                  })}
+                  onChange={(e, value) => {
+                    setValue("drug", value);
+                    console.log(value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.drugId}
+                  options={drugs}
+                  sx={{
+                    mt: "0.5rem",
+                    width: "100%",
+                    ...(errors.drug && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                      />
+                    );
+                  }}
                 />
               </Grid>
               <Grid item lg={6} xs={12}>
@@ -229,7 +307,12 @@ const DrugUsage = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Batch No
+                  Batch No{" "}
+                  {errors.batchNo ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.batchNo.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   size="small"
@@ -243,7 +326,6 @@ const DrugUsage = () => {
                   })}
                   {...(errors.batchNo && {
                     error: true,
-                    helperText: errors.batchNo.message,
                   })}
                 />
               </Grid>
@@ -254,7 +336,12 @@ const DrugUsage = () => {
                   color="#495579"
                   pb={1}
                 >
-                  BHT
+                  BHT{" "}
+                  {errors.bht ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.bht.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   size="small"
@@ -268,7 +355,6 @@ const DrugUsage = () => {
                   })}
                   {...(errors.bht && {
                     error: true,
-                    helperText: errors.bht.message,
                   })}
                 />
               </Grid>
@@ -279,21 +365,25 @@ const DrugUsage = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Quantity to BHT
+                  Quantity to BHT{" "}
+                  {errors.quantitytoBHT ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.quantitytoBHT.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   size="small"
                   fullWidth
-                  id="quantity"
-                  {...register("quantity", {
+                  id="quantitytoBHT"
+                  {...register("quantitytoBHT", {
                     required: {
                       value: true,
                       message: "Quantity is required",
                     },
                   })}
-                  {...(errors.quantity && {
+                  {...(errors.quantitytoBHT && {
                     error: true,
-                    helperText: errors.quantity.message,
                   })}
                 />
               </Grid>
@@ -309,17 +399,12 @@ const DrugUsage = () => {
                 <TextField
                   size="small"
                   fullWidth
-                  id="quantity2"
-                  {...register("quantity2", {
-                    required: {
-                      value: true,
-                      message: "Quantity is required",
-                    },
-                  })}
-                  {...(errors.quantity2 && {
-                    error: true,
-                    helperText: errors.quantity2.message,
-                  })}
+                  id="quantityfromBHT"
+                  {...register("quantityfromBHT", {})}
+                  // {...(errors.quantity2 && {
+                  //   error: true,
+                  //   helperText: errors.quantity2.message,
+                  // })}
                 />
               </Grid>
               <Grid

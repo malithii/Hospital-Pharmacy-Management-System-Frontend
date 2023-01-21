@@ -8,6 +8,7 @@ import { useState } from "react";
 import { allDrugUsages } from "../../../App/wardDrugUsage";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import SearchIcon from "@mui/icons-material/Search";
+import { useSelector } from "react-redux";
 
 const UsageHistory = () => {
   const [value, setValue] = useState(dayjs());
@@ -20,7 +21,7 @@ const UsageHistory = () => {
       align: "center",
     },
     {
-      id: "drugName",
+      id: "drug",
       numeric: "false",
       disablePadding: true,
       label: "Drug Name",
@@ -42,10 +43,17 @@ const UsageHistory = () => {
       align: "center",
     },
     {
-      id: "quantity",
-      numeric: "false",
+      id: "quantityToBHT",
+
       disablePadding: true,
-      label: "Quantity",
+      label: "Quantity To BHT",
+      align: "center",
+    },
+    {
+      id: "quantityFromBHT",
+
+      disablePadding: true,
+      label: "Quantity from BHT",
       align: "center",
     },
     {
@@ -77,18 +85,28 @@ const UsageHistory = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(_id, date, drugName, batchNo, bht, quantity) {
+  function createData(
+    _id,
+    date,
+    drug,
+    batchNo,
+    bht,
+    quantitytoBHT,
+    quantityfromBHT
+  ) {
     return {
       _id,
       date,
-      drugName,
+      drug,
       batchNo,
       bht,
-      quantity,
+      quantitytoBHT,
+      quantityfromBHT,
     };
   }
+  const user = useSelector((state) => state.loginHPMS._id);
   const requestBody = {
-    wardNo: "13",
+    user: user,
   };
 
   useEffect(() => {
@@ -96,7 +114,15 @@ const UsageHistory = () => {
       console.log(response.drugUsage);
       setRetrivedRows(
         response.drugUsage.map((e) =>
-          createData(e._id, e.date, e.drugName, e.batchNo, e.bht, e.quantity)
+          createData(
+            e._id,
+            e.date,
+            e.drug.drugId,
+            e.batchNo,
+            e.bht,
+            e.quantitytoBHT,
+            e.quantityfromBHT
+          )
         )
       );
       setNumOfRows(response.drugUsage.length);

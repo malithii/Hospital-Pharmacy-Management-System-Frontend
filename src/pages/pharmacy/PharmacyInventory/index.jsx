@@ -23,6 +23,7 @@ import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimat
 import DetailedInventory from "../../../components/DetailedInventory";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import EditIcon from "@mui/icons-material/Edit";
+import { useSelector } from "react-redux";
 
 const PharmacyInventory = () => {
   const [detailedInventory, setDetailedInventory] = useState({});
@@ -72,8 +73,10 @@ const PharmacyInventory = () => {
     // console.log(data);
   };
 
+  const user = useSelector((state) => state.loginHPMS._id);
+
   const requestBody = {
-    user: "63b564bcfc1d5e7994bea009",
+    user: user,
   };
   useEffect(() => {
     setRows(
