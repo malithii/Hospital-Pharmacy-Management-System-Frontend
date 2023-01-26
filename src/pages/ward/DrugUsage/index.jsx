@@ -381,6 +381,18 @@ const DrugUsage = () => {
                       value: true,
                       message: "Quantity is required",
                     },
+                    validate: {
+                      isNumber: (value) => {
+                        if (!value.match(/^[0-9]*$/)) {
+                          return "Please enter a number";
+                        }
+                      },
+                      // lessThan100: (value) => {
+                      //   if (value > 100) {
+                      //     return "knfksndfkj";
+                      //   }
+                      // },
+                    },
                   })}
                   {...(errors.quantitytoBHT && {
                     error: true,
