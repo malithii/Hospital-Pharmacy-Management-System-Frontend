@@ -67,7 +67,7 @@ export const NavbarData = [
     title: "Inventory",
     icon: <MedicalServicesIcon />,
     path: "/pharmacyinventory",
-    userType: ["PHARMACIST"],
+    userType: ["PHARMACIST", "WARDUSER"],
   },
   {
     id: 10,

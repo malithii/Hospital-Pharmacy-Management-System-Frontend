@@ -101,6 +101,7 @@ const RecievedStocks = () => {
     // console.log(rows);
   }, [rows]);
 
+  
   return (
     <Box>
       <TitleBar

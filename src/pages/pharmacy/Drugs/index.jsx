@@ -392,6 +392,7 @@ const Drugs = () => {
                   })}
                   onChange={(e, value) => {
                     setValue("category", value);
+                    console.log(value);
                   }}
                   id="combo-box-demo"
                   getOptionLabel={(option) => option.name}
