@@ -2,12 +2,16 @@ import { Button, Grid } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
-import { getOrders } from "../../../App/orderService";
+import { createSearchParams, useNavigate } from "react-router-dom";
+import { getOrders, getPendingOrders } from "../../../App/orderService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import TitleBar from "../../../components/TitleBar";
 import ordersIcon from "../../../images/ordersIcon.png";
 
 const RecievedOrders = () => {
+  const [detailedOrder, setDetailedOrder] = useState({});
+  const navigate = useNavigate();
+
   const headCells = [
     {
       id: "user",
@@ -30,6 +34,14 @@ const RecievedOrders = () => {
       label: "Status",
       align: "center",
     },
+    {
+      id: "Actions",
+      numeric: true,
+      disablePadding: false,
+      label: "Actions",
+      align: "center",
+      sorting: false,
+    },
   ];
 
   const [rows, setRows] = useState([]);
@@ -45,9 +57,9 @@ const RecievedOrders = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(_id, user, date, status) {
+  function createData(obj, user, date, status) {
     return {
-      _id,
+      obj,
       user,
       date,
       status,
@@ -55,11 +67,11 @@ const RecievedOrders = () => {
   }
 
   useEffect(() => {
-    getOrders((response) => {
+    getPendingOrders((response) => {
       console.log(response.order);
       setRetrivedRows(
         response.order.map((e) =>
-          createData(e._id, e.user.wardNo, e.date, e.status)
+          createData(e, e.wardUser.wardNo, e.date, e.status)
         )
       );
       setNumOfRows(response.order.length);
@@ -69,6 +81,14 @@ const RecievedOrders = () => {
   useEffect(() => {
     console.log(rows);
   }, [rows]);
+
+  const issueClickHandler = (data) => {
+    console.log(data.obj);
+    navigate("/detailed-orders", {
+      state: { detailedOrder: data.obj },
+    });
+  };
+
   return (
     <Box>
       <TitleBar
@@ -97,6 +117,9 @@ const RecievedOrders = () => {
                 setRowsPerPage={setRowsPerPage}
                 numOfRows={numOfRows}
                 tableTitle={"Orders"}
+                actionButtons={[
+                  { btnName: "Issue", actionFunc: issueClickHandler },
+                ]}
               />
             </Grid>
           </Box>

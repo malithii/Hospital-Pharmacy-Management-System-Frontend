@@ -24,6 +24,7 @@ import RecievedStocks from "./pages/pharmacy/RecievedStocks";
 import RecievedOrders from "./pages/pharmacy/RecievedOrders";
 import PharmacyReports from "./pages/pharmacy/PharmacyReports";
 import CustomSnackbar from "./components/CustomSnackbar";
+import DetailedOrders from "./pages/pharmacy/DetailedOrders";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               />
               <Route path="/recieved-orders" element={<RecievedOrders />} />
               <Route path="pharmacy-reports" element={<PharmacyReports />} />
+              <Route path="/detailed-orders" element={<DetailedOrders />} />
             </Route>
           </Routes>
         </BrowserRouter>
