@@ -1,16 +1,30 @@
-import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
+import {
+  Autocomplete,
+  Button,
+  Grid,
+  IconButton,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { getDrugById } from "../../../App/drugsService";
 import { getRecieved } from "../../../App/receivedStocksService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import TitleBar from "../../../components/TitleBar";
 import recievedIcon from "../../../images/recievedIcon.png";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const RecievedStocks = () => {
-  const [value, setValue] = useState(dayjs());
+  const [date, setDate] = useState(dayjs());
+  const [drugs, setDrugs] = useState([]);
+  const [receivedStocks, setReceivedStocks] = useState([]);
 
   const headCells = [
     {
@@ -101,7 +115,28 @@ const RecievedStocks = () => {
     // console.log(rows);
   }, [rows]);
 
-  
+  useEffect(() => {
+    getDrugById((response) => {
+      console.log(response.drug);
+      setDrugs(response.drug);
+    });
+  }, []);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+    setValue,
+  } = useForm();
+
+  const addStock = (data) => {
+    console.log(data);
+    // receivedStocks.push(data);
+    setReceivedStocks([...receivedStocks, data]);
+    console.log(receivedStocks);
+  };
+
   return (
     <Box>
       <TitleBar
@@ -154,7 +189,41 @@ const RecievedStocks = () => {
                 >
                   Drug
                 </Typography>
-                <TextField size="small" fullWidth sx={{ width: "98%" }} />
+                <Autocomplete
+                  disablePortal
+                  {...register("drug", {
+                    required: {
+                      value: true,
+                      message: "Drug is required",
+                    },
+                  })}
+                  onChange={(e, value) => {
+                    setValue("drug", value);
+                    console.log(value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.drugId}
+                  options={drugs}
+                  sx={{
+                    width: "98%",
+                    ...(errors.drug && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                      />
+                    );
+                  }}
+                />
               </Grid>
               <Grid item lg={6} xs={12} mt={1}>
                 <Typography
@@ -165,7 +234,21 @@ const RecievedStocks = () => {
                 >
                   Batch
                 </Typography>
-                <TextField size="small" fullWidth sx={{ width: "98%" }} />
+                <TextField
+                  size="small"
+                  fullWidth
+                  sx={{ width: "98%" }}
+                  id="batchNo"
+                  {...register("batchNo", {
+                    required: {
+                      value: true,
+                      message: "batchNo is required",
+                    },
+                  })}
+                  {...(errors.batchNo && {
+                    error: true,
+                  })}
+                />
               </Grid>
               <Grid item lg={6} xs={12} mt={1}>
                 <Typography
@@ -176,7 +259,35 @@ const RecievedStocks = () => {
                 >
                   Expire Date
                 </Typography>
-                <TextField size="small" fullWidth sx={{ width: "98%" }} />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Stack spacing={3}>
+                    <DesktopDatePicker
+                      minDate={dayjs("2017-01-01")}
+                      onChange={(newValue) => {
+                        setValue(newValue);
+                      }}
+                      inputFormat="YYYY-MM-DD"
+                      renderInput={(params) => (
+                        <TextField
+                          size="small"
+                          {...params}
+                          sx={{ width: "98%" }}
+                          {...register("expDate", {
+                            required: {
+                              value: true,
+                              message: "Exp Date is required",
+                            },
+                          })}
+                          {...(errors.expDate && {
+                            error: true,
+                            helperText: errors.expDate.message,
+                          })}
+                        />
+                      )}
+                      size="small"
+                    />
+                  </Stack>
+                </LocalizationProvider>
               </Grid>
               <Grid item lg={6} xs={12} mt={1}>
                 <Typography
@@ -187,7 +298,21 @@ const RecievedStocks = () => {
                 >
                   Quantity{" "}
                 </Typography>
-                <TextField size="small" fullWidth sx={{ width: "98%" }} />
+                <TextField
+                  size="small"
+                  fullWidth
+                  sx={{ width: "98%" }}
+                  {...register("quantity", {
+                    required: {
+                      value: true,
+                      message: "Quantity is required",
+                    },
+                  })}
+                  {...(errors.quantity && {
+                    error: true,
+                    helperText: errors.quantity.message,
+                  })}
+                />
               </Grid>
               <Grid item lg={6} mt={2}>
                 <Button variant="outlined" size="medium" sx={{ width: "98%" }}>
@@ -195,7 +320,12 @@ const RecievedStocks = () => {
                 </Button>
               </Grid>
               <Grid item lg={6} mt={2}>
-                <Button variant="contained" size="medium" sx={{ width: "98%" }}>
+                <Button
+                  variant="contained"
+                  size="medium"
+                  sx={{ width: "98%" }}
+                  onClick={handleSubmit(addStock)}
+                >
                   Add
                 </Button>
               </Grid>
@@ -213,7 +343,44 @@ const RecievedStocks = () => {
             }}
           >
             <Typography fontWeight={"bold"}>Stocks Added</Typography>
-            <Box sx={{ height: "78%" }}></Box>
+            <Box sx={{ height: "78%" }}>
+              <Grid container>
+                {receivedStocks.map((item) => {
+                  return (
+                    <Grid container>
+                      <Grid item lg={3}>
+                        <Typography>{item.drug.drugId}</Typography>
+                      </Grid>
+                      <Grid item lg={3}>
+                        <Typography>{item.batchNo}</Typography>
+                      </Grid>
+                      <Grid item lg={2.5}>
+                        <Typography>{item.expDate}</Typography>
+                      </Grid>
+                      <Grid item lg={1.5}>
+                        <Typography>{item.quantity}</Typography>
+                      </Grid>
+                      <Grid item lg={2}>
+                        <IconButton
+                          onClick={() => {
+                            setReceivedStocks(
+                              receivedStocks.filter(
+                                (i) =>
+                                  i.drug.drugId !== item.drug.drugId ||
+                                  i.batchNo !== item.batchNo
+                              )
+                            );
+                            console.log(receivedStocks);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
+                  );
+                })}
+              </Grid>
+            </Box>
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <Button variant="contained" size="medium" sx={{ width: "150px" }}>
                 Save
