@@ -187,7 +187,7 @@ const Dashboard = () => {
             <Typography variant="h7" fontWeight={"bold"} color="#495579" pb={1}>
               Expiring List
             </Typography>
-            <Typography>Table</Typography>
+            {/* <Typography>Table</Typography> */}
           </Box>
         </Grid>
       </Grid>

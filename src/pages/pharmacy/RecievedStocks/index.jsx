@@ -25,6 +25,7 @@ import TitleBar from "../../../components/TitleBar";
 import recievedIcon from "../../../images/recievedIcon.png";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
+import drugStore from "../../../images/drugStore.png";
 
 const RecievedStocks = () => {
   const [date, setDate] = useState(dayjs());
@@ -348,18 +349,18 @@ const RecievedStocks = () => {
           </Box>
         </Grid>
         <Grid item lg={7} xs={12}>
-          <Box
-            sx={{
-              bgcolor: "white",
-              p: 2,
-              borderRadius: 3,
-              pb: 3,
-              height: "330px",
-              pl: 5,
-            }}
-          >
-            {receivedStocks.length > 0 ? (
-              <>
+          {receivedStocks.length > 0 ? (
+            <>
+              <Box
+                sx={{
+                  bgcolor: "white",
+                  p: 2,
+                  borderRadius: 3,
+                  pb: 3,
+                  height: "330px",
+                  pl: 5,
+                }}
+              >
                 <Typography fontWeight={"bold"} mb={1}>
                   Stocks Added
                 </Typography>
@@ -452,9 +453,28 @@ const RecievedStocks = () => {
                     Save
                   </Button>
                 </Box>
-              </>
-            ) : null}
-          </Box>
+              </Box>
+            </>
+          ) : (
+            <Box
+              sx={{
+                bgcolor: "white",
+                p: 2,
+                borderRadius: 3,
+                pb: 3,
+                height: "330px",
+                pl: 5,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Typography fontWeight={"bold"}>No Stocks Added</Typography>
+
+              <img src={drugStore} alt="drugStore" />
+            </Box>
+          )}
         </Grid>
         <Grid item lg={12} xs={12}>
           <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>

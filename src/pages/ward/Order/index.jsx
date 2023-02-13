@@ -66,7 +66,7 @@ const Order = () => {
                   bgcolor: "white",
                   p: 2,
                   borderRadius: 3,
-                  height: "500px",
+                  height: "300px",
                   overflow: "auto",
                 }}
               >
@@ -77,7 +77,7 @@ const Order = () => {
                     color="#495579"
                     pb={1}
                   >
-                    Order
+                    Add Order Items
                   </Typography>
                   <Grid item lg={12}>
                     <Typography>Drug</Typography>
@@ -128,30 +128,38 @@ const Order = () => {
                       onChange={(e) => setQuantityOrdered(e.target.value)}
                     />
                   </Grid>
-                  <Button
-                    variant="contained"
-                    onClick={() => {
-                      setQuantityOrdered("");
-                      setValue("");
-                      setOrderItems([
-                        ...orderItems,
-                        {
-                          drug: value,
-                          quantityOrdered: quantityOrdered,
-                        },
-                      ]);
-                      console.log(orderItems);
-                    }}
+                  <Grid
+                    item
+                    lg={12}
+                    sx={{ display: "flex", justifyContent: "end", pt: 3 }}
                   >
-                    Order
-                  </Button>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        setQuantityOrdered("");
+                        setValue("");
+                        setOrderItems([
+                          ...orderItems,
+                          {
+                            drug: value,
+                            quantityOrdered: quantityOrdered,
+                          },
+                        ]);
+                        console.log(orderItems);
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </Grid>
                 </Grid>
               </Box>
             </Grid>
           </Grid>
         </Grid>
         <Grid item lg={7}>
-          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
+          <Box
+            sx={{ bgcolor: "white", p: 2, borderRadius: 3, height: "300px" }}
+          >
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={1}>
               Order
             </Typography>
@@ -161,11 +169,11 @@ const Order = () => {
                   <Grid item lg={12} key={item.id}>
                     <Grid container>
                       <Grid item lg={4}>
-                        <Typography>Drug</Typography>
+                        {/* <Typography>Drug</Typography> */}
                         <Typography>{item.drug.drugId}</Typography>
                       </Grid>
                       <Grid item lg={4}>
-                        <Typography>Quantity</Typography>
+                        {/* <Typography>Quantity</Typography> */}
                         <Typography>{item.quantityOrdered}</Typography>
                       </Grid>
                       <Grid item lg={4}>
@@ -187,11 +195,27 @@ const Order = () => {
                 );
               })}
               {orderItems.length > 0 ? ( // if orderItems is not empty
-                <Button variant="contained" onClick={handleSubmit(onSubmit)}>
-                  Submit
+                <Button
+                  variant="contained"
+                  sx={{ bottom: 0 }}
+                  onClick={handleSubmit(onSubmit)}
+                >
+                  Order
                 </Button>
               ) : (
-                <Typography>Order is empty</Typography>
+                <Box
+                  sx={{
+                    height: "200px",
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography>
+                    Order is empty. Add Order Items to order
+                  </Typography>
+                </Box>
               )}
             </Grid>
           </Box>
