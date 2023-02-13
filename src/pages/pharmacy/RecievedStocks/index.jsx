@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Button,
+  Divider,
   Grid,
   IconButton,
   Stack,
@@ -15,11 +16,16 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { getDrugById } from "../../../App/drugsService";
-import { getRecieved } from "../../../App/receivedStocksService";
+import {
+  getRecieved,
+  newRecievedDrugs,
+} from "../../../App/receivedStocksService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import TitleBar from "../../../components/TitleBar";
 import recievedIcon from "../../../images/recievedIcon.png";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useSelector } from "react-redux";
+import drugStore from "../../../images/drugStore.png";
 
 const RecievedStocks = () => {
   const [date, setDate] = useState(dayjs());
@@ -88,8 +94,18 @@ const RecievedStocks = () => {
     };
   }
 
+  const user = useSelector((state) => state.loginHPMS._id);
+
   const requestBody = {
-    user: "63b564bcfc1d5e7994bea009",
+    user: user,
+    date: date,
+    recievedDrugs: receivedStocks,
+  };
+
+  const onSubmit = () => {
+    newRecievedDrugs(requestBody, (response) => {
+      console.log(response);
+    });
   };
 
   useEffect(() => {
@@ -165,7 +181,7 @@ const RecievedStocks = () => {
                     <DesktopDatePicker
                       minDate={dayjs("2017-01-01")}
                       onChange={(newValue) => {
-                        setValue(newValue);
+                        setDate(newValue);
                       }}
                       inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
@@ -333,60 +349,132 @@ const RecievedStocks = () => {
           </Box>
         </Grid>
         <Grid item lg={7} xs={12}>
-          <Box
-            sx={{
-              bgcolor: "white",
-              p: 2,
-              borderRadius: 3,
-              pb: 3,
-              height: "330px",
-            }}
-          >
-            <Typography fontWeight={"bold"}>Stocks Added</Typography>
-            <Box sx={{ height: "78%" }}>
-              <Grid container>
-                {receivedStocks.map((item) => {
-                  return (
-                    <Grid container>
-                      <Grid item lg={3}>
-                        <Typography>{item.drug.drugId}</Typography>
-                      </Grid>
-                      <Grid item lg={3}>
-                        <Typography>{item.batchNo}</Typography>
-                      </Grid>
-                      <Grid item lg={2.5}>
-                        <Typography>{item.expDate}</Typography>
-                      </Grid>
-                      <Grid item lg={1.5}>
-                        <Typography>{item.quantity}</Typography>
-                      </Grid>
-                      <Grid item lg={2}>
-                        <IconButton
-                          onClick={() => {
-                            setReceivedStocks(
-                              receivedStocks.filter(
-                                (i) =>
-                                  i.drug.drugId !== item.drug.drugId ||
-                                  i.batchNo !== item.batchNo
-                              )
-                            );
-                            console.log(receivedStocks);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Grid>
+          {receivedStocks.length > 0 ? (
+            <>
+              <Box
+                sx={{
+                  bgcolor: "white",
+                  p: 2,
+                  borderRadius: 3,
+                  pb: 3,
+                  height: "330px",
+                  pl: 5,
+                }}
+              >
+                <Typography fontWeight={"bold"} mb={1}>
+                  Stocks Added
+                </Typography>
+
+                <Box
+                  sx={{
+                    height: "78%",
+                    overflow: "auto",
+                    scrollbarWidth: "thin",
+                  }}
+                >
+                  <Grid container>
+                    <Grid item lg={3}>
+                      <Typography fontWeight={"bold"}>Drug</Typography>
                     </Grid>
-                  );
-                })}
-              </Grid>
+                    <Grid item lg={3}>
+                      <Typography fontWeight={"bold"}>Batch</Typography>
+                    </Grid>
+                    <Grid item lg={2.5}>
+                      <Typography fontWeight={"bold"}>Expire Date</Typography>
+                    </Grid>
+                    <Grid item lg={1.5}>
+                      <Typography fontWeight={"bold"}>Quantity</Typography>
+                    </Grid>
+
+                    {receivedStocks.map((item) => {
+                      return (
+                        <Grid container>
+                          <Grid
+                            item
+                            lg={3}
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Typography>{item.drug.drugId}</Typography>
+                          </Grid>
+                          <Grid
+                            item
+                            lg={3}
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Typography>{item.batchNo}</Typography>
+                          </Grid>
+                          <Grid
+                            item
+                            lg={2.5}
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Typography>{item.expDate}</Typography>
+                          </Grid>
+                          <Grid
+                            item
+                            lg={2}
+                            sx={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Typography>{item.quantity}</Typography>
+                          </Grid>
+                          <Grid item lg={1.5}>
+                            <IconButton
+                              onClick={() => {
+                                setReceivedStocks(
+                                  receivedStocks.filter(
+                                    (i) =>
+                                      i.drug.drugId !== item.drug.drugId ||
+                                      i.batchNo !== item.batchNo ||
+                                      i.expDate !== item.expDate ||
+                                      i.quantity !== item.quantity
+                                  )
+                                );
+                                console.log(receivedStocks);
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Box>
+
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", pr: 2 }}
+                >
+                  <Button
+                    variant="contained"
+                    size="medium"
+                    sx={{ width: "150px" }}
+                    onClick={handleSubmit(onSubmit)}
+                  >
+                    Save
+                  </Button>
+                </Box>
+              </Box>
+            </>
+          ) : (
+            <Box
+              sx={{
+                bgcolor: "white",
+                p: 2,
+                borderRadius: 3,
+                pb: 3,
+                height: "330px",
+                pl: 5,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
+              <Typography fontWeight={"bold"}>No Stocks Added</Typography>
+
+              <img src={drugStore} alt="drugStore" />
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button variant="contained" size="medium" sx={{ width: "150px" }}>
-                Save
-              </Button>
-            </Box>
-          </Box>
+          )}
         </Grid>
         <Grid item lg={12} xs={12}>
           <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>

@@ -12,7 +12,7 @@ const CardDetails = [
   {
     image: medicine1,
     value: 11,
-    title: "Low Level Drugs",
+    title: "Low Stocks",
     buttonTitle: "View Inventory",
   },
   {

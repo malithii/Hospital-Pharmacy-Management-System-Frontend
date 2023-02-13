@@ -59,7 +59,12 @@ const DetailedOrders = () => {
                   <Typography>Quantity</Typography>
                   <TextField size="small" sx={{ ml: "20px" }} />
                   <IconButton>
-                    {"   "} <AddCircleIcon />
+                    {"   "}{" "}
+                    <AddCircleIcon
+                      onClick={() => {
+                        console.log(e);
+                      }}
+                    />
                   </IconButton>
                 </Grid>
               </Grid>
