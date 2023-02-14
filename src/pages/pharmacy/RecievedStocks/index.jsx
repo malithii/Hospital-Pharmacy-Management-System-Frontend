@@ -107,6 +107,7 @@ const RecievedStocks = () => {
     newRecievedDrugs(requestBody, (response) => {
       console.log(response);
     });
+    showAlert("Stocks Added Successfully", "success");
     setReceivedStocks([]);
   };
 
@@ -148,6 +149,18 @@ const RecievedStocks = () => {
     setValue,
   } = useForm();
 
+  const clearAll = () => {
+    resetField("drug");
+    resetField("batchNo");
+
+    resetField("quantity");
+  };
+
+  const removeAllHandler = () => {
+    setReceivedStocks([]);
+    showAlert("All Stocks Removed", "success");
+  };
+
   const addStock = (data) => {
     console.log(data);
     //check if data is already in the array
@@ -162,6 +175,8 @@ const RecievedStocks = () => {
       return;
     }
     setReceivedStocks((prev) => [...prev, data]);
+    //TODO: fix errors in showing errors onsubmit
+    // clearAll();
   };
 
   return (
@@ -214,7 +229,12 @@ const RecievedStocks = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Drug
+                  Drug{" "}
+                  {errors.drug ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.drug.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <Autocomplete
                   disablePortal
@@ -259,7 +279,12 @@ const RecievedStocks = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Batch
+                  Batch{" "}
+                  {errors.batchNo ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.batchNo.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   size="small"
@@ -284,7 +309,12 @@ const RecievedStocks = () => {
                   color="#495579"
                   pb={1}
                 >
-                  Expire Date
+                  Expire Date{" "}
+                  {errors.expDate ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.expDate.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <Stack spacing={3}>
@@ -307,7 +337,6 @@ const RecievedStocks = () => {
                           })}
                           {...(errors.expDate && {
                             error: true,
-                            helperText: errors.expDate.message,
                           })}
                         />
                       )}
@@ -324,6 +353,11 @@ const RecievedStocks = () => {
                   pb={1}
                 >
                   Quantity{" "}
+                  {errors.quantity ? (
+                    <span style={{ color: "red", fontSize: 10 }}>
+                      {errors.quantity.message}
+                    </span>
+                  ) : null}
                 </Typography>
                 <TextField
                   size="small"
@@ -337,7 +371,6 @@ const RecievedStocks = () => {
                   })}
                   {...(errors.quantity && {
                     error: true,
-                    helperText: errors.quantity.message,
                   })}
                 />
               </Grid>
@@ -424,7 +457,11 @@ const RecievedStocks = () => {
                           <Grid
                             item
                             lg={2}
-                            sx={{ display: "flex", alignItems: "center" }}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              pl: 2,
+                            }}
                           >
                             <Typography>{item.quantity}</Typography>
                           </Grid>
@@ -453,8 +490,21 @@ const RecievedStocks = () => {
                 </Box>
 
                 <Box
-                  sx={{ display: "flex", justifyContent: "flex-end", pr: 2 }}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    pr: 2,
+                    gap: 2,
+                  }}
                 >
+                  <Button
+                    variant="outlined"
+                    size="medium"
+                    sx={{ width: "150px" }}
+                    onClick={removeAllHandler}
+                  >
+                    Remove All
+                  </Button>
                   <Button
                     variant="contained"
                     size="medium"
