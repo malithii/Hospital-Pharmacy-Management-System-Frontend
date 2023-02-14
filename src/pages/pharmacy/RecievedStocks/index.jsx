@@ -118,10 +118,10 @@ const RecievedStocks = () => {
         response.recievedDrug.map((e) =>
           createData(
             e,
-            e.date,
+            e.date.slice(0, 10),
             e.drug.drugId,
             e.recievedDrugs.batchNo,
-            e.recievedDrugs.expDate,
+            e.recievedDrugs.expDate.slice(0, 10),
             e.recievedDrugs.quantity
           )
         )
