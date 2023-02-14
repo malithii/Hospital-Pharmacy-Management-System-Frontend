@@ -7,6 +7,7 @@ import PharmacyCard from "../../../data/PharmacyCard";
 import dashboardIcon from "../../../images/dashboardIcon.png";
 import Chart from "react-apexcharts";
 import NearExpireDates from "../../../components/NearExpireDates";
+import InventoryChart from "../../../components/InventoryChart";
 
 const PharmacyDashboard = () => {
   return (
@@ -20,74 +21,10 @@ const PharmacyDashboard = () => {
             </Grid>
           );
         })}
-        <Grid item lg={7} xs={12}>
-          <Box
-            sx={{
-              bgcolor: "white",
-              pt: 2,
-              pl: 2,
-              pr: 2,
-              borderRadius: 3,
-              height: "380px",
-            }}
-          >
-            <Chart
-              type="bar"
-              width="100%"
-              height="100%"
-              options={{
-                chart: {
-                  id: "basic-bar",
-                },
-
-                xaxis: {
-                  categories: [
-                    "Allopurinol",
-                    "Amoxicillin",
-                    "Bisoprolol",
-                    "Cefalexin",
-                    "Domperidone ",
-                    "Escitalopram",
-                    "Finasteride ",
-                    "Hydroxocobalamin ",
-                    "Allopurinol",
-                    "Amoxicillin",
-                    "Bisoprolol",
-                    "Cefalexin",
-                    "Domperidone ",
-                    "Escitalopram",
-                    "Finasteride ",
-                    "Hydroxocobalamin ",
-                  ],
-                },
-                title: {
-                  text: "Inventory",
-                  align: "left",
-                  margin: 10,
-                  offsetX: 0,
-                  offsetY: 0,
-                  floating: false,
-                  style: {
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    fontFamily: undefined,
-                    color: "#263238",
-                  },
-                },
-              }}
-              series={[
-                {
-                  name: "series-1",
-                  data: [
-                    30, 40, 45, 50, 49, 60, 70, 10, 30, 130, 45, 50, 39, 60, 20,
-                    91,
-                  ],
-                },
-              ]}
-            />
-          </Box>
+        <Grid item lg={4} xs={12}>
+          <InventoryChart />
         </Grid>
-        <Grid item lg={5} xs={12}>
+        <Grid item lg={4} xs={12}>
           {/* <Grid item sx={{ display: "flex", justifyContent: "end" }}>
               <Button
                 variant="contained"

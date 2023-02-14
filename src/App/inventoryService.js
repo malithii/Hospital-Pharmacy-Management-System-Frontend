@@ -11,3 +11,7 @@ export const getWardInventory = (onSuccess) => {
 export const getNearestExpireDates = (body, onSuccess) => {
   post("/inventory/getNearestExpireDates", body, onSuccess);
 };
+
+export const inventoryChart = (body, onSuccess) => {
+  post("/inventory/inventoryChart", body, onSuccess);
+};

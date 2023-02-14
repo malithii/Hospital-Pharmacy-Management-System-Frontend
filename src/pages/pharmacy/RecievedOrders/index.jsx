@@ -1,4 +1,4 @@
-import { Button, Grid } from "@mui/material";
+import { Button, Chip, Grid, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
@@ -71,7 +71,12 @@ const RecievedOrders = () => {
       console.log(response.order);
       setRetrivedRows(
         response.order.map((e) =>
-          createData(e, e.wardUser.wardNo, e.date, e.status)
+          createData(
+            e,
+            <Chip label={e.wardUser.wardNo} />,
+            e.date.slice(0, 10),
+            <Chip label={e.status} sx={{ backgroundColor: " #f1c40f " }} />
+          )
         )
       );
       setNumOfRows(response.order.length);
@@ -107,7 +112,7 @@ const RecievedOrders = () => {
               <Button variant="contained">View Order History</Button>
             </Grid>
             Pending Orders
-            <Grid item lg={12}>
+            <Grid item lg={7}>
               <EnhancedTable
                 headCells={headCells}
                 rows={rows}
