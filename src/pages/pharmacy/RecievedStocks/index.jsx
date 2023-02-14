@@ -26,6 +26,7 @@ import recievedIcon from "../../../images/recievedIcon.png";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 import drugStore from "../../../images/drugStore.png";
+import { showAlert } from "../../../App/alertService";
 
 const RecievedStocks = () => {
   const [date, setDate] = useState(dayjs());
@@ -106,6 +107,7 @@ const RecievedStocks = () => {
     newRecievedDrugs(requestBody, (response) => {
       console.log(response);
     });
+    setReceivedStocks([]);
   };
 
   useEffect(() => {
@@ -148,9 +150,18 @@ const RecievedStocks = () => {
 
   const addStock = (data) => {
     console.log(data);
-    // receivedStocks.push(data);
-    setReceivedStocks([...receivedStocks, data]);
-    console.log(receivedStocks);
+    //check if data is already in the array
+    const isAlreadyAdded = receivedStocks.find(
+      (e) =>
+        e.drug.drugId === data.drug.drugId &&
+        e.batchNo === data.batchNo &&
+        e.expDate === data.expDate
+    );
+    if (isAlreadyAdded) {
+      showAlert("Stock Already Added", "error");
+      return;
+    }
+    setReceivedStocks((prev) => [...prev, data]);
   };
 
   return (
