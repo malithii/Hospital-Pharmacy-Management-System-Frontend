@@ -1,5 +1,10 @@
 import React from "react";
-import { BarWave, FillingBottle, Hypnosis } from "react-cssfx-loading";
+import {
+  BarWave,
+  FillingBottle,
+  Hypnosis,
+  SpinStretch,
+} from "react-cssfx-loading";
 
 const LoadingAnimation = () => {
   const size = "60px";
@@ -31,7 +36,7 @@ const LoadingAnimation = () => {
           width: "100vw",
         }}
       >
-        <FillingBottle
+        <SpinStretch
           color="#007ACC"
           style={{
             opacity: 1,

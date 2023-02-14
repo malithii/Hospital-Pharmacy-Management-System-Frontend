@@ -6,6 +6,7 @@ import TitleBar from "../../../components/TitleBar";
 import PharmacyCard from "../../../data/PharmacyCard";
 import dashboardIcon from "../../../images/dashboardIcon.png";
 import Chart from "react-apexcharts";
+import NearExpireDates from "../../../components/NearExpireDates";
 
 const PharmacyDashboard = () => {
   return (
@@ -87,8 +88,7 @@ const PharmacyDashboard = () => {
           </Box>
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, pt: 3, pb: 3 }}>
-            <Grid item sx={{ display: "flex", justifyContent: "end" }}>
+          {/* <Grid item sx={{ display: "flex", justifyContent: "end" }}>
               <Button
                 variant="contained"
                 sx={{ minWidth: "200px" }}
@@ -98,8 +98,8 @@ const PharmacyDashboard = () => {
                 View History
               </Button>
               <CustomCalendar />
-            </Grid>
-          </Box>
+            </Grid> */}
+          <NearExpireDates />
         </Grid>
       </Grid>
     </Box>
