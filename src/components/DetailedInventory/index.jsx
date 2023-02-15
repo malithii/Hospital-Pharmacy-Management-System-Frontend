@@ -102,7 +102,7 @@ const DetailedInventory = ({ detailedInventory }) => {
                         {batch.batchNo}
                       </TableCell>
                       <TableCell align="center" size="small">
-                        {batch.expDate}
+                        {batch.expDate.slice(0, 10)}
                       </TableCell>
                       <TableCell align="center" size="small">
                         {batch.quantity}

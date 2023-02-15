@@ -24,9 +24,26 @@ import DetailedInventory from "../../../components/DetailedInventory";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
+import ReorderLevelModal from "../../../components/ReorderLevelModal";
 
 const PharmacyInventory = () => {
   const [detailedInventory, setDetailedInventory] = useState({});
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [updatingData, setUpdatingData] = useState({});
+  const [reorderLevel, setReorderLevel] = useState({
+    reorderLevel: "",
+  });
+
+  const [refresh, setRefresh] = useState(true);
+  const handleReorderLevelChange = (data) => {
+    setUpdatingData(data);
+    console.log("handleReorderLevelChange");
+    console.log(data);
+    handleOpen();
+  };
 
   const headCells = [
     {
@@ -105,7 +122,7 @@ const PharmacyInventory = () => {
       );
       setNumOfRows(response.inventory.inventory.length);
     });
-  }, [shouldRefresh]);
+  }, [refresh]);
 
   useEffect(() => {
     // console.log(rows);
@@ -184,7 +201,10 @@ const PharmacyInventory = () => {
                 tableTitle={"Drugs"}
                 actionButtons={[
                   { btnName: <WysiwygIcon />, actionFunc: editClickHandler },
-                  { btnName: <EditIcon /> },
+                  {
+                    btnName: <EditIcon />,
+                    actionFunc: handleReorderLevelChange,
+                  },
                 ]}
               />
             </Box>
@@ -194,6 +214,13 @@ const PharmacyInventory = () => {
           </Grid>
         </Grid>
       </Box>
+      <ReorderLevelModal
+        open={open}
+        setOpen={setOpen}
+        reorderLevel={reorderLevel}
+        updatingData={updatingData}
+        setRefresh={setRefresh}
+      />
     </Box>
   );
 };

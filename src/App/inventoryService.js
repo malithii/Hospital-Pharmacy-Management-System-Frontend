@@ -15,3 +15,7 @@ export const getNearestExpireDates = (body, onSuccess) => {
 export const inventoryChart = (body, onSuccess) => {
   post("/inventory/inventoryChart", body, onSuccess);
 };
+
+export const updateReorderLevel = (body, onSuccess) => {
+  post("/inventory/updateReorderLevel", body, onSuccess);
+};
