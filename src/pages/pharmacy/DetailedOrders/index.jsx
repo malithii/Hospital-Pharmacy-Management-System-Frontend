@@ -13,8 +13,9 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { acceptOrder } from "../../../App/orderService";
+
 import { showAlert } from "../../../App/alertService";
+import { acceptOrder } from "../../../App/orderService";
 
 const DetailedOrders = () => {
   const location = useLocation();
@@ -140,6 +141,7 @@ const DetailedOrders = () => {
                         setOrderItem(e);
                         console.log(batch);
                         console.log(quantityIssued);
+                        orderItem.drug = e.drug._id;
                         orderItem.issueDrugs.push({
                           batch: batch,
                           quantityIssued: quantityIssued,

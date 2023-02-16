@@ -1,162 +1,207 @@
-import * as React from "react";
-import PropTypes from "prop-types";
-import Box from "@mui/material/Box";
-import Collapse from "@mui/material/Collapse";
-import IconButton from "@mui/material/IconButton";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
-import { viewInventory } from "../App/inventoryService";
+// import {
+//   Button,
+//   Chip,
+//   Divider,
+//   Grid,
+//   IconButton,
+//   TextField,
+//   Typography,
+// } from "@mui/material";
+// import { Box } from "@mui/system";
+// import { useLocation, useSearchParams } from "react-router-dom";
+// import AddCircleIcon from "@mui/icons-material/AddCircle";
+// import { useEffect, useState } from "react";
+// import { useForm } from "react-hook-form";
+// import { useSelector } from "react-redux";
+// import { acceptOrder } from "../../../App/orderService";
+// import { showAlert } from "../../../App/alertService";
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      {
-        date: "2020-01-05",
-        customerId: "11091700",
-        amount: 3,
-      },
-      {
-        date: "2020-01-02",
-        customerId: "Anonymous",
-        amount: 1,
-      },
-    ],
-  };
-}
+// const DetailedOrders = () => {
+//   const location = useLocation();
 
-function Row(props) {
-  const { row } = props;
-  const [open, setOpen] = React.useState(false);
+//   console.log(location.state);
 
-  return (
-    <React.Fragment>
-      <TableRow sx={{ "& > *": { borderBottom: "unset" } }}>
-        <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
-        <TableCell component="th" scope="row">
-          {row.name}
-        </TableCell>
-        <TableCell align="right">{row.calories}</TableCell>
-        <TableCell align="right">{row.fat}</TableCell>
-        <TableCell align="right">{row.carbs}</TableCell>
-        <TableCell align="right">{row.protein}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
-              </Typography>
-              <Table size="small" aria-label="purchases">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align="right">Amount</TableCell>
-                    <TableCell align="right">Total price ($)</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">
-                        {Math.round(historyRow.amount * row.price * 100) / 100}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Box>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  );
-}
+//   const [order, setOrder] = useState(
+//     location.state.detailedOrder.orderItems.map((order) => ({
+//       drug: order.drug._id,
+//       quantityOrdered: order.quantityOrdered,
+//       issueDrugs: order.issueDrugs.map((issue) => ({
+//         batch: issue.batch,
+//         quantityIssued: issue.quantityIssued,
+//       })),
+//     }))
+//   );
+//   useEffect(() => {
+//     console.log(order);
+//   }, [order]);
 
-Row.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      })
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-};
+//   const [batch, setBatch] = useState("");
+//   const [quantityIssued, setQuantityIssued] = useState(0);
+//   const pharmacist = useSelector((state) => state.loginHPMS._id);
+//   const [orderItem, setOrderItem] = useState({
+//     drug: "",
+//     quantityOrdered: 0,
+//     issueDrugs: [],
+//   });
+//   const [orderItems, setOrderItems] = useState([]);
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0, 3.99),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3, 4.99),
-  createData("Eclair", 262, 16.0, 24, 6.0, 3.79),
-  createData("Cupcake", 305, 3.7, 67, 4.3, 2.5),
-  createData("Gingerbread", 356, 16.0, 49, 3.9, 1.5),
-];
+//   // console.log("issue order");
+//   // console.log(order);
 
-export default function Test() {
-  const user = useSelector((state) => state.loginHPMS._id);
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//     resetField,
+//     setValue,
+//   } = useForm();
 
-  const requestBody = {
-    user: user,
-  };
-  useEffect(() => {
-    viewInventory(requestBody, (response) => {
-      console.log(response.inventory.inventory);
-    });
-  }, []);
-  return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Drug</TableCell>
-            <TableCell align="right">Quantity In Stock</TableCell>
-            <TableCell align="right">Reorder Level</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.name} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
+//   const reqBody = {
+//     _id: location.state.detailedOrder._id,
+//     wardUser: location.state.detailedOrder.wardUser._id,
+//     pharmacist: pharmacist,
+//     orderItems: order,
+//   };
+//   const onSubmit = () => {
+//     console.log("submit");
+//     console.log(reqBody);
+//     acceptOrder(reqBody, (response) => {
+//       console.log(response);
+//       showAlert("Order accepted successfully", "success");
+//     });
+//   };
+
+//   return (
+//     <Box>
+//       <Grid container spacing={2}>
+//         <Grid item xs={12}>
+//           <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
+//             <Grid container spacing={2}>
+//               <Grid item xs={12} lg={4} sx={{ display: "flex" }}>
+//                 <Typography fontWeight={"bold"}>Ward: </Typography>
+//                 <Typography fontWeight={"bold"}>
+//                   {location.state.detailedOrder.wardUser.wardNo}
+//                 </Typography>
+//               </Grid>
+//               <Grid item xs={12} lg={4} sx={{ display: "flex" }}>
+//                 <Typography fontWeight={"bold"}>Date: </Typography>
+//                 <Typography fontWeight={"bold"}>
+//                   {location.state.detailedOrder.date.slice(0, 10)}
+//                 </Typography>
+//               </Grid>
+//               <Grid
+//                 item
+//                 xs={12}
+//                 lg={4}
+//                 sx={{
+//                   display: "flex",
+//                   justifyContent: "end",
+//                   alignItems: "center",
+//                 }}
+//               >
+//                 <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+//                   Issue
+//                 </Button>
+//               </Grid>
+//             </Grid>
+//           </Box>
+//         </Grid>
+//         <Grid item xs={12}>
+//           {order.map((e) => {
+//             console.log(e);
+//             return (
+//               <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
+//                 <Grid container spacing={2}>
+//                   <Grid
+//                     item
+//                     xs={12}
+//                     lg={4}
+//                     sx={{ display: "flex", alignItems: "center" }}
+//                   >
+//                     <Chip label={e.drug} />
+//                   </Grid>
+//                   <Grid
+//                     item
+//                     xs={12}
+//                     lg={2}
+//                     sx={{ display: "flex", alignItems: "center" }}
+//                   >
+//                     <Typography>{e.quantityOrdered}</Typography>
+//                   </Grid>
+//                   <Grid
+//                     item
+//                     xs={12}
+//                     lg={6}
+//                     sx={{ display: "flex", alignItems: "center" }}
+//                   >
+//                     <Typography>Batch</Typography>
+//                     <TextField
+//                       id="batch "
+//                       size="small"
+//                       sx={{ ml: "20px", mr: "30px" }}
+//                       onChange={(e) => {
+//                         setBatch(e.target.value);
+//                       }}
+//                     />
+//                     <Typography>Quantity</Typography>
+//                     <TextField
+//                       id="quantityIssued"
+//                       size="small"
+//                       sx={{ ml: "20px" }}
+//                       onChange={(e) => {
+//                         setQuantityIssued(e.target.value);
+//                       }}
+//                     />
+//                     <IconButton>
+//                       {"   "}{" "}
+//                       <AddCircleIcon
+//                         onClick={() => {
+//                           console.log(e);
+//                           orderItems.issueDrugs.push({
+//                             batch: batch,
+//                             quantityIssued: quantityIssued,
+//                           });
+//                           console.log(orderItems);
+//                         }}
+//                       />
+//                     </IconButton>
+//                   </Grid>
+//                 </Grid>
+//                 {/* <Grid container sx={{ pt: 1 }}>
+//                   <Grid item lg={12}>
+//                     <Chip label="Issue Drugs" />
+//                   </Grid>
+
+//                   {e.issueDrugs.map((a) => (
+//                     <>
+//                       <Grid
+//                         item
+//                         xs={12}
+//                         lg={2}
+//                         sx={{ display: "flex", alignItems: "center" }}
+//                       >
+//                         <Typography>Batch : </Typography>
+//                         <Typography>{a.batch}</Typography>
+//                       </Grid>
+//                       <Grid
+//                         item
+//                         xs={12}
+//                         lg={2}
+//                         sx={{ display: "flex", alignItems: "center" }}
+//                       >
+//                         <Typography>Quantity : </Typography>
+//                         <Typography>{a.quantityIssued}</Typography>
+//                       </Grid>
+//                     </>
+//                   ))}
+//                 </Grid> */}
+//               </Box>
+//             );
+//           })}
+//         </Grid>
+//       </Grid>
+//     </Box>
+//   );
+// };
+
+// export default DetailedOrders;
