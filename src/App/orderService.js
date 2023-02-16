@@ -11,3 +11,7 @@ export const getOrders = (onSuccess) => {
 export const getPendingOrders = (onSuccess) => {
   post("/orders/get-pending-orders", {}, onSuccess);
 };
+
+export const acceptOrder = (body, onSuccess) => {
+  post("/orders/accept-order", body, onSuccess);
+};
