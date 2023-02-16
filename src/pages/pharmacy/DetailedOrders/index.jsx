@@ -10,23 +10,42 @@ import {
 import { Box } from "@mui/system";
 import { useLocation, useSearchParams } from "react-router-dom";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-
-import { showAlert } from "../../../App/alertService";
 import { acceptOrder } from "../../../App/orderService";
+import { showAlert } from "../../../App/alertService";
 
 const DetailedOrders = () => {
   const location = useLocation();
 
   console.log(location.state);
 
-  const [order, setOrder] = useState(location.state.detailedOrder.orderItems);
-  const [orderItem, setOrderItem] = useState({});
+  const [order, setOrder] = useState(
+    location.state.detailedOrder.orderItems.map((order) => ({
+      drugName: order.drug.drugId,
+      drug: order.drug._id,
+      quantityOrdered: order.quantityOrdered,
+      issueDrugs: order.issueDrugs.map((issue) => ({
+        batch: issue.batch,
+        quantityIssued: issue.quantityIssued,
+      })),
+    }))
+  );
+  useEffect(() => {
+    console.log(order);
+  }, [order]);
+
   const [batch, setBatch] = useState("");
   const [quantityIssued, setQuantityIssued] = useState(0);
+  const [issues, setIssues] = useState({});
   const pharmacist = useSelector((state) => state.loginHPMS._id);
+  const [orderItem, setOrderItem] = useState({
+    drug: "",
+    quantityOrdered: 0,
+    issueDrugs: [],
+  });
+  const [orderItems, setOrderItems] = useState([]);
 
   // console.log("issue order");
   // console.log(order);
@@ -90,98 +109,124 @@ const DetailedOrders = () => {
           </Box>
         </Grid>
         <Grid item xs={12}>
-          {order.map((e) => (
-            <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
-              <Grid container spacing={2}>
-                <Grid
-                  item
-                  xs={12}
-                  lg={4}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Chip label={e.drug.drugId} />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  lg={2}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Typography>{e.quantityOrdered}</Typography>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  lg={6}
-                  sx={{ display: "flex", alignItems: "center" }}
-                >
-                  <Typography>Batch</Typography>
-                  <TextField
-                    id="batch "
-                    size="small"
-                    sx={{ ml: "20px", mr: "30px" }}
-                    onChange={(e) => {
-                      setBatch(e.target.value);
-                    }}
-                  />
-                  <Typography>Quantity</Typography>
-                  <TextField
-                    id="quantityIssued"
-                    size="small"
-                    sx={{ ml: "20px" }}
-                    onChange={(e) => {
-                      setQuantityIssued(e.target.value);
-                    }}
-                  />
-                  <IconButton>
-                    {"   "}{" "}
-                    <AddCircleIcon
-                      onClick={() => {
-                        console.log(e);
-                        setOrderItem(e);
-                        console.log(batch);
-                        console.log(quantityIssued);
-                        orderItem.drug = e.drug._id;
-                        orderItem.issueDrugs.push({
-                          batch: batch,
-                          quantityIssued: quantityIssued,
-                        });
-                        setOrderItem("");
+          {order.map((e, index) => {
+            console.log(e);
+            return (
+              <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
+                <Grid container spacing={2}>
+                  <Grid
+                    item
+                    xs={12}
+                    lg={4}
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Chip label={e.drugName} />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    lg={2}
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Typography>{e.quantityOrdered}</Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    lg={6}
+                    sx={{ display: "flex", alignItems: "center" }}
+                  >
+                    <Typography>Batch</Typography>
+                    <TextField
+                      id="batch "
+                      size="small"
+                      sx={{ ml: "20px", mr: "30px" }}
+                      onChange={(e) => {
+                        setBatch(e.target.value);
                       }}
                     />
-                  </IconButton>
-                </Grid>
-              </Grid>
-              <Grid container sx={{ pt: 1 }}>
-                <Grid item lg={12}>
-                  <Chip label="Issue Drugs" />
-                </Grid>
+                    <Typography>Quantity</Typography>
+                    <TextField
+                      id="quantityIssued"
+                      size="small"
+                      sx={{ ml: "20px" }}
+                      onChange={(e) => {
+                        setQuantityIssued(e.target.value);
+                      }}
+                    />
+                    <IconButton>
+                      {"   "}{" "}
+                      <AddCircleIcon
+                        onClick={() => {
+                          console.log(e);
 
-                {e.issueDrugs.map((a) => (
-                  <>
-                    <Grid
-                      item
-                      xs={12}
-                      lg={2}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <Typography>Batch : </Typography>
-                      <Typography>{a.batch}</Typography>
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      lg={2}
-                      sx={{ display: "flex", alignItems: "center" }}
-                    >
-                      <Typography>Quantity : </Typography>
-                      <Typography>{a.quantityIssued}</Typography>
-                    </Grid>
-                  </>
-                ))}
-              </Grid>
-            </Box>
-          ))}
+                          setIssues((prev) => {
+                            if (prev[e.drug]) {
+                              return {
+                                ...prev,
+                                [e.drug]: [
+                                  ...prev[e.drug],
+                                  {
+                                    batch: batch,
+                                    quantityIssued: quantityIssued,
+                                  },
+                                ],
+                              };
+                            } else {
+                              return {
+                                ...prev,
+                                [e.drug]: [
+                                  {
+                                    batch: batch,
+                                    quantityIssued: quantityIssued,
+                                  },
+                                ],
+                              };
+                            }
+                          });
+                          order[index].issueDrugs.push({
+                            batch: batch,
+                            quantityIssued: quantityIssued,
+                          });
+                          console.log(order);
+                          setOrder(order);
+                          console.log(orderItems);
+                        }}
+                      />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ pt: 1 }}>
+                  <Grid item lg={12}>
+                    <Chip label="Issue Drugs" />
+                  </Grid>
+
+                  {issues[e.drug]?.map((a) => (
+                    <>
+                      <Grid
+                        item
+                        xs={12}
+                        lg={2}
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        <Typography>Batch : </Typography>
+                        <Typography>{a.batch}</Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        lg={2}
+                        sx={{ display: "flex", alignItems: "center" }}
+                      >
+                        <Typography>Quantity : </Typography>
+                        <Typography>{a.quantityIssued}</Typography>
+                      </Grid>
+                    </>
+                  ))}
+                </Grid>
+              </Box>
+            );
+          })}
         </Grid>
       </Grid>
     </Box>
