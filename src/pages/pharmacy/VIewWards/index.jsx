@@ -113,23 +113,25 @@ const ViewWards = () => {
       />
 
       <Grid container>
-        <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-          <Grid container gap={2}>
-            {wardNos.map((x) => {
-              console.log(x.user._id);
-              return (
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    getUserInventory(x.user._id);
-                  }}
-                >
-                  {x.user.wardNo}
-                </Button>
-              );
-            })}
-          </Grid>
-        </Box>
+        <Grid item lg={12}>
+          <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
+            <Grid container gap={2}>
+              {wardNos.map((x) => {
+                console.log(x.user._id);
+                return (
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      getUserInventory(x.user._id);
+                    }}
+                  >
+                    {x.user.wardNo}
+                  </Button>
+                );
+              })}
+            </Grid>
+          </Box>
+        </Grid>
       </Grid>
       <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
         <Grid container>

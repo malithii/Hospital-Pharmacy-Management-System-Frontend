@@ -23,3 +23,7 @@ export const updateReorderLevel = (body, onSuccess) => {
 export const checkBatchQuantity = (body, onSuccess) => {
   post("/inventory/checkBatchQuantity", body, onSuccess);
 };
+
+export const getInventoryByDrug = (body, onSuccess) => {
+  post("/inventory/getInventoryByDrug", body, onSuccess);
+};
