@@ -19,3 +19,7 @@ export const inventoryChart = (body, onSuccess) => {
 export const updateReorderLevel = (body, onSuccess) => {
   post("/inventory/updateReorderLevel", body, onSuccess);
 };
+
+export const checkBatchQuantity = (body, onSuccess) => {
+  post("/inventory/checkBatchQuantity", body, onSuccess);
+};

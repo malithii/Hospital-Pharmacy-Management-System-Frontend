@@ -4,6 +4,11 @@ import {
   Divider,
   Grid,
   IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -69,14 +74,18 @@ const DetailedOrders = () => {
     console.log(reqBody);
     acceptOrder(reqBody, (response) => {
       console.log(response);
-      showAlert("Order accepted successfully", "success");
+      if (response.status === "success") {
+        showAlert("Drugs Issued successfully", "success");
+      } else {
+        showAlert("Error", "error");
+      }
     });
   };
 
   return (
     <Box>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} lg={4} sx={{ display: "flex" }}>
@@ -108,27 +117,39 @@ const DetailedOrders = () => {
             </Grid>
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={8}>
           {order.map((e, index) => {
             console.log(e);
             return (
               <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} sx={{ pb: 1 }}>
                   <Grid
                     item
                     xs={12}
-                    lg={4}
+                    lg={3.5}
                     sx={{ display: "flex", alignItems: "center" }}
                   >
-                    <Chip label={e.drugName} />
+                    <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                      Drug :
+                    </Typography>
+
+                    <Typography sx={{ fontWeight: "normal", fontSize: 14 }}>
+                      {" "}
+                      {e.drugName}
+                    </Typography>
                   </Grid>
                   <Grid
                     item
                     xs={12}
-                    lg={2}
+                    lg={2.5}
                     sx={{ display: "flex", alignItems: "center" }}
                   >
-                    <Typography>{e.quantityOrdered}</Typography>
+                    <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                      Quantity :
+                    </Typography>
+                    <Typography sx={{ fontWeight: "normal", fontSize: 14 }}>
+                      {e.quantityOrdered}
+                    </Typography>
                   </Grid>
                   <Grid
                     item
@@ -136,7 +157,9 @@ const DetailedOrders = () => {
                     lg={6}
                     sx={{ display: "flex", alignItems: "center" }}
                   >
-                    <Typography>Batch</Typography>
+                    <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                      Batch:
+                    </Typography>
                     <TextField
                       id="batch "
                       size="small"
@@ -145,7 +168,9 @@ const DetailedOrders = () => {
                         setBatch(e.target.value);
                       }}
                     />
-                    <Typography>Quantity</Typography>
+                    <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                      Issue:
+                    </Typography>
                     <TextField
                       id="quantityIssued"
                       size="small"
@@ -157,72 +182,162 @@ const DetailedOrders = () => {
                     <IconButton>
                       {"   "}{" "}
                       <AddCircleIcon
+                        color="primary"
                         onClick={() => {
+                          console.log("EEEEEEE");
                           console.log(e);
+                          //prevent adding same batch and quantity again
+                          if (
+                            issues[e.drug] &&
+                            issues[e.drug].find((issue) => {
+                              return (
+                                issue.batch === batch &&
+                                issue.quantityIssued === quantityIssued
+                              );
+                            })
+                          ) {
+                            showAlert(
+                              "Batch and quantity already added",
+                              "error"
+                            );
+                            return;
+                          } else {
+                            const response = fetch(
+                              `http://localhost:9000/inventory/checkBatchQuantity`,
+                              {
+                                method: "POST",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify({
+                                  user: pharmacist,
+                                  drug: e.drug,
+                                  batch: batch,
+                                  quantity: quantityIssued,
+                                }),
+                              }
+                            );
+                            response
+                              .then((res) => res.json())
+                              .then((data) => {
+                                if (data.status === "success") {
+                                  setIssues((prev) => {
+                                    if (prev[e.drug]) {
+                                      return {
+                                        ...prev,
+                                        [e.drug]: [
+                                          ...prev[e.drug],
+                                          {
+                                            batch: batch,
+                                            quantityIssued: quantityIssued,
+                                          },
+                                        ],
+                                      };
+                                    } else {
+                                      return {
+                                        ...prev,
+                                        [e.drug]: [
+                                          {
+                                            batch: batch,
+                                            quantityIssued: quantityIssued,
+                                          },
+                                        ],
+                                      };
+                                    }
+                                  });
+                                  order[index].issueDrugs.push({
+                                    batch: batch,
+                                    quantityIssued: quantityIssued,
+                                  });
 
-                          setIssues((prev) => {
-                            if (prev[e.drug]) {
-                              return {
-                                ...prev,
-                                [e.drug]: [
-                                  ...prev[e.drug],
-                                  {
-                                    batch: batch,
-                                    quantityIssued: quantityIssued,
-                                  },
-                                ],
-                              };
-                            } else {
-                              return {
-                                ...prev,
-                                [e.drug]: [
-                                  {
-                                    batch: batch,
-                                    quantityIssued: quantityIssued,
-                                  },
-                                ],
-                              };
-                            }
-                          });
-                          order[index].issueDrugs.push({
-                            batch: batch,
-                            quantityIssued: quantityIssued,
-                          });
-                          console.log(order);
-                          setOrder(order);
-                          console.log(orderItems);
+                                  setOrder(order);
+                                } else {
+                                  showAlert(data.error, "error");
+                                }
+                              });
+                          }
+
+                          //   {setIssues((prev) => {
+                          //     if (prev[e.drug]) {
+                          //       return {
+                          //         ...prev,
+                          //         [e.drug]: [
+                          //           ...prev[e.drug],
+                          //           {
+                          //             batch: batch,
+                          //             quantityIssued: quantityIssued,
+                          //           },
+                          //         ],
+                          //       };
+                          //     } else {
+                          //       return {
+                          //         ...prev,
+                          //         [e.drug]: [
+                          //           {
+                          //             batch: batch,
+                          //             quantityIssued: quantityIssued,
+                          //           },
+                          //         ],
+                          //       };
+                          //     }
+                          //   });
+                          //   order[index].issueDrugs.push({
+                          //     batch: batch,
+                          //     quantityIssued: quantityIssued,
+                          //   });
+
+                          //   setOrder(order);
+                          //   console.log("orderItems");
+                          //   console.log(orderItems);
+                          //   console.log("order");
+                          //   console.log(order);
+                          // }
                         }}
                       />
                     </IconButton>
                   </Grid>
                 </Grid>
+                <Divider />
                 <Grid container sx={{ pt: 1 }}>
-                  <Grid item lg={12}>
-                    <Chip label="Issue Drugs" />
+                  <Grid item lg={12} sx={{ pb: 1 }}>
+                    <Typography sx={{ fontWeight: "bold", fontSize: 14 }}>
+                      Issue Drugs
+                    </Typography>
                   </Grid>
-
-                  {issues[e.drug]?.map((a) => (
-                    <>
-                      <Grid
-                        item
-                        xs={12}
-                        lg={2}
-                        sx={{ display: "flex", alignItems: "center" }}
-                      >
-                        <Typography>Batch : </Typography>
-                        <Typography>{a.batch}</Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        lg={2}
-                        sx={{ display: "flex", alignItems: "center" }}
-                      >
-                        <Typography>Quantity : </Typography>
-                        <Typography>{a.quantityIssued}</Typography>
-                      </Grid>
-                    </>
-                  ))}
+                  <Grid item xs={12} lg={6}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="center">
+                            <Chip label="Batch" />
+                          </TableCell>
+                          <TableCell align="center">
+                            <Chip label="Quantity" />
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {issues[e.drug]?.map((a) => (
+                          <>
+                            <TableRow>
+                              <TableCell align="center">{a.batch}</TableCell>
+                              <TableCell align="center">
+                                {a.quantityIssued}
+                              </TableCell>
+                            </TableRow>
+                          </>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    lg={12}
+                    sx={{ display: "flex", justifyContent: "end" }}
+                  >
+                    bdndj
+                  </Grid>
                 </Grid>
               </Box>
             );
