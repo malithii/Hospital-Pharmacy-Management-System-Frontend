@@ -471,12 +471,7 @@ const DetailedOrders = () => {
             <Grid item lg={12} sx={{ display: "flex", alignItems: "flex-end" }}>
               <Autocomplete
                 disablePortal
-                {...register("drug", {
-                  required: {
-                    value: true,
-                    message: "Drug is required",
-                  },
-                })}
+                {...register("drug")}
                 onChange={(e, value) => {
                   setValue("drug", value);
                   // console.log(value);
