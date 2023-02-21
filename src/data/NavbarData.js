@@ -90,4 +90,11 @@ export const NavbarData = [
     path: "/pharmacy-reports",
     userType: ["PHARMACIST"],
   },
+  {
+    id: 13,
+    title: "Receive Stocks",
+    icon: <ViewListIcon />,
+    path: "/received-ward-stocks",
+    userType: ["WARDUSER"],
+  },
 ];

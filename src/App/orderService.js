@@ -15,3 +15,11 @@ export const getPendingOrders = (onSuccess) => {
 export const acceptOrder = (body, onSuccess) => {
   post("/orders/accept-order", body, onSuccess);
 };
+
+export const getAcceptedOrders = (body, onSuccess) => {
+  post("/orders/getAcceptedOrders", body, onSuccess);
+};
+
+export const saveQuantityReceived = (body, onSuccess) => {
+  post("/orders/saveQuantityReceived", body, onSuccess);
+};
