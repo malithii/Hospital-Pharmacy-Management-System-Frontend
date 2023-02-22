@@ -168,6 +168,9 @@ const ReceiveWardStocks = () => {
               borderRadius: 3,
               pb: 3,
               height: "490px",
+              overflowY: "auto",
+              overflowX: "hidden",
+              scrollbarWidth: "thin",
             }}
           >
             <Grid
