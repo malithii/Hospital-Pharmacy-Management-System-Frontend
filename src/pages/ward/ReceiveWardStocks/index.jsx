@@ -1,5 +1,6 @@
 import {
   Button,
+  Chip,
   Grid,
   Table,
   TableBody,
@@ -92,7 +93,7 @@ const ReceiveWardStocks = () => {
         issueDrugs: e.issueDrugs.map((a) => ({
           batch: a.batch,
           quantityIssued: a.quantityIssued,
-          quantityRecieved: a.quantityRecieved,
+          quantityRecieved: a.quantityIssued,
         })),
         quantityOrdered: e.quantityOrdered,
       }))
@@ -135,7 +136,15 @@ const ReceiveWardStocks = () => {
 
       <Grid container spacing={2}>
         <Grid item lg={7}>
-          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>
+          <Box
+            sx={{
+              bgcolor: "white",
+              p: 2,
+              borderRadius: 3,
+              pb: 3,
+              height: "490px",
+            }}
+          >
             <EnhancedTable
               headCells={headCells}
               rows={rows}
@@ -152,16 +161,39 @@ const ReceiveWardStocks = () => {
           </Box>
         </Grid>
         <Grid item lg={5}>
-          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>
-            <Typography variant="h7">Order Items</Typography>
-            <Button onClick={handleSubmit(onSubmit)}>Done</Button>
+          <Box
+            sx={{
+              bgcolor: "white",
+              p: 2,
+              borderRadius: 3,
+              pb: 3,
+              height: "490px",
+              overflowY: "auto",
+              overflowX: "hidden",
+              scrollbarWidth: "thin",
+            }}
+          >
+            <Grid
+              item
+              lg={12}
+              sx={{ display: "flex", justifyContent: "space-between" }}
+            >
+              {" "}
+              <Typography variant="h7">Ordered Items</Typography>
+              <Button variant="contained" onClick={handleSubmit(onSubmit)}>
+                Done
+              </Button>
+            </Grid>
+
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>Drug</TableCell>
-                  <TableCell>Batch</TableCell>
-                  <TableCell>Q Issued</TableCell>
-                  <TableCell>Q Received</TableCell>
+                  <TableCell align="center">
+                    <Chip label="Drug" color="primary" variant="outlined" />
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip label="Batch" color="primary" variant="outlined" />
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -171,24 +203,42 @@ const ReceiveWardStocks = () => {
                       <TableCell>{item.drugName}</TableCell>
                       {item.issueDrugs.map((issueDrug) => (
                         <>
-                          <TableCell>{issueDrug.batch}</TableCell>
-                          <TableCell>{issueDrug.quantityIssued}</TableCell>
-                          <TableCell>
-                            <TextField
-                              size="small"
-                              sx={{ width: "60px" }}
-                              defaultValue={issueDrug.quantityIssued}
-                              onChange={(e) => {
-                                console.log(e.target.value);
-                                issueDrug.quantityRecieved = e.target.value;
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>
+                                <Chip label="Batch" />
+                              </TableCell>
+                              <TableCell>
+                                <Chip label="Quantity Issued" />
+                              </TableCell>
+                              <TableCell>
+                                <Chip label="Quantity Received" />
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableRow>
+                            <TableCell align="center">
+                              {issueDrug.batch}
+                            </TableCell>
+                            <TableCell align="center">
+                              {issueDrug.quantityIssued}
+                            </TableCell>
+                            <TableCell align="center">
+                              <TextField
+                                size="small"
+                                sx={{ width: "60px" }}
+                                defaultValue={issueDrug.quantityIssued}
+                                onChange={(e) => {
+                                  console.log(e.target.value);
+                                  issueDrug.quantityRecieved = e.target.value;
 
-                                setorderitems([...orderItems]);
-                                console.log("ORDERITEMS");
-                                console.log(orderItems);
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell></TableCell>
+                                  setorderitems([...orderItems]);
+                                  console.log("ORDERITEMS");
+                                  console.log(orderItems);
+                                }}
+                              />
+                            </TableCell>
+                          </TableRow>
                         </>
                       ))}
                     </TableRow>
