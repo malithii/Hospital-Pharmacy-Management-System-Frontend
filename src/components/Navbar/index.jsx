@@ -25,7 +25,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useSelector } from "react-redux";
 
-const drawerWidth = 260;
+const drawerWidth = 230;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -34,6 +34,24 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+  backgroundColor: "#1976d2",
+  //icons and text color white
+  color: "white",
+  "& .MuiListItemIcon-root": {
+    color: "white",
+  },
+  "& .MuiListItemText-primary": {
+    color: "white",
+  },
+  "& .MuiListItemButton-root:hover": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected:hover": {
+    backgroundColor: "#1976d2",
+  },
 });
 
 const closedMixin = (theme) => ({
@@ -46,6 +64,24 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
+  backgroundColor: "#1976d2",
+  //icons and text color white
+  color: "white",
+  "& .MuiListItemIcon-root": {
+    color: "white",
+  },
+  "& .MuiListItemText-primary": {
+    color: "white",
+  },
+  "& .MuiListItemButton-root:hover": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected:hover": {
+    backgroundColor: "#1976d2",
+  },
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -53,6 +89,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
+
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
@@ -79,6 +116,7 @@ const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   width: drawerWidth,
+
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",

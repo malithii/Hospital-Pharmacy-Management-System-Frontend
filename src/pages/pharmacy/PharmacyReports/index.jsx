@@ -1,6 +1,7 @@
 import { TableBar } from "@mui/icons-material";
 import {
   Autocomplete,
+  Chip,
   Grid,
   Table,
   TableBody,
@@ -96,15 +97,31 @@ const PharmacyReports = () => {
     <Box>
       <TitleBar image={reports} title="Reports" description="View Reports" />
       <Grid container spacing={2}>
-        <Grid item lg={4}>
-          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>
-            <Typography variant="h7">Drug Usage</Typography>
+        <Grid item lg={3.5}>
+          <Box
+            sx={{
+              bgcolor: "white",
+              p: 2,
+              borderRadius: 3,
+              pb: 3,
+              height: "500px",
+              overflow: "auto",
+              scrollbarWidth: "thin",
+            }}
+          >
+            <Typography variant="h7" fontWeight="bold">
+              Drug Usage in the month of {month}/{year}
+            </Typography>
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Drug</TableCell>
-                    <TableCell align="center">Quantity</TableCell>
+                    <TableCell align="center">
+                      <Chip label="Drug" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip label="Quantity" />
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -119,16 +136,34 @@ const PharmacyReports = () => {
             </TableContainer>
           </Box>
         </Grid>
-        <Grid item lg={4}>
-          <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>
-            <Typography variant="h7">Inventory Summary</Typography>
+        <Grid item lg={4.5}>
+          <Box
+            sx={{
+              bgcolor: "white",
+              p: 2,
+              borderRadius: 3,
+              pb: 3,
+              height: "500px",
+              overflow: "auto",
+              scrollbarWidth: "thin",
+            }}
+          >
+            <Typography variant="h7" fontWeight="bold">
+              Inventory Summary {month}/{year}
+            </Typography>
             <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell align="center">Drug</TableCell>
-                    <TableCell align="center">Available Quantity</TableCell>
-                    <TableCell align="center">Exp dates</TableCell>
+                    <TableCell align="center">
+                      <Chip label="Drug" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip label="Available Quantity" />
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip label="Exp" />
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -158,8 +193,14 @@ const PharmacyReports = () => {
               borderRadius: 3,
               pb: 3,
               width: "100%",
+              height: "500px",
+              overflow: "auto",
+              scrollbarWidth: "thin",
             }}
           >
+            <Typography variant="h7" fontWeight="bold">
+              Drug Usage Charts {month}/{year}
+            </Typography>
             <Autocomplete
               disablePortal
               {...register("drug", {
@@ -189,6 +230,7 @@ const PharmacyReports = () => {
               options={drugs}
               sx={{
                 mt: "0.5rem",
+                mb: "5rem",
                 width: "100%",
                 ...(errors.drug && {
                   border: "1px solid red",
