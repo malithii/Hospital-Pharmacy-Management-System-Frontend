@@ -139,21 +139,13 @@ const PharmacyInventory = () => {
     <Box>
       <TitleBar
         image={iconInventory}
-        title="Pharmacy Inventory"
-        description="View Pharmacy Inventory"
+        title="Inventory"
+        description="View Inventory"
       />
       {loading && <LoadingAnimation />}
       <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item lg={3}>
-            <Typography
-              variant="h8"
-              fontWeight={"normal"}
-              color="#495579"
-              pb={1}
-            >
-              Ward Inventory
-            </Typography>
             <Autocomplete
               id="free-solo-demo"
               freeSolo
@@ -164,15 +156,13 @@ const PharmacyInventory = () => {
             />
           </Grid>
           <Grid item lg={3}>
-            <Box p={3}>
-              <Button
-                variant="contained"
-                sx={{ minWidth: "200px" }}
-                size="large"
-              >
-                <SearchIcon />
-              </Button>
-            </Box>
+            <Button
+              variant="contained"
+              sx={{ minWidth: "200px", mt: 0.5 }}
+              size="small"
+            >
+              <SearchIcon />
+            </Button>
           </Grid>
           <Grid
             item
@@ -182,11 +172,7 @@ const PharmacyInventory = () => {
               justifyContent: "end",
               alignItems: "center",
             }}
-          >
-            <Button variant="contained" sx={{ minWidth: "200px" }} size="large">
-              Detailed View
-            </Button>
-          </Grid>
+          ></Grid>
           {/* ///////////////////////// */}
           <Grid item lg={7}>
             <Box sx={{ width: "100%" }}>

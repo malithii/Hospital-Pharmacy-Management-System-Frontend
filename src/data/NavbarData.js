@@ -26,13 +26,6 @@ export const NavbarData = [
     path: "/order",
     userType: ["WARDUSER"],
   },
-  {
-    id: 4,
-    title: "Inventory",
-    icon: <InventoryIcon />,
-    path: "/wardinventory",
-    userType: ["WARDUSER"],
-  },
 
   {
     id: 5,

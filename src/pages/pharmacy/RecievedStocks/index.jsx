@@ -174,7 +174,16 @@ const RecievedStocks = () => {
       showAlert("Stock Already Added", "error");
       return;
     }
-    setReceivedStocks((prev) => [...prev, data]);
+    setReceivedStocks((prev) => [
+      ...prev,
+      {
+        drug: data.drug._id,
+        batchNo: data.batchNo,
+        expDate: data.expDate,
+        quantity: Number(data.quantity),
+        drugName: data.drug.drugId,
+      },
+    ]);
     //TODO: fix errors in showing errors onsubmit
     // clearAll();
   };
@@ -206,6 +215,7 @@ const RecievedStocks = () => {
                   <Stack spacing={3}>
                     <DesktopDatePicker
                       minDate={dayjs("2017-01-01")}
+                      value={date}
                       onChange={(newValue) => {
                         setDate(newValue);
                       }}

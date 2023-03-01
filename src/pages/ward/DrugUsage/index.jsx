@@ -223,8 +223,9 @@ const DrugUsage = () => {
                   <Stack spacing={3}>
                     <DesktopDatePicker
                       minDate={dayjs("2017-01-01")}
+                      value={date}
                       onChange={(newValue) => {
-                        setValue(newValue);
+                        setDate(newValue);
                       }}
                       inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
