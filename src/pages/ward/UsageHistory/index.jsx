@@ -1,11 +1,17 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Stack, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useState } from "react";
 import { allDrugUsages } from "../../../App/wardDrugUsage";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
+import SearchIcon from "@mui/icons-material/Search";
+import { useSelector } from "react-redux";
 
 const UsageHistory = () => {
+  const [value, setValue] = useState(dayjs());
   const headCells = [
     {
       id: "date",
@@ -15,7 +21,7 @@ const UsageHistory = () => {
       align: "center",
     },
     {
-      id: "drugName",
+      id: "drug",
       numeric: "false",
       disablePadding: true,
       label: "Drug Name",
@@ -37,10 +43,17 @@ const UsageHistory = () => {
       align: "center",
     },
     {
-      id: "quantity",
-      numeric: "false",
+      id: "quantityToBHT",
+
       disablePadding: true,
-      label: "Quantity",
+      label: "Quantity To BHT",
+      align: "center",
+    },
+    {
+      id: "quantityFromBHT",
+
+      disablePadding: true,
+      label: "Quantity from BHT",
       align: "center",
     },
     {
@@ -72,17 +85,28 @@ const UsageHistory = () => {
     );
   }, [page, rowsPerPage, retrivedRows]);
 
-  function createData(date, drugName, batchNo, bht, quantity) {
+  function createData(
+    _id,
+    date,
+    drug,
+    batchNo,
+    bht,
+    quantitytoBHT,
+    quantityfromBHT
+  ) {
     return {
+      _id,
       date,
-      drugName,
+      drug,
       batchNo,
       bht,
-      quantity,
+      quantitytoBHT,
+      quantityfromBHT,
     };
   }
+  const user = useSelector((state) => state.loginHPMS._id);
   const requestBody = {
-    wardNo: "13",
+    user: user,
   };
 
   useEffect(() => {
@@ -90,7 +114,15 @@ const UsageHistory = () => {
       console.log(response.drugUsage);
       setRetrivedRows(
         response.drugUsage.map((e) =>
-          createData(e.date, e.drugName, e.batchNo, e.bht, e.quantity)
+          createData(
+            e._id,
+            e.date,
+            e.drug.drugId,
+            e.batchNo,
+            e.bht,
+            e.quantitytoBHT,
+            e.quantityfromBHT
+          )
         )
       );
       setNumOfRows(response.drugUsage.length);
@@ -109,7 +141,44 @@ const UsageHistory = () => {
             <Typography variant="h6" fontWeight={"bold"} color="#495579" pb={3}>
               View All Drug Usage Details
             </Typography>
-
+            <Box sx={{ display: "flex" }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Stack spacing={3}>
+                  <DesktopDatePicker
+                    minDate={dayjs("2017-01-01")}
+                    onChange={(newValue) => {
+                      setValue(newValue);
+                    }}
+                    inputFormat="YYYY-MM-DD"
+                    renderInput={(params) => (
+                      <TextField
+                        size="small"
+                        {...params}
+                        sx={{ width: 350, paddingBottom: 2, paddingRight: 2 }}
+                        // {...register("date", {
+                        //   required: {
+                        //     value: true,
+                        //     message: "Date is required",
+                        //   },
+                        // })}
+                        // {...(errors.date && {
+                        //   error: true,
+                        //   helperText: errors.date.message,
+                        // })}
+                      />
+                    )}
+                    size="small"
+                  />
+                </Stack>
+              </LocalizationProvider>
+              <Button
+                variant="contained"
+                sx={{ minWidth: "200px", height: "40px" }}
+                size="large"
+              >
+                <SearchIcon />
+              </Button>
+            </Box>
             <EnhancedTable
               headCells={headCells}
               rows={rows}

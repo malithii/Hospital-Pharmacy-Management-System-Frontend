@@ -18,14 +18,14 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { NavbarData } from "../../data/NavbarData";
 import { Link, Outlet } from "react-router-dom";
-import { Navbar2Data } from "../../data/Navbar2";
 import { Badge, Menu, MenuItem } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import { useSelector } from "react-redux";
 
-const drawerWidth = 260;
+const drawerWidth = 230;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -34,6 +34,24 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: "hidden",
+  backgroundColor: "#1976d2",
+  //icons and text color white
+  color: "white",
+  "& .MuiListItemIcon-root": {
+    color: "white",
+  },
+  "& .MuiListItemText-primary": {
+    color: "white",
+  },
+  "& .MuiListItemButton-root:hover": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected:hover": {
+    backgroundColor: "#1976d2",
+  },
 });
 
 const closedMixin = (theme) => ({
@@ -46,6 +64,24 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up("sm")]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
+  backgroundColor: "#1976d2",
+  //icons and text color white
+  color: "white",
+  "& .MuiListItemIcon-root": {
+    color: "white",
+  },
+  "& .MuiListItemText-primary": {
+    color: "white",
+  },
+  "& .MuiListItemButton-root:hover": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected": {
+    backgroundColor: "#1976d2",
+  },
+  "& .MuiListItemButton-root.Mui-selected:hover": {
+    backgroundColor: "#1976d2",
+  },
 });
 
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -53,6 +89,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "flex-end",
   padding: theme.spacing(0, 1),
+
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
 }));
@@ -79,6 +116,7 @@ const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   width: drawerWidth,
+
   flexShrink: 0,
   whiteSpace: "nowrap",
   boxSizing: "border-box",
@@ -95,6 +133,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer(props) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const { type } = useSelector((state) => state.loginHPMS);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -200,70 +239,53 @@ export default function MiniDrawer(props) {
         </DrawerHeader>
         <Divider />
         <List>
-          {NavbarData.map((item) => (
-            <Link
-              to={item.path}
-              style={{ textDecoration: "none ", color: "black" }}
-            >
-              <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
+          {NavbarData.map((item) => {
+            {
+              /* if (item.userType.includes(type)) */
+            }
+            {
+              /* if (item.userType.includes("PHARMACIST"))  */
+            }
+            if (item.userType.includes(type)) {
+              return (
+                <Link
+                  to={item.path}
+                  style={{ textDecoration: "none ", color: "black" }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
+                  <ListItem
+                    key={item.id}
+                    disablePadding
+                    sx={{ display: "block" }}
                   >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.title}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
+                    <ListItemButton
+                      sx={{
+                        minHeight: 48,
+                        justifyContent: open ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          minWidth: 0,
+                          mr: open ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {item.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={item.title}
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              );
+            }
+          })}
         </List>
         <Divider />
-        <List>
-          {Navbar2Data.map((item) => (
-            <Link
-              to={item.path}
-              style={{ textDecoration: "none ", color: "black" }}
-            >
-              <ListItem key={item.id} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={item.title}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </Link>
-          ))}
-        </List>
+
         {/* <List>
           {["All mail", "Trash", "Spam", "g"].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: "block" }}>

@@ -8,7 +8,7 @@ import { CalendarPicker } from "@mui/x-date-pickers/CalendarPicker";
 // const maxDate = dayjs("2034-01-01T00:00:00.000");
 
 export default function CustomCalendar() {
-  const [date, setDate] = React.useState(dayjs("2022-04-07"));
+  const [date, setDate] = React.useState(dayjs());
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

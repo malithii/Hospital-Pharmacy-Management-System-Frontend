@@ -30,7 +30,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        MedPlus
+        medlink{" "}
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -60,16 +60,21 @@ export default function Login() {
     userLogin(data, (response) => {
       console.log(response);
       if (response.status === "success") {
-        const { username, wardNo, email, type } = response.wardUser;
+        const { _id, username, wardNo, email, type } = response.user;
         dispatch(
           login({
+            _id,
             username,
             wardNo,
             email,
             type,
           })
         );
-        navigate("/dashboard");
+        if (type === "PHARMACIST") {
+          navigate("/pharmacy-dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       }
     });
     //  newDrug(data, (response) => {
@@ -92,7 +97,7 @@ export default function Login() {
       alignContent={"center"}
     >
       <ThemeProvider theme={theme}>
-        <Card sx={{ mr: "160px" }}>
+        <Card sx={{ mr: "120px", borderRadius: "20px" }}>
           <CardContent>
             <Container component="main" maxWidth="xs">
               <CssBaseline />
@@ -147,10 +152,10 @@ export default function Login() {
                       helperText: errors.password.message,
                     })}
                   />
-                  <FormControlLabel
+                  {/* <FormControlLabel
                     control={<Checkbox value="remember" color="primary" />}
                     label="Remember me"
-                  />
+                  /> */}
                   <Button
                     type="submit"
                     fullWidth
@@ -166,11 +171,11 @@ export default function Login() {
                         Forgot password?
                       </Link>
                     </Grid>
-                    <Grid item>
+                    {/* <Grid item>
                       <Link href="#" variant="body2">
                         {"Don't have an account? Sign Up"}
                       </Link>
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </Box>
               </Box>

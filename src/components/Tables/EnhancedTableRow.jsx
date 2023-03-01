@@ -18,7 +18,7 @@ function EnhancedTableRow({
             key={id}
             scope="row"
             align={align}
-            style={{ fontWeight: "normal", fontSize: "19px", color: "#495579" }}
+            style={{ fontWeight: "normal", fontSize: "15px", color: "#495579" }}
           >
             {item}
           </TableCell>

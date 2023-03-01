@@ -16,162 +16,117 @@ import { Box } from "@mui/system";
 import TitleBar from "../../../components/TitleBar";
 import iconInventory from "../../../images/icon-inventory-96.png";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import EnhancedTable from "../../../components/Tables/EnhancedTable";
+import { viewInventory } from "../../../App/inventoryService";
+import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimation";
+import DetailedInventory from "../../../components/DetailedInventory";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
+import EditIcon from "@mui/icons-material/Edit";
+import { useSelector } from "react-redux";
+import ReorderLevelModal from "../../../components/ReorderLevelModal";
 
 const PharmacyInventory = () => {
-  const columns = [
-    { id: "drugId", label: "Drug ID", minWidth: 170 },
-    { id: "drugName", label: "Drug Name", minWidth: 100 },
+  const [detailedInventory, setDetailedInventory] = useState({});
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const [updatingData, setUpdatingData] = useState({});
+  const [reorderLevel, setReorderLevel] = useState({
+    reorderLevel: "",
+  });
+
+  const [refresh, setRefresh] = useState(true);
+  const handleReorderLevelChange = (data) => {
+    setUpdatingData(data);
+    console.log("handleReorderLevelChange");
+    console.log(data);
+    handleOpen();
+  };
+
+  const headCells = [
     {
-      id: "category",
-      label: "Category",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
+      id: "drugId",
+      numeric: false,
+      disablePadding: true,
+      label: "Drug ID",
+      align: "center",
     },
     {
-      id: "storeTemp",
-      label: "Storage Temperature",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toLocaleString("en-US"),
-    },
-    {
-      id: "level",
-      label: "Level",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toFixed(2),
-    },
-    {
-      id: "batchNo",
-      label: "Batch No",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toFixed(2),
-    },
-    {
-      id: "exp",
-      label: "Expire Date",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toFixed(2),
-    },
-    {
-      id: "quantity",
+      id: "quantityInStock",
+      numeric: false,
+      disablePadding: true,
       label: "Quantity",
-      minWidth: 170,
-      align: "right",
-      format: (value) => value.toFixed(2),
+      align: "center",
+    },
+    {
+      id: "reorderLevel",
+      numeric: false,
+      disablePadding: true,
+      label: "Reorder Level",
+      align: "center",
+    },
+    {
+      id: "Actions",
+      numeric: true,
+      disablePadding: false,
+      label: "Actions",
+      align: "center",
+      sorting: false,
     },
   ];
 
-  function createData(
-    drugId,
-    drugName,
-    category,
-    storeTemp,
-    level,
-    batchNo,
-    exp,
-    quantity
-  ) {
+  const [shouldRefresh, setShouldRefresh] = useState(true);
+  const [rows, setRows] = useState([]);
+  const [retrivedRows, setRetrivedRows] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [numOfRows, setNumOfRows] = useState(0);
+  const [loading, setLoading] = useState(false);
+
+  const editClickHandler = (data) => {
+    setDetailedInventory(data);
+    // console.log(data);
+  };
+
+  const user = useSelector((state) => state.loginHPMS._id);
+
+  const requestBody = {
+    user: user,
+  };
+  useEffect(() => {
+    setRows(
+      retrivedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    );
+  }, [page, rowsPerPage, retrivedRows]);
+
+  function createData(obj, drugId, quantityInStock, reorderLevel) {
     return {
+      obj,
       drugId,
-      drugName,
-      category,
-      storeTemp,
-      level,
-      batchNo,
-      exp,
-      quantity,
+      quantityInStock,
+      reorderLevel,
     };
   }
 
-  const rows = [
-    createData(
-      "WWT342",
-      "Amoxicillin",
-      "General",
-      "1",
-      "2",
-      "RTY456",
-      "2024-03-12",
-      "45"
-    ),
-    createData(
-      "GHT3245",
-      "Paracetamol",
-      "General",
-      "2",
-      "4",
-      "RTY456",
-      "2024-05-27",
-      "140"
-    ),
-    createData(
-      "ERY457",
-      "Augmentin",
-      "General",
-      "1",
-      "3",
-      "24567",
-      "2022-08-27",
-      "52"
-    ),
-    createData(
-      "TJY2345",
-      "Nervjin",
-      "General",
-      "1",
-      "3",
-      "TH456",
-      "2026-01-27",
-      "52"
-    ),
-    createData(
-      "GNM567",
-      "Ventolin",
-      "General",
-      "2",
-      "3",
-      "4577889",
-      "2024-05-27",
-      "109"
-    ),
-    createData(
-      "TQW3455",
-      "Gablin",
-      "General",
-      "1",
-      "3",
-      "67889",
-      "2023-0-27",
-      "45"
-    ),
-    createData(
-      "NMQ457",
-      "Celeko",
-      "General",
-      "1",
-      "2",
-      "56789",
-      "2023-05-01",
-      "96"
-    ),
-  ];
+  useEffect(() => {
+    setLoading(true);
+    viewInventory(requestBody, (response) => {
+      setLoading(false);
+      console.log(response.inventory.inventory);
+      setRetrivedRows(
+        response.inventory.inventory.map((e) =>
+          createData(e, e.drug.drugId, e.quantityInStock, e.reorderLevel)
+        )
+      );
+      setNumOfRows(response.inventory.inventory.length);
+    });
+  }, [refresh]);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  useEffect(() => {
+    // console.log(rows);
+  }, [rows]);
 
   /////////////////////////////////////////////////////////////////////////////////
   const top100Films = [
@@ -184,20 +139,13 @@ const PharmacyInventory = () => {
     <Box>
       <TitleBar
         image={iconInventory}
-        title="Pharmacy Inventory"
-        description="View Pharmacy Inventory"
+        title="Inventory"
+        description="View Inventory"
       />
+      {loading && <LoadingAnimation />}
       <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item lg={3}>
-            <Typography
-              variant="h8"
-              fontWeight={"normal"}
-              color="#495579"
-              pb={1}
-            >
-              Ward Inventory
-            </Typography>
             <Autocomplete
               id="free-solo-demo"
               freeSolo
@@ -208,77 +156,57 @@ const PharmacyInventory = () => {
             />
           </Grid>
           <Grid item lg={3}>
-            <Box p={3}>
-              <Button
-                variant="contained"
-                sx={{ minWidth: "200px" }}
-                size="large"
-              >
-                <SearchIcon />
-              </Button>
-            </Box>
+            <Button
+              variant="contained"
+              sx={{ minWidth: "200px", mt: 0.5 }}
+              size="small"
+            >
+              <SearchIcon />
+            </Button>
           </Grid>
+          <Grid
+            item
+            lg={6}
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              alignItems: "center",
+            }}
+          ></Grid>
           {/* ///////////////////////// */}
-          <Grid item lg={12}>
-            <Box sx={{ width: "100%", overflow: "hidden" }}>
-              <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      {columns.map((column) => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                      .map((row) => {
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={row.code}
-                          >
-                            {columns.map((column) => {
-                              const value = row[column.id];
-                              return (
-                                <TableCell key={column.id} align={column.align}>
-                                  {column.format && typeof value === "number"
-                                    ? column.format(value)
-                                    : value}
-                                </TableCell>
-                              );
-                            })}
-                          </TableRow>
-                        );
-                      })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
+          <Grid item lg={7}>
+            <Box sx={{ width: "100%" }}>
+              <EnhancedTable
+                headCells={headCells}
+                rows={rows}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                setPage={setPage}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                numOfRows={numOfRows}
+                tableTitle={"Drugs"}
+                actionButtons={[
+                  { btnName: <WysiwygIcon />, actionFunc: editClickHandler },
+                  {
+                    btnName: <EditIcon />,
+                    actionFunc: handleReorderLevelChange,
+                  },
+                ]}
               />
             </Box>
           </Grid>
+          <Grid item lg={5} sx={{ pl: 2 }}>
+            <DetailedInventory detailedInventory={detailedInventory} />
+          </Grid>
         </Grid>
       </Box>
+      <ReorderLevelModal
+        open={open}
+        setOpen={setOpen}
+        reorderLevel={reorderLevel}
+        updatingData={updatingData}
+        setRefresh={setRefresh}
+      />
     </Box>
   );
 };
