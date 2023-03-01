@@ -27,6 +27,7 @@ import CustomSnackbar from "./components/CustomSnackbar";
 import DetailedOrders from "./pages/pharmacy/DetailedOrders";
 import Test from "./pages/Test";
 import ReceiveWardStocks from "./pages/ward/ReceiveWardStocks";
+import OrderHistory from "./pages/pharmacy/OrderHistory";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
                 element={<ReceiveWardStocks />}
               />
               <Route path="/test" element={<Test />} />
+              <Route path="/order-history" element={<OrderHistory />} />
             </Route>
           </Routes>
         </BrowserRouter>

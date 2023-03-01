@@ -132,7 +132,14 @@ const RecievedOrders = () => {
                 }}
               >
                 <img src={iconnurse} alt="ward staff" />
-                <Button variant="contained">View Order History</Button>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    navigate("/order-history");
+                  }}
+                >
+                  View Order History
+                </Button>
               </Grid>
             </Grid>
           </Box>

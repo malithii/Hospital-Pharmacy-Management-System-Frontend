@@ -135,34 +135,6 @@ const ViewWards = () => {
       </Grid>
       <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3, mt: 2 }}>
         <Grid container>
-          <Grid item lg={3}>
-            <Typography
-              variant="h8"
-              fontWeight={"normal"}
-              color="#495579"
-              pb={1}
-            >
-              Search
-            </Typography>
-            <Autocomplete
-              id="free-solo-demo"
-              freeSolo
-              renderInput={(params) => (
-                <TextField {...params} label="Drug Name" size="small" />
-              )}
-            />
-          </Grid>
-          <Grid item lg={3}>
-            <Box p={3}>
-              <Button
-                variant="contained"
-                sx={{ minWidth: "200px" }}
-                size="large"
-              >
-                <SearchIcon />
-              </Button>
-            </Box>
-          </Grid>
           {/* ///////////////////////// */}
           <Grid item lg={7}>
             <Box sx={{ width: "100%", overflow: "hidden" }}>

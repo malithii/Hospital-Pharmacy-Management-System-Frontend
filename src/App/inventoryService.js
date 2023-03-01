@@ -27,3 +27,7 @@ export const checkBatchQuantity = (body, onSuccess) => {
 export const getInventoryByDrug = (body, onSuccess) => {
   post("/inventory/getInventoryByDrug", body, onSuccess);
 };
+
+export const searchInventoryByDrug = (body, onSuccess) => {
+  post("/inventory/searchInventoryByDrug", body, onSuccess);
+};
