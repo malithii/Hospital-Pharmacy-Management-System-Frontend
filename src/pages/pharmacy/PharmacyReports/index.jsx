@@ -71,8 +71,8 @@ const PharmacyReports = () => {
     pharmacyDrugUsageChart(
       {
         pharmacist: "63b564bcfc1d5e7994bea009",
-        month: 2,
-        year: 2023,
+        month: month,
+        year: year,
         drug: "63be5cdeb0249fb1e490a42c",
       },
       (response) => {
