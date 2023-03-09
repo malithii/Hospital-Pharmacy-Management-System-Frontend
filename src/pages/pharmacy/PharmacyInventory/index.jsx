@@ -18,13 +18,19 @@ import iconInventory from "../../../images/icon-inventory-96.png";
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
-import { viewInventory } from "../../../App/inventoryService";
+import {
+  getInventoryByDrug,
+  searchInventoryByDrug,
+  viewInventory,
+} from "../../../App/inventoryService";
 import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimation";
 import DetailedInventory from "../../../components/DetailedInventory";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
 import ReorderLevelModal from "../../../components/ReorderLevelModal";
+import { useForm } from "react-hook-form";
+import { getDrugById } from "../../../App/drugsService";
 
 const PharmacyInventory = () => {
   const [detailedInventory, setDetailedInventory] = useState({});
@@ -84,6 +90,7 @@ const PharmacyInventory = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [drugs, setDrugs] = useState([]);
 
   const editClickHandler = (data) => {
     setDetailedInventory(data);
@@ -128,51 +135,88 @@ const PharmacyInventory = () => {
     // console.log(rows);
   }, [rows]);
 
-  /////////////////////////////////////////////////////////////////////////////////
-  const top100Films = [
-    { title: "The Shawshank Redemption", year: 1994 },
-    { title: "The Godfather", year: 1972 },
-    { title: "The Godfather: Part II", year: 1974 },
-    { title: "The Dark Knight", year: 2008 },
-  ];
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+    setValue,
+  } = useForm();
+
+  useEffect(() => {
+    getDrugById((response) => {
+      console.log(response.drug);
+      setDrugs(response.drug);
+    });
+  }, []);
+
+  const searchInventory = (data) => {
+    searchInventoryByDrug({ drug: data.drug._id, user: user }, (response) => {
+      setRetrivedRows(
+        response.inventory.map((e) =>
+          createData(e, e.drug.drugId, e.quantityInStock, e.reorderLevel)
+        )
+      );
+      setNumOfRows(response.inventory.length);
+    });
+  };
   return (
     <Box>
       <TitleBar
         image={iconInventory}
-        title="Pharmacy Inventory"
-        description="View Pharmacy Inventory"
+        title="Inventory"
+        description="View Inventory"
       />
       {loading && <LoadingAnimation />}
       <Box sx={{ bgcolor: "white", p: 4, borderRadius: 3 }}>
-        <Grid container>
+        <Grid container spacing={2}>
           <Grid item lg={3}>
-            <Typography
-              variant="h8"
-              fontWeight={"normal"}
-              color="#495579"
-              pb={1}
-            >
-              Ward Inventory
-            </Typography>
             <Autocomplete
-              id="free-solo-demo"
-              freeSolo
-              options={top100Films.map((option) => option.title)}
-              renderInput={(params) => (
-                <TextField {...params} label="Drug Name" size="small" />
-              )}
+              disablePortal
+              {...register("drug", {
+                required: {
+                  value: true,
+                  message: "Drug is required",
+                },
+              })}
+              onChange={(e, value) => {
+                setValue("drug", value);
+                console.log(value);
+              }}
+              id="combo-box-demo"
+              getOptionLabel={(option) => option.drugId}
+              options={drugs}
+              sx={{
+                mt: "0.5rem",
+                width: "100%",
+                ...(errors.drug && {
+                  border: "1px solid red",
+                }),
+              }}
+              renderInput={(params) => {
+                return (
+                  <TextField
+                    sx={{ color: "red" }}
+                    {...params}
+                    size="small"
+                    InputProps={{
+                      ...params.InputProps,
+                      type: "search",
+                    }}
+                  />
+                );
+              }}
             />
           </Grid>
-          <Grid item lg={3}>
-            <Box p={3}>
-              <Button
-                variant="contained"
-                sx={{ minWidth: "200px" }}
-                size="large"
-              >
-                <SearchIcon />
-              </Button>
-            </Box>
+          <Grid item lg={3} sx={{ display: "flex", alignItems: "center" }}>
+            <Button
+              variant="contained"
+              sx={{ minWidth: "100px", mt: 0.5, height: "80%" }}
+              size="small"
+              onClick={handleSubmit(searchInventory)}
+            >
+              <SearchIcon />
+            </Button>
           </Grid>
           <Grid
             item
@@ -182,11 +226,7 @@ const PharmacyInventory = () => {
               justifyContent: "end",
               alignItems: "center",
             }}
-          >
-            <Button variant="contained" sx={{ minWidth: "200px" }} size="large">
-              Detailed View
-            </Button>
-          </Grid>
+          ></Grid>
           {/* ///////////////////////// */}
           <Grid item lg={7}>
             <Box sx={{ width: "100%" }}>
@@ -209,7 +249,13 @@ const PharmacyInventory = () => {
               />
             </Box>
           </Grid>
-          <Grid item lg={5} sx={{ pl: 2 }}>
+          <Grid
+            item
+            lg={5}
+            sx={{
+              pl: 2,
+            }}
+          >
             <DetailedInventory detailedInventory={detailedInventory} />
           </Grid>
         </Grid>

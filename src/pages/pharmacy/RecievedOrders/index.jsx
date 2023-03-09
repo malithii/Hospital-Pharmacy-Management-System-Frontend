@@ -7,6 +7,7 @@ import { getOrders, getPendingOrders } from "../../../App/orderService";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import TitleBar from "../../../components/TitleBar";
 import ordersIcon from "../../../images/ordersIcon.png";
+import iconnurse from "../../../images/iconnurse.png";
 
 const RecievedOrders = () => {
   const [detailedOrder, setDetailedOrder] = useState({});
@@ -104,28 +105,42 @@ const RecievedOrders = () => {
       <Grid container spacing={2}>
         <Grid item lg={12} xs={12}>
           <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>
-            <Grid
-              item
-              lg={12}
-              sx={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Button variant="contained">View Order History</Button>
-            </Grid>
-            Pending Orders
-            <Grid item lg={7}>
-              <EnhancedTable
-                headCells={headCells}
-                rows={rows}
-                page={page}
-                setPage={setPage}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
-                numOfRows={numOfRows}
-                tableTitle={"Orders"}
-                actionButtons={[
-                  { btnName: "Issue", actionFunc: issueClickHandler },
-                ]}
-              />
+            <Grid container>
+              <Grid item lg={9}>
+                <EnhancedTable
+                  headCells={headCells}
+                  rows={rows}
+                  page={page}
+                  setPage={setPage}
+                  rowsPerPage={rowsPerPage}
+                  setRowsPerPage={setRowsPerPage}
+                  numOfRows={numOfRows}
+                  tableTitle={"Orders"}
+                  actionButtons={[
+                    { btnName: "Issue", actionFunc: issueClickHandler },
+                  ]}
+                />
+              </Grid>
+              <Grid
+                item
+                lg={3}
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <img src={iconnurse} alt="ward staff" />
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    navigate("/order-history");
+                  }}
+                >
+                  View Order History
+                </Button>
+              </Grid>
             </Grid>
           </Box>
         </Grid>

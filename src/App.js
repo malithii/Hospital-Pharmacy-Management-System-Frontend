@@ -4,12 +4,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/ward/Dashboard";
 import DrugUsage from "./pages/ward/DrugUsage";
 import Order from "./pages/ward/Order";
-import WardReports from "./pages/ward/WardReports";
+
 import Login from "./pages/Login";
 import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
 import UsageHistory from "./pages/ward/UsageHistory";
-import WardInventory from "./pages/ward/WardInventory";
+
 import ViewWards from "./pages/pharmacy/VIewWards";
 import Suppliers from "./pages/pharmacy/Suppliers";
 import { Provider } from "react-redux";
@@ -27,6 +27,7 @@ import CustomSnackbar from "./components/CustomSnackbar";
 import DetailedOrders from "./pages/pharmacy/DetailedOrders";
 import Test from "./pages/Test";
 import ReceiveWardStocks from "./pages/ward/ReceiveWardStocks";
+import OrderHistory from "./pages/pharmacy/OrderHistory";
 
 function App() {
   return (
@@ -43,11 +44,11 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/drugUsage" element={<DrugUsage />} />
               <Route path="/order" element={<Order />} />
-              <Route path="/wardreports" element={<WardReports />} />
+
               <Route path="wardfullreport" element={<ViewFullReport />} />
               <Route path="/drugs" element={<Drugs />} />
               <Route path="/drugusagehistory" element={<UsageHistory />} />
-              <Route path="/wardinventory" element={<WardInventory />} />
+
               <Route path="/viewwards" element={<ViewWards />} />
               <Route path="/suppliers" element={<Suppliers />} />
               <Route
@@ -67,6 +68,7 @@ function App() {
                 element={<ReceiveWardStocks />}
               />
               <Route path="/test" element={<Test />} />
+              <Route path="/order-history" element={<OrderHistory />} />
             </Route>
           </Routes>
         </BrowserRouter>

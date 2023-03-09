@@ -30,6 +30,7 @@ const DetailedInventory = ({ detailedInventory }) => {
             height: "420px",
             overflow: "auto",
             scrollbarWidth: "thin",
+            width: "100%",
           }}
         >
           <Typography fontWeight={"bold"} variant="h6" mb={2}>

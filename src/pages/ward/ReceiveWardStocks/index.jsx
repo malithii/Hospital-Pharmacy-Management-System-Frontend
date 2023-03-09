@@ -72,7 +72,13 @@ const ReceiveWardStocks = () => {
     getAcceptedOrders({ wardUser: user }, (response) => {
       //   console.log(response);
       setRetrivedRows(
-        response.orders.map((e) => createData(e, e.date.slice(0, 10), e.status))
+        response.orders.map((e) =>
+          createData(
+            e,
+            e.date.slice(0, 10),
+            <Chip label={e.status} color="success" />
+          )
+        )
       );
       setNumOfRows(response.orders.length);
     });
@@ -92,10 +98,10 @@ const ReceiveWardStocks = () => {
         drug: e.drug._id,
         issueDrugs: e.issueDrugs.map((a) => ({
           batch: a.batch,
-          quantityIssued: a.quantityIssued,
-          quantityRecieved: a.quantityIssued,
+          quantityIssued: Number(a.quantityIssued),
+          quantityRecieved: Number(a.quantityIssued),
         })),
-        quantityOrdered: e.quantityOrdered,
+        quantityOrdered: Number(e.quantityOrdered),
       }))
     );
     setPharmacist(data.obj.pharmacist);
@@ -230,7 +236,9 @@ const ReceiveWardStocks = () => {
                                 defaultValue={issueDrug.quantityIssued}
                                 onChange={(e) => {
                                   console.log(e.target.value);
-                                  issueDrug.quantityRecieved = e.target.value;
+                                  issueDrug.quantityRecieved = Number(
+                                    e.target.value
+                                  );
 
                                   setorderitems([...orderItems]);
                                   console.log("ORDERITEMS");

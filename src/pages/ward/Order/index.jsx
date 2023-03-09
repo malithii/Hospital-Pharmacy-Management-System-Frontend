@@ -1,9 +1,14 @@
 import {
   Autocomplete,
   Button,
+  Chip,
   Divider,
   Grid,
   IconButton,
+  Table,
+  TableCell,
+  TableHead,
+  TableRow,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,11 +24,14 @@ import { useForm } from "react-hook-form";
 import { newOrder } from "../../../App/orderService";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { showAlert } from "../../../App/alertService";
+import { viewInventory } from "../../../App/inventoryService";
+import recievedIcon from "../../../images/drugStore.png";
 
 const Order = () => {
   const [drugs, setDrugs] = useState([]);
   const [quantityOrdered, setQuantityOrdered] = useState("");
   const [value, setValue] = useState("");
+  const [inventory, setInventory] = useState([]);
 
   useEffect(() => {
     getDrugById((response) => {
@@ -58,12 +66,23 @@ const Order = () => {
     setOrderItems([]);
   };
 
+  useEffect(() => {
+    viewInventory({ user: wardUser }, (response) => {
+      console.log(response);
+      setInventory(
+        response.inventory.inventory.filter(
+          (i) => i.quantityInStock <= i.reorderLevel
+        )
+      );
+    });
+  }, []);
+
   return (
     <Box>
       <TitleBar image={order} title="Order" description="Manages Orders" />
 
       <Grid container spacing={2}>
-        <Grid item lg={6}>
+        <Grid item lg={7}>
           <Grid container spacing={2}>
             <Grid item lg={12}>
               <Box
@@ -286,6 +305,70 @@ const Order = () => {
               </Box>
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item lg={5}>
+          <Box
+            sx={{
+              bgcolor: "white",
+              p: 2,
+              borderRadius: 3,
+              height: "500px",
+              overflow: "auto",
+              scrollbarWidth: "thin",
+            }}
+          >
+            <Grid container>
+              {inventory.length > 0 ? (
+                <Table>
+                  {" "}
+                  {inventory.length > 0 ? (
+                    <TableHead>
+                      <TableRow>
+                        <TableCell align="center">
+                          <Chip label="Drug" />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Chip label="Quantity" />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Chip label="Reorder Level" />
+                        </TableCell>
+                      </TableRow>
+                    </TableHead>
+                  ) : null}
+                  {inventory.map((item) => {
+                    return (
+                      <TableRow>
+                        <TableCell align="center">{item.drug.drugId}</TableCell>
+                        <TableCell align="center">
+                          {item.quantityInStock}
+                        </TableCell>
+                        <TableCell align="center">
+                          {item.reorderLevel}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </Table>
+              ) : (
+                <>
+                  <Box
+                    sx={{
+                      height: "400px",
+                      width: "100%",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography>Low stock drugs will be appear here</Typography>
+                    <img src={recievedIcon} alt="stock" />
+                  </Box>
+                </>
+              )}
+            </Grid>
+          </Box>
         </Grid>
       </Grid>
     </Box>

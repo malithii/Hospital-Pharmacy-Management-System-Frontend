@@ -26,21 +26,7 @@ export const NavbarData = [
     path: "/order",
     userType: ["WARDUSER"],
   },
-  {
-    id: 4,
-    title: "Inventory",
-    icon: <InventoryIcon />,
-    path: "/wardinventory",
-    userType: ["WARDUSER"],
-  },
 
-  {
-    id: 5,
-    title: "Reports",
-    icon: <ViewListIcon />,
-    path: "/wardreports",
-    userType: ["WARDUSER"],
-  },
   {
     id: 6,
     title: "Dashboard",
@@ -88,7 +74,7 @@ export const NavbarData = [
     title: "Reports",
     icon: <ViewListIcon />,
     path: "/pharmacy-reports",
-    userType: ["PHARMACIST"],
+    userType: ["PHARMACIST", "WARDUSER"],
   },
   {
     id: 13,

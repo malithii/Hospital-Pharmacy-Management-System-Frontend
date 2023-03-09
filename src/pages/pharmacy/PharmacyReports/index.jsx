@@ -36,6 +36,7 @@ const PharmacyReports = () => {
   } = useForm();
 
   const pharmacist = useSelector((state) => state.loginHPMS._id);
+  const userType = useSelector((state) => state.loginHPMS.type);
   const [drugUsageDetails, setDrugUsageDetails] = useState([]);
   const [inventoryDetails, setInventoryDetails] = useState([]);
   const [chartData, setChartData] = useState([]);
@@ -71,8 +72,8 @@ const PharmacyReports = () => {
     pharmacyDrugUsageChart(
       {
         pharmacist: "63b564bcfc1d5e7994bea009",
-        month: 2,
-        year: 2023,
+        month: month,
+        year: year,
         drug: "63be5cdeb0249fb1e490a42c",
       },
       (response) => {
@@ -251,45 +252,47 @@ const PharmacyReports = () => {
               }}
             />
             {/* apex line chart */}
-            <Chart
-              width="100%"
-              series={[
-                {
-                  name: "Quantity",
-                  data: chartData.map((e) => e.total),
-                },
-              ]}
-              options={{
-                chart: {
-                  height: 350,
-                  type: "line",
-                  zoom: {
+            {userType === "PHARMACIST" ? (
+              <Chart
+                width="100%"
+                series={[
+                  {
+                    name: "Quantity",
+                    data: chartData.map((e) => e.total),
+                  },
+                ]}
+                options={{
+                  chart: {
+                    height: 350,
+                    type: "line",
+                    zoom: {
+                      enabled: false,
+                    },
+                  },
+                  dataLabels: {
                     enabled: false,
                   },
-                },
-                dataLabels: {
-                  enabled: false,
-                },
-                stroke: {
-                  curve: "straight",
-                },
-                title: {
-                  text: "Drug Usage Chart",
-                  align: "left",
-                },
-                grid: {
-                  row: {
-                    colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
-                    opacity: 0.5,
+                  stroke: {
+                    curve: "straight",
                   },
-                },
-                xaxis: {
-                  categories: chartData.map((e) =>
-                    e.date.slice(0, 10).slice(8, 10)
-                  ),
-                },
-              }}
-            />
+                  title: {
+                    text: "Drug Usage Chart",
+                    align: "left",
+                  },
+                  grid: {
+                    row: {
+                      colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                      opacity: 0.5,
+                    },
+                  },
+                  xaxis: {
+                    categories: chartData.map((e) =>
+                      e.date.slice(0, 10).slice(8, 10)
+                    ),
+                  },
+                }}
+              />
+            ) : null}
           </Box>
         </Grid>
       </Grid>

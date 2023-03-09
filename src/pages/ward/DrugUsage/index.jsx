@@ -188,7 +188,16 @@ const DrugUsage = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    const body = { ...data, user: user };
+    const body = {
+      ...data,
+      user: user,
+
+      date: date,
+      drug: data.drug._id,
+
+      quantitytoBHT: Number(data.quantitytoBHT),
+      quantityfromBHT: Number(data.quantityfromBHT),
+    };
     newDrugUsage(body, (response) => {
       console.log(response);
       clearAll();
@@ -223,8 +232,9 @@ const DrugUsage = () => {
                   <Stack spacing={3}>
                     <DesktopDatePicker
                       minDate={dayjs("2017-01-01")}
+                      value={date}
                       onChange={(newValue) => {
-                        setValue(newValue);
+                        setDate(newValue);
                       }}
                       inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
