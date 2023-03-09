@@ -98,10 +98,10 @@ const ReceiveWardStocks = () => {
         drug: e.drug._id,
         issueDrugs: e.issueDrugs.map((a) => ({
           batch: a.batch,
-          quantityIssued: a.quantityIssued,
-          quantityRecieved: a.quantityIssued,
+          quantityIssued: Number(a.quantityIssued),
+          quantityRecieved: Number(a.quantityIssued),
         })),
-        quantityOrdered: e.quantityOrdered,
+        quantityOrdered: Number(e.quantityOrdered),
       }))
     );
     setPharmacist(data.obj.pharmacist);
