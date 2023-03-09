@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/ward/Dashboard";
 import DrugUsage from "./pages/ward/DrugUsage";
 import Order from "./pages/ward/Order";
-import WardReports from "./pages/ward/WardReports";
+
 import Login from "./pages/Login";
 import Drugs from "./pages/pharmacy/Drugs";
 import LandingPage from "./pages/LandingPage";
@@ -44,7 +44,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/drugUsage" element={<DrugUsage />} />
               <Route path="/order" element={<Order />} />
-              <Route path="/wardreports" element={<WardReports />} />
+
               <Route path="wardfullreport" element={<ViewFullReport />} />
               <Route path="/drugs" element={<Drugs />} />
               <Route path="/drugusagehistory" element={<UsageHistory />} />

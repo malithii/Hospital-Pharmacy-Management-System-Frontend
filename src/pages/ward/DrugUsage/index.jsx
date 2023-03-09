@@ -189,13 +189,14 @@ const DrugUsage = () => {
   const onSubmit = (data) => {
     console.log(data);
     const body = {
+      ...data,
       user: user,
-      batchNo: data.batchNo,
+
       date: date,
       drug: data.drug._id,
-      bht: data.bht,
+
       quantitytoBHT: Number(data.quantitytoBHT),
-      quantityfromBHT: data.quantityfromBHT,
+      quantityfromBHT: Number(data.quantityfromBHT),
     };
     newDrugUsage(body, (response) => {
       console.log(response);
