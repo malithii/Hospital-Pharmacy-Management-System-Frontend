@@ -31,3 +31,7 @@ export const getInventoryByDrug = (body, onSuccess) => {
 export const searchInventoryByDrug = (body, onSuccess) => {
   post("/inventory/searchInventoryByDrug", body, onSuccess);
 };
+
+export const getBatches = (body, onSuccess) => {
+  post("/inventory/getBatches", body, onSuccess);
+};
