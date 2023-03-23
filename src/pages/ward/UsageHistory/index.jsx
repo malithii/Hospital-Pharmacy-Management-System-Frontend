@@ -5,13 +5,14 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 import { useEffect } from "react";
 import { useState } from "react";
-import { allDrugUsages } from "../../../App/wardDrugUsage";
+import { allDrugUsages, viewDrugUsageByDate } from "../../../App/wardDrugUsage";
 import EnhancedTable from "../../../components/Tables/EnhancedTable";
 import SearchIcon from "@mui/icons-material/Search";
 import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
 
 const UsageHistory = () => {
-  const [value, setValue] = useState(dayjs());
+  const [date, setDate] = useState(dayjs());
   const headCells = [
     {
       id: "date",
@@ -56,15 +57,9 @@ const UsageHistory = () => {
       label: "Quantity from BHT",
       align: "center",
     },
-    {
-      id: "Actions",
-      numeric: true,
-      disablePadding: false,
-      label: "Actions",
-      align: "center",
-      sorting: false,
-    },
   ];
+
+  const { register, handleSubmit, setValue } = useForm();
 
   const [rows, setRows] = useState([]);
   const [retrivedRows, setRetrivedRows] = useState([]);
@@ -72,12 +67,6 @@ const UsageHistory = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [numOfRows, setNumOfRows] = useState(0);
   const [shouldRefresh, setShouldRefresh] = useState(true);
-
-  const editClickHandler = (userId) => {
-    console.log(userId);
-    //btn action
-    setShouldRefresh((prev) => !prev);
-  };
 
   useEffect(() => {
     setRows(
@@ -116,7 +105,7 @@ const UsageHistory = () => {
         response.drugUsage.map((e) =>
           createData(
             e._id,
-            e.date,
+            e.date.slice(0, 10),
             e.drug.drugId,
             e.batchNo,
             e.bht,
@@ -146,8 +135,11 @@ const UsageHistory = () => {
                 <Stack spacing={3}>
                   <DesktopDatePicker
                     minDate={dayjs("2017-01-01")}
+                    value={date}
                     onChange={(newValue) => {
-                      setValue(newValue);
+                      setDate(newValue);
+                      setValue("date", newValue.format("YYYY-MM-DD"));
+                      console.log(date);
                     }}
                     inputFormat="YYYY-MM-DD"
                     renderInput={(params) => (
@@ -173,10 +165,34 @@ const UsageHistory = () => {
               </LocalizationProvider>
               <Button
                 variant="contained"
-                sx={{ minWidth: "200px", height: "40px" }}
-                size="large"
+                color="primary"
+                size="small"
+                sx={{ width: 150, height: 40, marginLeft: 2 }}
+                startIcon={<SearchIcon />}
+                onClick={handleSubmit((data) => {
+                  console.log(data);
+                  viewDrugUsageByDate(
+                    { user: user, date: data.date.slice(0, 10) },
+                    (response) => {
+                      console.log(response);
+                      setRetrivedRows(
+                        response.drugUsage.map((e) =>
+                          createData(
+                            e._id,
+                            e.date.slice(0, 10),
+                            e.drug.drugId,
+                            e.batchNo,
+                            e.bht,
+                            e.quantitytoBHT,
+                            e.quantityfromBHT
+                          )
+                        )
+                      );
+                    }
+                  );
+                })}
               >
-                <SearchIcon />
+                Search
               </Button>
             </Box>
             <EnhancedTable
@@ -188,9 +204,6 @@ const UsageHistory = () => {
               setRowsPerPage={setRowsPerPage}
               numOfRows={numOfRows}
               tableTitle={"Drug Usage"}
-              actionButtons={[
-                { btnName: "Edit", actionFunc: editClickHandler },
-              ]}
             />
           </Box>
         </Grid>

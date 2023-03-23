@@ -27,9 +27,11 @@ import CustomCalendar from "../../../components/Calendar";
 import { useSelector } from "react-redux";
 import { getDrugById } from "../../../App/drugsService";
 import {
+  checkBatchQuantity,
   getBatches,
   searchInventoryByDrug,
 } from "../../../App/inventoryService";
+import { showAlert } from "../../../App/alertService";
 
 const DrugUsage = () => {
   const [date, setDate] = useState(dayjs());
@@ -152,7 +154,7 @@ const DrugUsage = () => {
         response.drugUsage.map((e) =>
           createData(
             e._id,
-            e.date,
+            e.date.slice(0, 10),
             e.drug.drugId,
             e.batchNo,
             e.bht,
@@ -203,11 +205,28 @@ const DrugUsage = () => {
       quantitytoBHT: Number(data.quantitytoBHT),
       quantityfromBHT: Number(data.quantityfromBHT),
     };
-    newDrugUsage(body, (response) => {
-      console.log(response);
-      clearAll();
-      setShouldRefresh((prev) => !prev);
-    });
+
+    checkBatchQuantity(
+      {
+        user: user,
+        drug: data.drug._id,
+        batch: data.batchNo,
+        quantity: Number(data.quantitytoBHT),
+      },
+      (response) => {
+        console.log(response);
+        if (response.status === "success") {
+          newDrugUsage(body, (response2) => {
+            console.log(response2);
+            clearAll();
+            showAlert("success", "success");
+            setShouldRefresh((prev) => !prev);
+          });
+        } else {
+          console.log("sdf");
+        }
+      }
+    );
   };
   return (
     <Box>
