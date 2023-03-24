@@ -20,6 +20,8 @@ import {
   drugIssueReport,
   inventoryReport,
   pharmacyDrugUsageChart,
+  wardDrugUsageChart,
+  wardDrugUsageReport,
 } from "../../../App/reportsService";
 import TitleBar from "../../../components/TitleBar";
 import reports from "../../../images/reports.png";
@@ -35,11 +37,13 @@ const PharmacyReports = () => {
     setValue,
   } = useForm();
 
-  const pharmacist = useSelector((state) => state.loginHPMS._id);
+  const user = useSelector((state) => state.loginHPMS._id);
   const userType = useSelector((state) => state.loginHPMS.type);
   const [drugUsageDetails, setDrugUsageDetails] = useState([]);
+  const [drugUsageWard, setDrugUsageWard] = useState([]);
   const [inventoryDetails, setInventoryDetails] = useState([]);
   const [chartData, setChartData] = useState([]);
+  const [wardChartData, setWardChartData] = useState([]);
   const [drugs, setDrugs] = useState([]);
   const [drug, setDrug] = useState("");
 
@@ -49,7 +53,7 @@ const PharmacyReports = () => {
   const year = date.getFullYear();
 
   const req = {
-    pharmacist: pharmacist,
+    pharmacist: user,
     month: month,
     year: year,
   };
@@ -62,7 +66,17 @@ const PharmacyReports = () => {
   }, []);
 
   useEffect(() => {
-    inventoryReport({ user: pharmacist }, (response) => {
+    wardDrugUsageReport(
+      { user: user, month: month, year: year },
+      (response) => {
+        console.log(response);
+        setDrugUsageWard(response.wardDrugUsage);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    inventoryReport({ user: user }, (response) => {
       console.log(response);
       setInventoryDetails(response.inventory);
     });
@@ -79,6 +93,21 @@ const PharmacyReports = () => {
       (response) => {
         console.log(response);
         setChartData(response.usage);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    wardDrugUsageChart(
+      {
+        ward: user,
+        drug: "63be5cdeb0249fb1e490a42c",
+        month: month,
+        year: year,
+      },
+      (response) => {
+        console.log(response);
+        setWardChartData(response.usage);
       }
     );
   }, []);
@@ -127,13 +156,20 @@ const PharmacyReports = () => {
                 </TableHead>
                 <TableBody>
                   {userType === "PHARMACIST"
-                    ? drugUsageDetails.map((row) => (
+                    ? drugUsageDetails.map((row, index) => (
                         <TableRow key={row.drug}>
                           <TableCell align="center">{row.drug}</TableCell>
                           <TableCell align="center">{row.total}</TableCell>
                         </TableRow>
                       ))
-                    : null}
+                    : drugUsageWard.map((row) => (
+                        <TableRow key={row.drug.drugId}>
+                          <TableCell align="center">
+                            {row.drug.drugId}
+                          </TableCell>
+                          <TableCell align="center">{row.total}</TableCell>
+                        </TableRow>
+                      ))}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -215,18 +251,33 @@ const PharmacyReports = () => {
               onChange={(e, value) => {
                 setValue("drug", value);
                 console.log(value);
-                pharmacyDrugUsageChart(
-                  {
-                    pharmacist: "63b564bcfc1d5e7994bea009",
-                    month: 2,
-                    year: 2023,
-                    drug: value._id,
-                  },
-                  (response) => {
-                    console.log(response);
-                    setChartData(response.usage);
-                  }
-                );
+                if (userType === "PHARMACIST") {
+                  pharmacyDrugUsageChart(
+                    {
+                      pharmacist: user,
+                      month: month,
+                      year: year,
+                      drug: value._id,
+                    },
+                    (response) => {
+                      console.log(response);
+                      setChartData(response.usage);
+                    }
+                  );
+                } else {
+                  wardDrugUsageChart(
+                    {
+                      ward: user,
+                      drug: value._id,
+                      month: month,
+                      year: year,
+                    },
+                    (response) => {
+                      console.log(response);
+                      setWardChartData(response.usage);
+                    }
+                  );
+                }
               }}
               id="combo-box-demo"
               getOptionLabel={(option) => option.drugId}
@@ -294,7 +345,47 @@ const PharmacyReports = () => {
                   },
                 }}
               />
-            ) : null}
+            ) : (
+              <Chart
+                width="100%"
+                series={[
+                  {
+                    name: "Quantity",
+                    data: wardChartData.map((e) => e.quantity),
+                  },
+                ]}
+                options={{
+                  chart: {
+                    height: 350,
+                    type: "line",
+                    zoom: {
+                      enabled: false,
+                    },
+                  },
+                  dataLabels: {
+                    enabled: false,
+                  },
+                  stroke: {
+                    curve: "straight",
+                  },
+                  title: {
+                    text: "Drug Usage Chart",
+                    align: "left",
+                  },
+                  grid: {
+                    row: {
+                      colors: ["#f3f3f3", "transparent"], // takes an array which will be repeated on columns
+                      opacity: 0.5,
+                    },
+                  },
+                  xaxis: {
+                    categories: wardChartData.map((e) =>
+                      e.date.slice(0, 10).slice(8, 10)
+                    ),
+                  },
+                }}
+              />
+            )}
           </Box>
         </Grid>
       </Grid>
