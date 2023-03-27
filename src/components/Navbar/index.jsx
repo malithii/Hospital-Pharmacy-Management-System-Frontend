@@ -24,6 +24,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getUnreadNotifications } from "../../App/notificationsService";
+import { useState } from "react";
 
 const drawerWidth = 230;
 
@@ -146,6 +149,7 @@ export default function MiniDrawer(props) {
   //////////////////////////////////////
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
+  const [notifications, setNotifications] = useState([]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -173,9 +177,18 @@ export default function MiniDrawer(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
     </Menu>
   );
+
+  const user = useSelector((state) => state.loginHPMS._id);
+
+  const viewNotifications = () => {
+    getUnreadNotifications({ user: user }, (response) => {
+      console.log(response);
+      setNotifications(response);
+    });
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -207,7 +220,7 @@ export default function MiniDrawer(props) {
               color="inherit"
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <NotificationsIcon onClick={viewNotifications} />
               </Badge>
             </IconButton>
             <IconButton
