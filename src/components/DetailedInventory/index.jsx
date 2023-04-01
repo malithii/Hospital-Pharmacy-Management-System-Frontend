@@ -13,11 +13,11 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 
-const DetailedInventory = ({ detailedInventory }) => {
+const DetailedInventory = ({ detailedInventory, refresh }) => {
   console.log(detailedInventory);
   useEffect(() => {
     console.log(detailedInventory.obj);
-  }, [detailedInventory]);
+  }, [detailedInventory, refresh]);
 
   return (
     <>
