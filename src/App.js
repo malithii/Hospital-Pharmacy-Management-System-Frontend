@@ -37,10 +37,11 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
             <Route path="/medlink" element={<LandingPage />} />
             <Route path="/userprofile" element={<Profile />} />
             <Route path="/" element={<Navbar />}>
+              <Route path="/signup" element={<SignUp />} />
+
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/drugUsage" element={<DrugUsage />} />
               <Route path="/order" element={<Order />} />

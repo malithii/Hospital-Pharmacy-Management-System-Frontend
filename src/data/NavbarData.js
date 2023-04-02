@@ -83,4 +83,11 @@ export const NavbarData = [
     path: "/received-ward-stocks",
     userType: ["WARDUSER"],
   },
+  {
+    id: 14,
+    title: "Add new users",
+    icon: <ViewListIcon />,
+    path: "/signup",
+    userType: ["PHARMACIST"],
+  },
 ];
