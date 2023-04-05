@@ -37,7 +37,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<Login />} />
-            <Route path="/medlink" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage />} />
             <Route path="/userprofile" element={<Profile />} />
             <Route path="/" element={<Navbar />}>
               <Route path="/signup" element={<SignUp />} />

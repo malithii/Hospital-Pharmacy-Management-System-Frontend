@@ -21,7 +21,7 @@ const LoadingAnimation = () => {
         minHeight: "100vh",
         height: "100%",
         width: "100vw",
-        backdropFilter: "blur(2px)",
+        // backdropFilter: "blur(2px)",
       }}
     >
       <div

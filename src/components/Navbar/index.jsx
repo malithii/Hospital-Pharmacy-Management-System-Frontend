@@ -25,7 +25,10 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getUnreadNotifications } from "../../App/notificationsService";
+import {
+  getUnreadNotifications,
+  readNotification,
+} from "../../App/notificationsService";
 import { useState } from "react";
 import medicine2 from "../../images/medicine-2.png";
 import logo from "../../images/medlink-logo.png";
@@ -210,12 +213,14 @@ export default function MiniDrawer(props) {
     </Menu>
   );
 
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
     getUnreadNotifications({ user: user }, (response) => {
       console.log(response);
       setNotifications(response.notifications);
     });
-  }, []);
+  }, [refresh]);
 
   const menuId2 = "primary-search-account-menu2";
   const renderMenu2 = (
@@ -238,7 +243,19 @@ export default function MiniDrawer(props) {
         <MenuItem onClick={handleNotifiClose}>No Notifications</MenuItem>
       ) : (
         notifications.map((notification) => [
-          <MenuItem key={notification._id} onClick={viewNotifications}>
+          <MenuItem
+            key={notification._id}
+            onClick={() => {
+              viewNotifications();
+              readNotification(
+                { _id: notification._id, user: user },
+                (response) => {
+                  console.log(response);
+                }
+              );
+              setRefresh(!refresh);
+            }}
+          >
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src={medicine2} />
