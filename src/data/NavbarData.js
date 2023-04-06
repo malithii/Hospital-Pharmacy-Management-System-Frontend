@@ -1,8 +1,12 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import ShoppingBagIcon from "@mui/icons-material/ShoppingBag";
 import ViewListIcon from "@mui/icons-material/ViewList";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import MedicationIcon from "@mui/icons-material/Medication";
+import LocalPharmacyIcon from "@mui/icons-material/LocalPharmacy";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export const NavbarData = [
   {
@@ -14,79 +18,81 @@ export const NavbarData = [
   },
   {
     id: 2,
-    title: "Drug Usage",
-    icon: <MedicalServicesIcon />,
-    path: "/drugUsage",
-    userType: ["WARDUSER"],
-  },
-  {
-    id: 3,
-    title: "Order",
-    icon: <ShoppingBagIcon />,
-    path: "/order",
-    userType: ["WARDUSER"],
-  },
-
-  {
-    id: 6,
     title: "Dashboard",
     icon: <DashboardIcon />,
     path: "/pharmacy-dashboard",
     userType: ["PHARMACIST"],
   },
   {
-    id: 7,
+    id: 3,
+    title: "Drug Usage",
+    icon: <MedicalServicesIcon />,
+    path: "/drugUsage",
+    userType: ["WARDUSER"],
+  },
+  {
+    id: 4,
+    title: "Order",
+    icon: <ShoppingCartIcon />,
+    path: "/order",
+    userType: ["WARDUSER"],
+  },
+
+  {
+    id: 5,
+    title: "Receive Stocks",
+    icon: <MedicationIcon />,
+    path: "/received-ward-stocks",
+    userType: ["WARDUSER"],
+  },
+
+  {
+    id: 6,
     title: "Drugs",
-    icon: <ShoppingBagIcon />,
+    icon: <MedicalServicesIcon />,
     path: "/drugs",
     userType: ["PHARMACIST"],
   },
   {
-    id: 8,
-    title: "View Wards",
-    icon: <InventoryIcon />,
-    path: "/viewwards",
-    userType: ["PHARMACIST"],
-  },
-  {
-    id: 9,
+    id: 7,
     title: "Inventory",
-    icon: <MedicalServicesIcon />,
+    icon: <InventoryIcon />,
     path: "/pharmacyinventory",
     userType: ["PHARMACIST", "WARDUSER"],
   },
   {
-    id: 10,
-    title: "Received Stocks",
-    icon: <ViewListIcon />,
-    path: "/recieved-stocks",
-    userType: ["PHARMACIST"],
-  },
-  {
-    id: 11,
+    id: 8,
     title: "Orders",
-    icon: <ViewListIcon />,
+    icon: <ShoppingCartIcon />,
     path: "/recieved-orders",
     userType: ["PHARMACIST"],
   },
   {
-    id: 12,
+    id: 9,
+    title: "Received Stocks",
+    icon: <MedicationIcon />,
+    path: "/recieved-stocks",
+    userType: ["PHARMACIST"],
+  },
+  {
+    id: 10,
+    title: "View Wards",
+    icon: <LocalPharmacyIcon />,
+    path: "/viewwards",
+    userType: ["PHARMACIST"],
+  },
+
+  {
+    id: 11,
     title: "Reports",
-    icon: <ViewListIcon />,
+    icon: <ShowChartIcon />,
     path: "/pharmacy-reports",
     userType: ["PHARMACIST", "WARDUSER"],
   },
   {
-    id: 13,
-    title: "Receive Stocks",
-    icon: <ViewListIcon />,
-    path: "/received-ward-stocks",
-    userType: ["WARDUSER"],
-  },
-  {
-    id: 14,
+    id: 12,
     title: "Add new users",
-    icon: <ViewListIcon />,
+    icon: <PersonAddIcon />,
     path: "/signup",
     userType: ["PHARMACIST"],
   },

@@ -217,8 +217,8 @@ const Drugs = () => {
     resetField("drugId");
     resetField("drugName");
     resetField("strength");
-    resetField("category");
-    resetField("storeTemp");
+    // resetField("category");
+    // resetField("storeTemp");
     resetField("description");
   };
 

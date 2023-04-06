@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -60,6 +60,7 @@ const DetailedOrders = () => {
   const [quantity, setQuantity] = useState(0);
   const [drugs, setDrugs] = useState([]);
   const [inventoryByDrug, setInventoryByDrug] = useState([]);
+  const navigate = useNavigate();
 
   // console.log("issue order");
   // console.log(order);
@@ -85,6 +86,7 @@ const DetailedOrders = () => {
       // console.log(response);
       if (response.status === "success") {
         showAlert("Drugs Issued successfully", "success");
+        navigate("/recieved-orders");
       } else {
         showAlert("Error", "error");
       }

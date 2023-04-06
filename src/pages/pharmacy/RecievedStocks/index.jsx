@@ -27,6 +27,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useSelector } from "react-redux";
 import drugStore from "../../../images/drugStore.png";
 import { showAlert } from "../../../App/alertService";
+import LoadingAnimation from "../../../components/LoadingAnimation/LoadingAnimation";
 
 const RecievedStocks = () => {
   const [date, setDate] = useState(dayjs());
@@ -97,6 +98,7 @@ const RecievedStocks = () => {
   }
 
   const user = useSelector((state) => state.loginHPMS._id);
+  const [loading, setLoading] = useState(false);
 
   const requestBody = {
     user: user,
@@ -105,11 +107,16 @@ const RecievedStocks = () => {
   };
 
   const onSubmit = () => {
+    setLoading(true);
+
     newRecievedDrugs(requestBody, (response) => {
+      setLoading(false);
+
       console.log(response);
     });
     showAlert("Stocks Added Successfully", "success");
     setReceivedStocks([]);
+    setShouldRefresh(!shouldRefresh);
   };
 
   useEffect(() => {
@@ -196,6 +203,8 @@ const RecievedStocks = () => {
         title="Received Stocks"
         description="Manage Received Stocks"
       />
+      {loading && <LoadingAnimation />}
+
       <Grid container spacing={2}>
         <Grid item lg={5} xs={12}>
           <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3, pb: 3 }}>
