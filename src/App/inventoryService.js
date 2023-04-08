@@ -39,3 +39,7 @@ export const getBatches = (body, onSuccess) => {
 export const removeBatch = (body, onSuccess) => {
   post("/inventory/removeBatch", body, onSuccess);
 };
+
+export const allInventories = (body, onSuccess) => {
+  post("/inventory/all-inventory", body, onSuccess);
+};

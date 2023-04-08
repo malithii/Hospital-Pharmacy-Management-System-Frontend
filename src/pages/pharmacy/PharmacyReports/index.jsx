@@ -1,6 +1,7 @@
 import { TableBar } from "@mui/icons-material";
 import {
   Autocomplete,
+  Button,
   Chip,
   Grid,
   Table,
@@ -88,7 +89,7 @@ const PharmacyReports = () => {
         pharmacist: "63b564bcfc1d5e7994bea009",
         month: month,
         year: year,
-        drug: "63be5cdeb0249fb1e490a42c",
+        drug: "643d7110e03bf8a8ef22596b",
       },
       (response) => {
         console.log(response);
@@ -101,7 +102,7 @@ const PharmacyReports = () => {
     wardDrugUsageChart(
       {
         ward: user,
-        drug: "63be5cdeb0249fb1e490a42c",
+        drug: "643d7110e03bf8a8ef22596b",
         month: month,
         year: year,
       },
@@ -121,6 +122,9 @@ const PharmacyReports = () => {
 
   const onSubmit = (data) => {
     console.log(data);
+  };
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -240,6 +244,14 @@ const PharmacyReports = () => {
             <Typography variant="h7" fontWeight="bold">
               Drug Usage Charts {month}/{year}
             </Typography>
+            <Button
+              onClick={handlePrint}
+              variant="contained"
+              size="small"
+              sx={{ ml: 11, height: "26px" }}
+            >
+              Print Reports
+            </Button>
             <Autocomplete
               disablePortal
               {...register("drug", {
