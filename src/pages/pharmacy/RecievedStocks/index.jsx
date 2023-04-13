@@ -30,6 +30,7 @@ import { showAlert } from "../../../App/alertService";
 
 const RecievedStocks = () => {
   const [date, setDate] = useState(dayjs());
+  const [expDate, setExpDate] = useState(dayjs());
   const [drugs, setDrugs] = useState([]);
   const [receivedStocks, setReceivedStocks] = useState([]);
 
@@ -218,6 +219,7 @@ const RecievedStocks = () => {
                       value={date}
                       onChange={(newValue) => {
                         setDate(newValue);
+                        setValue("date", newValue.format("YYYY-MM-DD"));
                       }}
                       inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
@@ -330,8 +332,10 @@ const RecievedStocks = () => {
                   <Stack spacing={3}>
                     <DesktopDatePicker
                       minDate={dayjs("2017-01-01")}
+                      value={expDate}
                       onChange={(newValue) => {
-                        setValue(newValue);
+                        setExpDate(newValue);
+                        setValue("expDate", newValue.format("YYYY-MM-DD"));
                       }}
                       inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
@@ -448,7 +452,7 @@ const RecievedStocks = () => {
                             lg={3}
                             sx={{ display: "flex", alignItems: "center" }}
                           >
-                            <Typography>{item.drug.drugId}</Typography>
+                            <Typography>{item.drugName}</Typography>
                           </Grid>
                           <Grid
                             item

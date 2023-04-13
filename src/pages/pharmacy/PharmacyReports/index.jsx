@@ -126,12 +126,14 @@ const PharmacyReports = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {drugUsageDetails.map((row) => (
-                    <TableRow key={row.drug}>
-                      <TableCell align="center">{row.drug}</TableCell>
-                      <TableCell align="center">{row.total}</TableCell>
-                    </TableRow>
-                  ))}
+                  {userType === "PHARMACIST"
+                    ? drugUsageDetails.map((row) => (
+                        <TableRow key={row.drug}>
+                          <TableCell align="center">{row.drug}</TableCell>
+                          <TableCell align="center">{row.total}</TableCell>
+                        </TableRow>
+                      ))
+                    : null}
                 </TableBody>
               </Table>
             </TableContainer>
