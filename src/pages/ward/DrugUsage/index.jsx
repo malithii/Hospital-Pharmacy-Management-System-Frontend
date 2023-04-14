@@ -26,10 +26,17 @@ import { useNavigate } from "react-router-dom";
 import CustomCalendar from "../../../components/Calendar";
 import { useSelector } from "react-redux";
 import { getDrugById } from "../../../App/drugsService";
+import {
+  checkBatchQuantity,
+  getBatches,
+  searchInventoryByDrug,
+} from "../../../App/inventoryService";
+import { showAlert } from "../../../App/alertService";
 
 const DrugUsage = () => {
   const [date, setDate] = useState(dayjs());
   const [drugs, setDrugs] = useState([]);
+  const [batchNos, setBatchNos] = useState([]);
 
   const navigate = useNavigate();
   const navigateToHistory = () => {
@@ -147,7 +154,7 @@ const DrugUsage = () => {
         response.drugUsage.map((e) =>
           createData(
             e._id,
-            e.date,
+            e.date.slice(0, 10),
             e.drug.drugId,
             e.batchNo,
             e.bht,
@@ -198,11 +205,28 @@ const DrugUsage = () => {
       quantitytoBHT: Number(data.quantitytoBHT),
       quantityfromBHT: Number(data.quantityfromBHT),
     };
-    newDrugUsage(body, (response) => {
-      console.log(response);
-      clearAll();
-      setShouldRefresh((prev) => !prev);
-    });
+
+    checkBatchQuantity(
+      {
+        user: user,
+        drug: data.drug._id,
+        batch: data.batchNo,
+        quantity: Number(data.quantitytoBHT),
+      },
+      (response) => {
+        console.log(response);
+        if (response.status === "success") {
+          newDrugUsage(body, (response2) => {
+            console.log(response2);
+            clearAll();
+            showAlert("success", "success");
+            setShouldRefresh((prev) => !prev);
+          });
+        } else {
+          console.log("sdf");
+        }
+      }
+    );
   };
   return (
     <Box>
@@ -235,6 +259,7 @@ const DrugUsage = () => {
                       value={date}
                       onChange={(newValue) => {
                         setDate(newValue);
+                        setValue("date", newValue.format("YYYY-MM-DD"));
                       }}
                       inputFormat="YYYY-MM-DD"
                       renderInput={(params) => (
@@ -284,6 +309,11 @@ const DrugUsage = () => {
                   onChange={(e, value) => {
                     setValue("drug", value);
                     console.log(value);
+                    getBatches({ user: user, drug: value._id }, (response) => {
+                      console.log(response);
+                      setBatchNos(response.inventory);
+                      console.log(batchNos);
+                    });
                   }}
                   id="combo-box-demo"
                   getOptionLabel={(option) => option.drugId}
@@ -324,7 +354,42 @@ const DrugUsage = () => {
                     </span>
                   ) : null}
                 </Typography>
-                <TextField
+                <Autocomplete
+                  disablePortal
+                  {...register("batchNo", {
+                    required: {
+                      value: true,
+                      message: "batchNo is required",
+                    },
+                  })}
+                  onChange={(e, value) => {
+                    setValue("batchNo", value.batchNo);
+                    console.log(value);
+                  }}
+                  id="combo-box-demo"
+                  getOptionLabel={(option) => option.batchNo}
+                  options={batchNos}
+                  sx={{
+                    width: "98%",
+                    ...(errors.batchNo && {
+                      border: "1px solid red",
+                    }),
+                  }}
+                  renderInput={(params) => {
+                    return (
+                      <TextField
+                        sx={{ color: "red" }}
+                        {...params}
+                        size="small"
+                        InputProps={{
+                          ...params.InputProps,
+                          type: "search",
+                        }}
+                      />
+                    );
+                  }}
+                />
+                {/* <TextField
                   size="small"
                   fullWidth
                   id="batchNo"
@@ -337,7 +402,7 @@ const DrugUsage = () => {
                   {...(errors.batchNo && {
                     error: true,
                   })}
-                />
+                /> */}
               </Grid>
               <Grid item lg={6} xs={12}>
                 <Typography
