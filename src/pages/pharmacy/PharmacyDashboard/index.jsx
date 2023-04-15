@@ -13,7 +13,9 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { expireDateNotification } from "../../../App/notificationsService";
 
 const PharmacyDashboard = () => {
   const [value, setValue] = useState(dayjs());
@@ -23,6 +25,13 @@ const PharmacyDashboard = () => {
 
     return day === 0 || day === 6;
   };
+
+  const user = useSelector((state) => state.loginHPMS._id);
+  useEffect(() => {
+    expireDateNotification({ user: user }, (response) => {
+      console.log(response);
+    });
+  }, []);
 
   return (
     <Box>
@@ -53,13 +62,9 @@ const PharmacyDashboard = () => {
           <NearExpireDates />
         </Grid>
         <Grid item lg={3.5}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <StaticDatePicker
-              orientation="potrait"
-              openTo="day"
-              value={value}
-            />
-          </LocalizationProvider>
+          <Box sx={{ bgcolor: "white", p: 3, borderRadius: 3 }}>
+            <CustomCalendar />
+          </Box>
         </Grid>
       </Grid>
     </Box>
