@@ -67,6 +67,7 @@ const CategoryModal = ({
           p: 4,
           borderRadius: 3,
           pt: 5,
+
           position: "absolute",
           top: "50%",
           left: "50%",
@@ -117,52 +118,50 @@ const CategoryModal = ({
             Existing Categories
           </Typography>
         </Grid>
-        <Box sx={{ height: "250px" }} overflow>
-          <Grid item lg={4}>
-            {categories.map((category) =>
-              category._id === editing._id ? (
-                <Box
-                  display={"flex"}
-                  alignItems={"center"}
-                  mt={1}
-                  justifyContent="space-between"
+        <Box sx={{ height: "250px" }} overflow="auto" scrollbarWidth="thin">
+          {categories.map((category) =>
+            category._id === editing._id ? (
+              <Box
+                display={"flex"}
+                alignItems={"center"}
+                mt={1}
+                justifyContent="space-between"
+              >
+                <TextField
+                  size="small"
+                  value={editing.name}
+                  onChange={(e) => {
+                    setEditing({ ...editing, name: e.target.value });
+                  }}
+                />
+                <Button
+                  onClick={() => {
+                    console.log(editing);
+                    categoryUpdate(editing);
+                    setEditing("");
+                  }}
                 >
-                  <TextField
-                    size="small"
-                    value={editing.name}
-                    onChange={(e) => {
-                      setEditing({ ...editing, name: e.target.value });
-                    }}
-                  />
-                  <Button
+                  Update
+                </Button>
+              </Box>
+            ) : (
+              <ListItem
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
                     onClick={() => {
-                      console.log(editing);
-                      categoryUpdate(editing);
-                      setEditing("");
+                      setEditing(category);
                     }}
                   >
-                    Update
-                  </Button>
-                </Box>
-              ) : (
-                <ListItem
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => {
-                        setEditing(category);
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  }
-                >
-                  <ListItemText primary={category.name} />
-                </ListItem>
-              )
-            )}
-          </Grid>
+                    <EditIcon />
+                  </IconButton>
+                }
+              >
+                <ListItemText primary={category.name} />
+              </ListItem>
+            )
+          )}
         </Box>
       </Box>
     </Modal>
