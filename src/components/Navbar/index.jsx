@@ -23,11 +23,16 @@ import { AccountCircle } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getUnreadNotifications } from "../../App/notificationsService";
+import {
+  getUnreadNotifications,
+  readNotification,
+} from "../../App/notificationsService";
 import { useState } from "react";
 import medicine2 from "../../images/medicine-2.png";
+import logo from "../../images/medlink-logo.png";
+import { logout } from "../../reducers/loginSlice";
 
 const drawerWidth = 230;
 
@@ -179,6 +184,13 @@ export default function MiniDrawer(props) {
     handleNotifiClose();
   };
 
+  const dispatch = useDispatch();
+
+  const onClickLogout = () => {
+    navigate("/login");
+    dispatch(logout());
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -197,16 +209,18 @@ export default function MiniDrawer(props) {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+      <MenuItem onClick={onClickLogout}>Logout</MenuItem>
     </Menu>
   );
+
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     getUnreadNotifications({ user: user }, (response) => {
       console.log(response);
       setNotifications(response.notifications);
     });
-  }, []);
+  }, [refresh]);
 
   const menuId2 = "primary-search-account-menu2";
   const renderMenu2 = (
@@ -229,7 +243,19 @@ export default function MiniDrawer(props) {
         <MenuItem onClick={handleNotifiClose}>No Notifications</MenuItem>
       ) : (
         notifications.map((notification) => [
-          <MenuItem key={notification._id} onClick={viewNotifications}>
+          <MenuItem
+            key={notification._id}
+            onClick={() => {
+              viewNotifications();
+              readNotification(
+                { _id: notification._id, user: user },
+                (response) => {
+                  console.log(response);
+                }
+              );
+              setRefresh(!refresh);
+            }}
+          >
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar alt="Remy Sharp" src={medicine2} />
@@ -269,6 +295,7 @@ export default function MiniDrawer(props) {
           >
             <MenuIcon />
           </IconButton>
+          <img src={logo} alt="logo" width="100px" />
           <Typography variant="h6" noWrap component="div">
             HOSPITAL PHARMACY MANAGEMENT SYSTEM
           </Typography>

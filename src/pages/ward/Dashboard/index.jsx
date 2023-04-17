@@ -7,12 +7,15 @@ import "react-calendar/dist/Calendar.css";
 import TitleBar from "../../../components/TitleBar";
 import dashboardIcon from "../../../images/dashboardIcon.png";
 import Chart from "react-apexcharts";
+import InventoryChart from "../../../components/InventoryChart";
+import NearExpireDates from "../../../components/NearExpireDates";
+import CustomCalendar from "../../../components/Calendar";
 
 const Dashboard = () => {
   return (
     <Box>
       <TitleBar image={dashboardIcon} title="Dashboard" description="Home" />
-      <Grid container spacing={2} mt={2}>
+      <Grid container spacing={2}>
         {CardDetails.map((card, index) => {
           return (
             <Grid item lg={3} xs={12}>
@@ -20,174 +23,26 @@ const Dashboard = () => {
             </Grid>
           );
         })}
-      </Grid>
-
-      <Grid container spacing={3} pt={3}>
-        <Grid item lg={4}>
-          <Grid container spacing={3}>
-            <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
-                <Chart
-                  type="bar"
-                  width="100%"
-                  height="180px"
-                  options={{
-                    chart: {
-                      id: "basic-bar",
-                    },
-                    plotOptions: {
-                      bar: {
-                        borderRadius: 4,
-                        horizontal: true,
-                      },
-                    },
-                    xaxis: {
-                      categories: [
-                        "Non-Refrigerated",
-                        "Refrigerated",
-                        "Freezing",
-                      ],
-                    },
-                    title: {
-                      text: "Store Temperature",
-                      align: "left",
-                      margin: 10,
-                      offsetX: 0,
-                      offsetY: 0,
-                      floating: false,
-                      style: {
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        fontFamily: undefined,
-                        color: "#263238",
-                      },
-                    },
-                  }}
-                  series={[
-                    {
-                      name: "series-1",
-                      data: [30, 40, 45],
-                    },
-                  ]}
-                />
-              </Box>
-            </Grid>
-            <Grid item lg={12}>
-              <Box sx={{ bgcolor: "white", p: 2, borderRadius: 3 }}>
-                <Chart
-                  type="bar"
-                  width="100%"
-                  height="200px"
-                  options={{
-                    chart: {
-                      id: "basic-bar",
-                    },
-                    plotOptions: {
-                      bar: {
-                        borderRadius: 4,
-                        horizontal: true,
-                      },
-                    },
-                    xaxis: {
-                      categories: [
-                        "General Medicines",
-                        "Pharmacy Medicines",
-                        "Prescription Only",
-                        "Controlled drugs",
-                      ],
-                    },
-                    title: {
-                      text: "Drug Categories",
-                      align: "left",
-                      margin: 10,
-                      offsetX: 0,
-                      offsetY: 0,
-                      floating: false,
-                      style: {
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                        fontFamily: undefined,
-                        color: "#263238",
-                      },
-                    },
-                  }}
-                  series={[
-                    {
-                      name: "series-1",
-                      data: [30, 40, 20, 45],
-                    },
-                  ]}
-                />
-              </Box>
-            </Grid>
-          </Grid>
+        <Grid item lg={4} xs={12}>
+          <InventoryChart />
         </Grid>
-        <Grid item lg={4}>
-          <Box
-            sx={{ bgcolor: "white", p: 2, borderRadius: 3, height: "31rem" }}
-          >
-            <Chart
-              type="bar"
-              width="100%"
-              height="100%"
-              options={{
-                chart: {
-                  id: "basic-bar",
-                },
-                plotOptions: {
-                  bar: {
-                    borderRadius: 4,
-                    horizontal: true,
-                  },
-                },
-                xaxis: {
-                  categories: [
-                    "General Medicines",
-                    "Pharmacy Medicines",
-                    "Prescription Only",
-                    "Controlled drugs",
-                    "General Medicines",
-                    "Pharmacy Medicines",
-                    "Prescription Only",
-                    "Controlled drugs",
-                    "General Medicines",
-                    "Pharmacy Medicines",
-                    "Prescription Only",
-                    "Controlled drugs",
-                  ],
-                },
-                title: {
-                  text: "General Medicine Inventory",
-                  align: "left",
-                  margin: 10,
-                  offsetX: 0,
-                  offsetY: 0,
-                  floating: false,
-                  style: {
-                    fontSize: "14px",
-                    fontWeight: "bold",
-                    fontFamily: undefined,
-                    color: "#263238",
-                  },
-                },
-              }}
-              series={[
-                {
-                  name: "series-1",
-                  data: [30, 40, 20, 45, 30, 40, 20, 45, 30, 40, 20, 45],
-                },
-              ]}
-            />
-          </Box>
+        <Grid item lg={4.5} xs={12}>
+          {/* <Grid item sx={{ display: "flex", justifyContent: "end" }}>
+              <Button
+                variant="contained"
+                sx={{ minWidth: "200px" }}
+                size="large"
+                title="Click to view drug usage history"
+              >
+                View History
+              </Button>
+              <CustomCalendar />
+            </Grid> */}
+          <NearExpireDates />
         </Grid>
-        <Grid item lg={4}>
-          <Box
-            sx={{ bgcolor: "white", p: 2, borderRadius: 3, height: "31rem" }}
-          >
-            <Typography variant="h7" fontWeight={"bold"} color="#495579" pb={1}>
-              Expiring List
-            </Typography>
-            {/* <Typography>Table</Typography> */}
+        <Grid item lg={3.5}>
+          <Box sx={{ bgcolor: "white", p: 3, borderRadius: 3 }}>
+            <CustomCalendar />
           </Box>
         </Grid>
       </Grid>

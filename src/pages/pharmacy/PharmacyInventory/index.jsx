@@ -104,6 +104,7 @@ const PharmacyInventory = () => {
   };
 
   const user = useSelector((state) => state.loginHPMS._id);
+  const userType = useSelector((state) => state.loginHPMS.type);
 
   const requestBody = {
     user: user,
@@ -228,16 +229,19 @@ const PharmacyInventory = () => {
               <SearchIcon />
             </Button>
           </Grid>
-          <Grid item lg={6} sx={{ display: "flex", justifyContent: "end" }}>
-            <Button
-              variant="contained"
-              sx={{ minWidth: "100px", mt: 0.5, height: "80%" }}
-              size="small"
-              onClick={removeBatchfunc}
-            >
-              Remove Batch
-            </Button>
-          </Grid>
+          {userType === "PHARMACIST" ? (
+            <Grid item lg={6} sx={{ display: "flex", justifyContent: "end" }}>
+              <Button
+                variant="contained"
+                sx={{ minWidth: "100px", mt: 0.5, height: "80%" }}
+                size="small"
+                onClick={removeBatchfunc}
+              >
+                Remove Batch
+              </Button>
+            </Grid>
+          ) : null}
+
           <Grid
             item
             lg={6}
