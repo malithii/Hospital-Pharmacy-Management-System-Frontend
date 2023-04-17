@@ -17,8 +17,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { NavbarData } from "../../data/NavbarData";
-import { Link, Outlet } from "react-router-dom";
-import { Badge, Menu, MenuItem } from "@mui/material";
+import { Link, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { Avatar, Badge, ListItemAvatar, Menu, MenuItem } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -27,6 +27,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getUnreadNotifications } from "../../App/notificationsService";
 import { useState } from "react";
+import medicine2 from "../../images/medicine-2.png";
 
 const drawerWidth = 230;
 
@@ -150,13 +151,32 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
   const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate();
+
+  const [anchorEl2, setAnchorEl2] = React.useState(null);
+  const isMenuOpen2 = Boolean(anchorEl2);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleNotifiMenuOpen = (event) => {
+    console.log(notifications);
+    setAnchorEl2(event.currentTarget);
+  };
+
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleNotifiClose = () => {
+    setAnchorEl2(null);
+  };
+
+  const viewNotifications = () => {
+    console.log("clicked");
+    navigate("/pharmacyinventory");
+    handleNotifiClose();
   };
 
   const menuId = "primary-search-account-menu";
@@ -181,14 +201,56 @@ export default function MiniDrawer(props) {
     </Menu>
   );
 
-  const user = useSelector((state) => state.loginHPMS._id);
-
-  const viewNotifications = () => {
+  useEffect(() => {
     getUnreadNotifications({ user: user }, (response) => {
       console.log(response);
-      setNotifications(response);
+      setNotifications(response.notifications);
     });
-  };
+  }, []);
+
+  const menuId2 = "primary-search-account-menu2";
+  const renderMenu2 = (
+    <Menu
+      anchorEl={anchorEl2}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      id={menuId2}
+      keepMounted
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={isMenuOpen2}
+      onClose={handleNotifiClose}
+    >
+      {!notifications ? (
+        <MenuItem onClick={handleNotifiClose}>No Notifications</MenuItem>
+      ) : (
+        notifications.map((notification) => [
+          <MenuItem key={notification._id} onClick={viewNotifications}>
+            <ListItem alignItems="flex-start">
+              <ListItemAvatar>
+                <Avatar alt="Remy Sharp" src={medicine2} />
+              </ListItemAvatar>
+              <ListItemText
+                primary={notification.message}
+                secondary={<>{"Click to view inventory"}</>}
+              />
+            </ListItem>
+          </MenuItem>,
+          <Divider
+            key={notification.id + "_divider"}
+            variant="inset"
+            component="li"
+          />,
+        ])
+      )}
+    </Menu>
+  );
+
+  const user = useSelector((state) => state.loginHPMS._id);
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -219,8 +281,8 @@ export default function MiniDrawer(props) {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon onClick={viewNotifications} />
+              <Badge badgeContent={notifications.length} color="error">
+                <NotificationsIcon onClick={handleNotifiMenuOpen} />
               </Badge>
             </IconButton>
             <IconButton
@@ -239,6 +301,7 @@ export default function MiniDrawer(props) {
           {/* ///////////////////////////////// */}
         </Toolbar>
         {renderMenu}
+        {renderMenu2}
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>

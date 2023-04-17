@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Button,
   Grid,
+  Modal,
   Table,
   TableBody,
   TableCell,
@@ -31,12 +32,17 @@ import { useSelector } from "react-redux";
 import ReorderLevelModal from "../../../components/ReorderLevelModal";
 import { useForm } from "react-hook-form";
 import { getDrugById } from "../../../App/drugsService";
+import RemoveBatchModal from "../../../components/RemoveBatchModal";
 
 const PharmacyInventory = () => {
   const [detailedInventory, setDetailedInventory] = useState({});
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => setOpen2(true);
+  const handleClose2 = () => setOpen2(false);
 
   const [updatingData, setUpdatingData] = useState({});
   const [reorderLevel, setReorderLevel] = useState({
@@ -160,6 +166,10 @@ const PharmacyInventory = () => {
       setNumOfRows(response.inventory.length);
     });
   };
+
+  const removeBatchfunc = () => {
+    handleOpen2();
+  };
   return (
     <Box>
       <TitleBar
@@ -218,6 +228,16 @@ const PharmacyInventory = () => {
               <SearchIcon />
             </Button>
           </Grid>
+          <Grid item lg={6} sx={{ display: "flex", justifyContent: "end" }}>
+            <Button
+              variant="contained"
+              sx={{ minWidth: "100px", mt: 0.5, height: "80%" }}
+              size="small"
+              onClick={removeBatchfunc}
+            >
+              Remove Batch
+            </Button>
+          </Grid>
           <Grid
             item
             lg={6}
@@ -256,7 +276,10 @@ const PharmacyInventory = () => {
               pl: 2,
             }}
           >
-            <DetailedInventory detailedInventory={detailedInventory} />
+            <DetailedInventory
+              detailedInventory={detailedInventory}
+              refresh={refresh}
+            />
           </Grid>
         </Grid>
       </Box>
@@ -265,6 +288,11 @@ const PharmacyInventory = () => {
         setOpen={setOpen}
         reorderLevel={reorderLevel}
         updatingData={updatingData}
+        setRefresh={setRefresh}
+      />
+      <RemoveBatchModal
+        open={open2}
+        setOpen={setOpen2}
         setRefresh={setRefresh}
       />
     </Box>
