@@ -3,6 +3,8 @@ import { Box } from "@mui/system";
 import { useState } from "react";
 import logo from "../../images/logo2.png";
 import Select from "@mui/material/Select";
+import { useForm } from "react-hook-form";
+import { userSignUp } from "../../App/userService";
 
 const SignUp = () => {
   const [type, setType] = useState("");
@@ -10,6 +12,14 @@ const SignUp = () => {
   const handleChange = (event) => {
     setType(event.target.value);
   };
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    resetField,
+    setValue,
+  } = useForm();
   return (
     <Grid
       container
@@ -58,29 +68,75 @@ const SignUp = () => {
               fullWidth
               size="small"
             >
-              <MenuItem value={10}>Pharmacist</MenuItem>
-              <MenuItem value={20}>Ward User</MenuItem>
+              <MenuItem value={"PHARMACIST"}>PHARMACIST</MenuItem>
+              <MenuItem value={"WARDUSER"}>WARDUSER</MenuItem>
             </Select>
             <Typography variant="h7" fontWeight={"normal"} pt={2}>
               Email:
             </Typography>
-            <TextField size="small" fullWidth />
+            <TextField
+              size="small"
+              fullWidth
+              {...register("email", {
+                required: {
+                  value: true,
+                  message: "Email is required",
+                },
+              })}
+            />
             <Typography variant="h7" fontWeight={"normal"} pt={2}>
               Username:
             </Typography>
-            <TextField size="small" fullWidth />
+            <TextField
+              size="small"
+              fullWidth
+              {...register("username", {
+                required: {
+                  value: true,
+                  message: "Username is required",
+                },
+              })}
+            />
             <Typography variant="h7" fontWeight={"normal"} pt={2}>
               Ward Number:
             </Typography>
-            <TextField size="small" fullWidth />
+            <TextField
+              size="small"
+              fullWidth
+              {...register("wardNo", {
+                required: {
+                  value: true,
+                  message: "Ward Number is required",
+                },
+              })}
+            />
             <Typography variant="h7" fontWeight={"normal"} pt={2}>
               Contact Number:
             </Typography>
-            <TextField size="small" fullWidth />
+            <TextField
+              size="small"
+              fullWidth
+              {...register("contact", {
+                required: {
+                  value: true,
+                  message: "Contact Number is required",
+                },
+              })}
+            />
             <Typography variant="h7" fontWeight={"normal"} pt={2}>
               Password:
             </Typography>
-            <TextField size="small" fullWidth type={"password"} />
+            <TextField
+              size="small"
+              fullWidth
+              type={"password"}
+              {...register("password", {
+                required: {
+                  value: true,
+                  message: "Password is required",
+                },
+              })}
+            />
             <Grid
               container
               gap={2}
@@ -93,7 +149,17 @@ const SignUp = () => {
               <Button variant="contained" sx={{ flexGrow: 1 }}>
                 Clear All
               </Button>
-              <Button variant="contained" sx={{ flexGrow: 1 }}>
+              <Button
+                variant="contained"
+                sx={{ flexGrow: 1 }}
+                onClick={handleSubmit((data) => {
+                  const req = { type: type, ...data };
+                  console.log(req);
+                  userSignUp(req, (res) => {
+                    console.log(res);
+                  });
+                })}
+              >
                 Add User
               </Button>
             </Grid>

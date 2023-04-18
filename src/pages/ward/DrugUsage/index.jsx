@@ -187,7 +187,6 @@ const DrugUsage = () => {
   } = useForm();
 
   const clearAll = () => {
-    resetField("batchNo");
     resetField("bht");
     resetField("quantitytoBHT");
     resetField("quantityfromBHT");

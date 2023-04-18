@@ -1,6 +1,7 @@
 import {
   Autocomplete,
   Button,
+  Chip,
   Grid,
   Modal,
   Table,
@@ -131,7 +132,20 @@ const PharmacyInventory = () => {
       console.log(response.inventory.inventory);
       setRetrivedRows(
         response.inventory.inventory.map((e) =>
-          createData(e, e.drug.drugId, e.quantityInStock, e.reorderLevel)
+          createData(
+            e,
+            e.drug.drugId,
+            e.quantityInStock < e.reorderLevel ? (
+              <Chip
+                label={e.quantityInStock}
+                color="error"
+                variant="outlined"
+              />
+            ) : (
+              e.quantityInStock
+            ),
+            e.reorderLevel
+          )
         )
       );
       setNumOfRows(response.inventory.inventory.length);

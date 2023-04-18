@@ -37,7 +37,8 @@ const NearExpireDates = () => {
           View All
         </Button>
       </Box>
-      <TableContainer sx={{ maxHeight: 440 }}>
+
+      <TableContainer sx={{ maxHeight: 300, scrollbarWidth: "thin" }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>

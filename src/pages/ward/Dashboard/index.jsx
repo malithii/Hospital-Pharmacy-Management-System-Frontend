@@ -2,7 +2,7 @@ import { Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import CustomCard from "../../../components/CustomCard";
 import CardDetails from "../../../data/CardDetails";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-calendar/dist/Calendar.css";
 import TitleBar from "../../../components/TitleBar";
 import dashboardIcon from "../../../images/dashboardIcon.png";
@@ -10,8 +10,16 @@ import Chart from "react-apexcharts";
 import InventoryChart from "../../../components/InventoryChart";
 import NearExpireDates from "../../../components/NearExpireDates";
 import CustomCalendar from "../../../components/Calendar";
+import { useSelector } from "react-redux";
+import { expireDateNotification } from "../../../App/notificationsService";
 
 const Dashboard = () => {
+  const user = useSelector((state) => state.loginHPMS._id);
+  useEffect(() => {
+    expireDateNotification({ user: user }, (response) => {
+      console.log(response);
+    });
+  }, []);
   return (
     <Box>
       <TitleBar image={dashboardIcon} title="Dashboard" description="Home" />
